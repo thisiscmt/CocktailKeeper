@@ -1,26 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
+import {Helmet} from "react-helmet";
+import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
+
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="app">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Cocktail Keeper</title>
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+            </Helmet>
+
+            <header className={'header'}>
+                <div className={'header-title'}>Cocktail Keeper</div>
+
+                <div className={'header-controls'}>
+                    <AddBoxOutlinedIcon />
+                </div>
+            </header>
+
+            <section className={'main-content'}>
+                Main content
+            </section>
+
+            <footer className={'footer'}>
+                Preferences
+            </footer>
+        </div>
+    );
 }
 
 export default App;
