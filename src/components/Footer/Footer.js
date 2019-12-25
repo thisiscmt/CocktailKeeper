@@ -1,19 +1,28 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import {createStyles, withStyles} from "@material-ui/styles";
+
+const styles = createStyles({
+    footer: {
+        alignItems: 'center',
+        backgroundColor: 'darkcyan',
+        display: 'flex',
+        height: '40px',
+        justifyContent: 'center'
+    }
+});
 
 class Footer extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    // }
-
     render() {
+        const { classes } = this.props;
+
         return (
-            <footer className={'footer'}>
-                <Link to={'/preferences'}>
-                    Preferences
+            <footer className={classes.footer}>
+                <Link to={'/settings'} className={'app-link'}>
+                    Settings
                 </Link>
             </footer>
         )}
 }
 
-export default Footer;
+export default withStyles(styles)(Footer);

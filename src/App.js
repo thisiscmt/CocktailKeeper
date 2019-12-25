@@ -6,7 +6,7 @@ import './App.css';
 import Home from "./pages/Home/Home";
 import ViewRecipe from "./pages/ViewRecipe/ViewRecipe";
 import EditRecipe from "./pages/EditRecipe/EditRecipe";
-import Preferences from "./pages/Preferences/Preferences";
+import Settings from "./pages/Settings/Settings";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 
@@ -26,14 +26,14 @@ function App() {
                     <Route exact path="/">
                         <Home />
                     </Route>
-                    <Route path="/recipe">
+                    <Route path="/recipe:id">
                         <ViewRecipe />
                     </Route>
-                    <Route path="/recipe:name">
+                    <Route path="/recipe/edit:id?">
                         <EditRecipe />
                     </Route>
-                    <Route path="/preferences">
-                        <Preferences />
+                    <Route path="/settings">
+                        <Settings />
                     </Route>
                 </Switch>
 
