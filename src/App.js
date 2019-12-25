@@ -7,10 +7,12 @@ import Home from "./pages/Home/Home";
 import ViewRecipe from "./pages/ViewRecipe/ViewRecipe";
 import EditRecipe from "./pages/EditRecipe/EditRecipe";
 import Preferences from "./pages/Preferences/Preferences";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 
 function App() {
     return (
-        <div className="app main-content">
+        <div className="main-content">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Cocktail Keeper</title>
@@ -18,6 +20,8 @@ function App() {
             </Helmet>
 
             <BrowserRouter>
+                <Header/>
+
                 <Switch>
                     <Route exact path="/">
                         <Home />
@@ -32,6 +36,8 @@ function App() {
                         <Preferences />
                     </Route>
                 </Switch>
+
+                <Footer/>
             </BrowserRouter>
         </div>
     );
