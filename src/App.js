@@ -1,43 +1,40 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import {Helmet} from "react-helmet";
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import {Helmet} from 'react-helmet';
 
+import Home from './pages/Home/Home';
+import ViewRecipe from './pages/ViewRecipe/ViewRecipe';
+import EditRecipe from './pages/EditRecipe/EditRecipe';
+import Settings from './pages/Settings/Settings';
+import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 import './App.css';
-import Home from "./pages/Home/Home";
-import ViewRecipe from "./pages/ViewRecipe/ViewRecipe";
-import EditRecipe from "./pages/EditRecipe/EditRecipe";
-import Settings from "./pages/Settings/Settings";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
+import Paper from "@material-ui/core/Paper";
 
 function App() {
     return (
-        <div className="main-content">
+        <div className='main-content'>
             <Helmet>
-                <meta charSet="utf-8" />
+                <meta charSet='utf-8' />
                 <title>Cocktail Keeper</title>
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+                <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' />
             </Helmet>
 
             <BrowserRouter>
-                <Header/>
+                <Paper elevation={5}>
+                    <Header/>
 
-                <Switch>
-                    <Route exact path="/">
-                        <Home />
-                    </Route>
-                    <Route path="/recipe:id">
-                        <ViewRecipe />
-                    </Route>
-                    <Route path="/recipe/edit:id?">
-                        <EditRecipe />
-                    </Route>
-                    <Route path="/settings">
-                        <Settings />
-                    </Route>
-                </Switch>
+                    <Switch>
+                        <Route exact path='/' component={Home} />
+                        <Route exact path='/recipe/:id' component={ViewRecipe} />
+                        <Route exact path={['/recipe', '/recipe/:id/edit']} component={EditRecipe} />
+                        <Route exact path='/settings' component={Settings} />
+                        <Route component={ErrorPage} />
+                    </Switch>
 
-                <Footer/>
+                    <Footer/>
+                </Paper>
             </BrowserRouter>
         </div>
     );

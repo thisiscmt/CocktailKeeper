@@ -30,14 +30,14 @@ class Header extends React.Component {
         return (
             <header className={classes.header}>
                 <div className={classes.headerTitle}>
-                    <Link to={'/'} className={'app-link'}>
+                    <Link to={'/'} className={'nav-link'}>
                         <span>Cocktail Keeper</span>
                     </Link>
                 </div>
 
                 <div className={classes.headerControls}>
                     <div>
-                        <Link to={'/recipe/edit'} className={'app-link'} title={'Add a new recipe'}>
+                        <Link to={'/recipe'} className={'nav-link'} title={'Add a new recipe'}>
                             <AddBoxOutlinedIcon fontSize={'large'} />
                         </Link>
                     </div>

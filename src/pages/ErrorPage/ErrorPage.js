@@ -1,13 +1,13 @@
 import React from 'react';
 
-class Home extends React.Component {
+class ErrorPage extends React.Component {
     render() {
         return (
             <section>
-                <div>This is the home page</div>
+                <div>This is the error page</div>
             </section>
         )
     }
 }
 
-export default Home;
+export default ErrorPage;

@@ -18,7 +18,7 @@ class Footer extends React.Component {
 
         return (
             <footer className={classes.footer}>
-                <Link to={'/settings'} className={'app-link'}>
+                <Link to={'/settings'} className={'nav-link'}>
                     Settings
                 </Link>
             </footer>
