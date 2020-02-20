@@ -7,10 +7,14 @@ import Divider from "@material-ui/core/Divider";
 import Container from "@material-ui/core/Container";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import Link from "@material-ui/core/Link";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {createStyles, withStyles} from "@material-ui/styles";
 
 import RecipeService from "../../services/RecipeService";
-import Link from "@material-ui/core/Link";
 
 const styles = createStyles({
     root: {
@@ -38,11 +42,22 @@ const styles = createStyles({
         marginLeft: '10px'
     },
 
-    ingredient: {
+    newIngredient: {
+        borderBottom: '1px solid gray',
         paddingLeft: 0,
-        paddingRight: 0
-    }
+        paddingRight: 0,
+        paddingBottom: 0
+    },
 
+    ingredientQty: {
+        borderBottom: '1px solid gray',
+        borderRight: '1px solid gray'
+    },
+
+    ingredientName: {
+        borderBottom: '1px solid gray',
+        borderLeft: '1px solid gray'
+    }
 });
 
 class EditRecipe extends React.Component {
@@ -54,7 +69,8 @@ class EditRecipe extends React.Component {
         this.state = {
             recipe: {
                 ingredients: []
-            }
+            },
+            ingredientCounter: 1
         };
 
         if (id) {
@@ -64,12 +80,14 @@ class EditRecipe extends React.Component {
 
     handleAddIngredient = () => {
         const recipe = this.state.recipe;
+
         recipe.ingredients.push({
+            id: this.state.ingredientCounter,
             name: '',
             amount: ''
         });
 
-        this.setState({ recipe });
+        this.setState({ recipe, ingredientCounter: this.state.ingredientCounter + 1 });
     };
 
     handleSubmit = (event) => {
@@ -116,17 +134,31 @@ class EditRecipe extends React.Component {
                                 {
                                     recipe.ingredients.map(row => {
                                         return (
-                                            <ListItem>
-                                                <span>{row.amount}</span>
-                                                <span>{row.name}</span>
+                                            <ListItem key={row.id}>
+                                                <ExpansionPanel>
+                                                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} ria-controls="panel1a-content">
+                                                        {row.amount} ? {row.amount} : 'Qty'
+                                                    </ExpansionPanelSummary>
+                                                    <ExpansionPanelDetails>
+                                                        Add the dials here
+                                                    </ExpansionPanelDetails>
+                                                </ExpansionPanel>
+
+                                                <TextField className={classes.ingredientName}>{row.name}</TextField>
                                             </ListItem>
                                         )
                                     })
                                 }
                                 {
-                                    <ListItem className={classes.ingredient}>
-                                        <Link className='app-link'>
+                                    <ListItem className={classes.newIngredient}>
+                                        <Link className='app-link' onClick={() => {
+                                            this.handleAddIngredient();
+                                        }}>
                                             <AddCircleOutlineRoundedIcon color='primary' />
+                                        </Link>
+                                        <Link className='app-link' onClick={() => {
+                                            this.handleAddIngredient();
+                                        }}>
                                             <span className={classes.addLabel}>Add Ingredient</span>
                                         </Link>
                                     </ListItem>

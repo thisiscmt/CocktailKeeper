@@ -31,7 +31,7 @@ class Header extends React.Component {
             <header className={classes.header}>
                 <div className={classes.headerTitle}>
                     <Link to={'/'} className={'nav-link'}>
-                        <span>Cocktail Keeper</span>
+                        <span className={'fancy-nav'}>Cocktail Keeper</span>
                     </Link>
                 </div>
 

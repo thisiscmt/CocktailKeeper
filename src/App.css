@@ -29,3 +29,7 @@ a.app-link:active {
     min-height: calc(100vh - 100px);
     text-align: center;
 }
+
+.fancy-nav {
+    font-family: 'Rye', cursive, Roboto, Arial, Helvetica, sans-serif;
+}
