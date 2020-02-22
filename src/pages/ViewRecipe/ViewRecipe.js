@@ -4,11 +4,20 @@ import Button from "@material-ui/core/Button";
 import {createStyles, withStyles} from "@material-ui/styles";
 
 import RecipeService from "../../services/RecipeService";
+import Container from "@material-ui/core/Container";
+import Divider from "@material-ui/core/Divider";
 
 const styles = createStyles({
     mainContainer: {
         display: 'flex',
         justifyContent: 'space-between'
+    },
+
+    topControls: {
+        display: 'flex',
+        justifyContent: 'right',
+        marginTop: '5px',
+        marginBottom: '10px'
     },
 
     editButton: {
@@ -20,7 +29,7 @@ class ViewRecipe extends React.Component {
     constructor (props) {
         super(props);
 
-        let id = props.match.params.id;
+        const id = props.match.params.id;
 
         this.state = {
             recipe: RecipeService.getRecipe(id)
@@ -32,16 +41,16 @@ class ViewRecipe extends React.Component {
         const { recipe } = this.state;
 
         return (
-            <div className={classes.mainContainer}>
+            <div className={classes.root}>
+                <Container maxWidth='sm'>
+                    <div className={classes.topControls}>
+                        <Button component={ Link } to={`recipe/edit/${recipe.id}`} variant='outlined' color='primary' size='medium'>
+                            Edit
+                        </Button>
+                    </div>
 
-
-
-
-                <div className={classes.editButton}>
-                    <Button component={ Link } to={`recipe/edit/${recipe.id}`} variant='outlined' color='primary' size='medium'>
-                        Edit
-                    </Button>
-                </div>
+                    <Divider variant="fullWidth" className={classes.divider} />
+                </Container>
             </div>
         )}
 }

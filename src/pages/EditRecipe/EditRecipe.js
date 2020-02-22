@@ -15,6 +15,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {createStyles, withStyles} from "@material-ui/styles";
 
 import RecipeService from "../../services/RecipeService";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 
 const styles = createStyles({
     root: {
@@ -42,11 +44,25 @@ const styles = createStyles({
         marginLeft: '10px'
     },
 
+    ingredient: {
+        alignItems: 'flex-start',
+        paddingLeft: 0,
+        paddingRight: 0
+    },
+
     newIngredient: {
-        borderBottom: '1px solid gray',
         paddingLeft: 0,
         paddingRight: 0,
-        paddingBottom: 0
+        paddingTop: '10px',
+        paddingBottom: '5px'
+    },
+
+    qtySelector: {
+        borderRadius: '7px',
+        '&:first-child': {
+            borderTopLeftRadius: '7px',
+            borderTopRightRadius: '7px',
+        }
     },
 
     ingredientQty: {
@@ -55,8 +71,8 @@ const styles = createStyles({
     },
 
     ingredientName: {
-        borderBottom: '1px solid gray',
-        borderLeft: '1px solid gray'
+        marginLeft: '10px',
+        width: '100%'
     }
 });
 
@@ -90,6 +106,11 @@ class EditRecipe extends React.Component {
         this.setState({ recipe, ingredientCounter: this.state.ingredientCounter + 1 });
     };
 
+    handleQtyPanelChange = (event) => {
+
+
+    };
+
     handleSubmit = (event) => {
         console.log('saving recipe');
 
@@ -119,7 +140,7 @@ class EditRecipe extends React.Component {
 
                         <div>
                             <TextField className={`${classes.textStyle}`}
-                                       placeholder="Name"
+                                       placeholder="Drink name"
                                        margin="dense"
                                        variant="outlined"
                                        name="recipeName"
@@ -134,17 +155,44 @@ class EditRecipe extends React.Component {
                                 {
                                     recipe.ingredients.map(row => {
                                         return (
-                                            <ListItem key={row.id}>
-                                                <ExpansionPanel>
-                                                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} ria-controls="panel1a-content">
-                                                        {row.amount} ? {row.amount} : 'Qty'
+                                            <ListItem key={row.id} className={classes.ingredient}>
+                                                <ExpansionPanel
+                                                    square={false}
+                                                    classes={{ rounded: classes.qtySelector }}
+                                                    onChange={this.handleQtyPanelChange}
+                                                >
+                                                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                                        { row.amount ? row.amount : 'Qty' }
                                                     </ExpansionPanelSummary>
-                                                    <ExpansionPanelDetails>
-                                                        Add the dials here
-                                                    </ExpansionPanelDetails>
                                                 </ExpansionPanel>
 
-                                                <TextField className={classes.ingredientName}>{row.name}</TextField>
+                                                <TextField
+                                                    className={classes.ingredientName}
+                                                    placeholder="Ingredient"
+                                                    margin="dense"
+                                                    variant="outlined"
+                                                    name="description">
+                                                    {row.name}
+                                                </TextField>
+                                                <Card>
+                                                    <CardContent>
+                                                        <select>
+                                                            <option>1</option>
+                                                            <option>2</option>
+                                                            <option>3</option>
+                                                        </select>
+                                                        <select>
+                                                            <option>1/4</option>
+                                                            <option>1/2</option>
+                                                            <option>3/4</option>
+                                                        </select>
+                                                        <select>
+                                                            <option>oz</option>
+                                                            <option>dash</option>
+                                                            <option>ml</option>
+                                                        </select>
+                                                    </CardContent>
+                                                </Card>
                                             </ListItem>
                                         )
                                     })
