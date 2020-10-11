@@ -1,22 +1,17 @@
 import React from 'react';
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Link from "@material-ui/core/Link";
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 import Divider from "@material-ui/core/Divider";
 import Container from "@material-ui/core/Container";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-// import Link from "@material-ui/core/Link";
-// import Select from "@material-ui/core/Select";
-// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {createStyles, withStyles} from '@material-ui/core/styles';
+import * as UUID from 'uuid';
 
 import RecipeService from "../../services/RecipeService";
-// import Card from "@material-ui/core/Card";
-// import CardContent from "@material-ui/core/CardContent";
-// import Fade from "@material-ui/core/Fade";
-// import MenuItem from "@material-ui/core/MenuItem";
 import QtyModal from "../../components/QtyModal/QtyModal";
 
 const styles = createStyles({
@@ -62,6 +57,10 @@ const styles = createStyles({
         marginTop: '5px',
         width: '100%'
     },
+
+    changeBackgroundColor: {
+        fontSize: '14px'
+    }
 });
 
 class EditRecipe extends React.Component {
@@ -70,19 +69,34 @@ class EditRecipe extends React.Component {
 
         let id = props.match.params.id;
 
-        this.state = {
-            recipe: {
-                ingredients: []
-            },
-            ingredientCounter: 1
-        };
-
         if (id) {
             this.state.recipe = RecipeService.getRecipe(id)
+        } else {
+            this.state = {
+                recipe: {
+                    id: UUID.v4(),
+                    name: '',
+                    ingredients: [],
+                    directions: '',
+                    backgroundColor: ''
+                },
+                ingredientCounter: 1
+            };
         }
     }
 
-    handleAddIngredient = () => {
+    handleChangeName = (event) => {
+        event.preventDefault();
+
+        const recipe = this.state.recipe;
+        recipe.name = event.target.value;
+
+        this.setState({ recipe });
+    };
+
+    handleAddIngredient = (event) => {
+        event.preventDefault();
+
         const recipe = this.state.recipe;
 
         recipe.ingredients.push({
@@ -97,31 +111,64 @@ class EditRecipe extends React.Component {
         this.setState({ recipe, ingredientCounter: this.state.ingredientCounter + 1 });
     };
 
-    handleSaveIngredient = (newData) => {
+    handleSaveIngredientQty = (qtyData) => {
         const index = this.state.recipe.ingredients.findIndex(item => {
-            return item.id === newData.id;
+            return item.id === qtyData.id;
         })
 
         if (index > -1) {
             const recipe = this.state.recipe;
 
-            recipe.ingredients[index] = newData;
+            recipe.ingredients[index] = { ...qtyData, name: this.state.recipe.ingredients[index].name };
             this.setState({ recipe });
         }
     }
 
-    handleSubmit = (event) => {
-        console.log('saving recipe');
+    handleChangeIngredientName = (id, name) => {
+        const index = this.state.recipe.ingredients.findIndex(item => {
+            return item.id === id;
+        })
 
-//        RecipeService.saveRecipe(this.state.recipe);
-//        this.props.history.push('/');
+        if (index > -1) {
+            const recipe = this.state.recipe;
+
+            recipe.ingredients[index].name = name;
+            this.setState({ recipe });
+        }
+    };
+
+    handleChangeDirections = (event) => {
+        event.preventDefault();
+
+        const recipe = this.state.recipe;
+        recipe.directions = event.target.value;
+
+        this.setState({ recipe });
+    };
+
+    handleChangeImage = (event) => {
+        event.preventDefault();
+
+        console.log('changing image');
+    };
+
+    handleChangeBackgroundColor = (event) => {
+        event.preventDefault();
+
+        console.log('changing background color');
+    };
+
+
+    handleSubmit = (event) => {
+        RecipeService.saveRecipe(this.state.recipe);
+        this.props.history.push('/');
 
         event.preventDefault();
     };
 
     handleCancel = (event) => {
-        this.props.history.push('/');
         event.preventDefault();
+        this.props.history.push('/');
     };
 
     render() {
@@ -145,15 +192,16 @@ class EditRecipe extends React.Component {
 
                         <div>
                             <TextField
-                                className={`${classes.textStyle}`}
                                 placeholder="Drink name"
                                 margin="dense"
                                 variant="outlined"
                                 name="recipeName"
+                                required
                                 fullWidth= {true}
                                 value={recipe.name}
                                 size='small'
                                 inputProps={{ maxLength: 50 }}
+                                onChange={this.handleChangeName}
                             />
                         </div>
 
@@ -163,23 +211,26 @@ class EditRecipe extends React.Component {
                                     recipe.ingredients.map(ingredient => {
                                         return (
                                             <ListItem key={ingredient.id} className={classes.ingredient}>
-                                                <QtyModal ingredient={ingredient} onSave={this.handleSaveIngredient} />
+                                                <QtyModal ingredient={ingredient} onSave={this.handleSaveIngredientQty} />
 
                                                 <TextField
-                                                        className={classes.ingredientName}
-                                                        placeholder="Ingredient"
-                                                        margin="dense"
-                                                        variant="outlined"
-                                                        name="description">
-                                                    {ingredient.name}
-                                                </TextField>
+                                                    className={classes.ingredientName}
+                                                    placeholder="Ingredient"
+                                                    margin="dense"
+                                                    variant="outlined"
+                                                    name="description"
+                                                    value={ingredient.name}
+                                                    onChange={(event) => {
+                                                        this.handleChangeIngredientName(ingredient.id, event.target.value);}
+                                                    }
+                                                />
                                             </ListItem>
                                         )
                                     })
                                 }
                                 {
                                     <ListItem className={classes.newIngredient}>
-                                        <Button className='app-link' onClick={() => { this.handleAddIngredient(); }}>
+                                        <Button className='app-link' onClick={this.handleAddIngredient}>
                                             <AddCircleOutlineRoundedIcon color='primary' />
                                             <span className={classes.addLabel}>Add Ingredient</span>
                                         </Button>
@@ -189,17 +240,19 @@ class EditRecipe extends React.Component {
                         </div>
 
                         <div>
-                            <TextField className={`${classes.textStyle}`}
-                                       placeholder="Directions"
-                                       margin="dense"
-                                       variant="outlined"
-                                       name="description"
-                                       fullWidth= {true}
-                                       multiline={true}
-                                       rows={4}
-                                       value={recipe.description}
-                                       size='small'
-                                       inputProps={{ maxLength: 250 }}/>
+                            <TextField
+                                placeholder="Directions"
+                                margin="dense"
+                                variant="outlined"
+                                name="description"
+                                fullWidth= {true}
+                                multiline={true}
+                                rows={4}
+                                value={recipe.directions}
+                                size='small'
+                                inputProps={{ maxLength: 250 }}
+                                onChange={this.handleChangeDirections}
+                            />
                         </div>
 
 
@@ -208,7 +261,10 @@ class EditRecipe extends React.Component {
                         </div>
 
                         <div>
-                            Background color
+                            <Link component="button" className={classes.changeBackgroundColor} onClick={this.handleChangeBackgroundColor}>
+                                Change background color
+                            </Link>
+
                         </div>
 
                         <div className={classes.bottomControls}>

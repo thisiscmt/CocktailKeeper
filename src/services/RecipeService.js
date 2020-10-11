@@ -1,4 +1,17 @@
 class RecipeService {
+    static getRecipes = () => {
+        const recipesJSON = localStorage.getItem('ck.recipes');
+        let recipes = [];
+
+        if (recipesJSON) {
+            recipes = JSON.parse(recipesJSON);
+        }
+
+        console.log('current recipe list: %o', recipes);
+
+        return recipes;
+    }
+
     static saveRecipe = (recipe) => {
         const recipesJSON = localStorage.getItem('ck.recipes');
         let recipeIndex = -1;
