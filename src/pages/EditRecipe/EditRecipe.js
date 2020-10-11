@@ -7,16 +7,17 @@ import Divider from "@material-ui/core/Divider";
 import Container from "@material-ui/core/Container";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import Link from "@material-ui/core/Link";
-import Select from "@material-ui/core/Select";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {createStyles, withStyles} from "@material-ui/styles";
+// import Link from "@material-ui/core/Link";
+// import Select from "@material-ui/core/Select";
+// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {createStyles, withStyles} from '@material-ui/core/styles';
 
 import RecipeService from "../../services/RecipeService";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Fade from "@material-ui/core/Fade";
-import MenuItem from "@material-ui/core/MenuItem";
+// import Card from "@material-ui/core/Card";
+// import CardContent from "@material-ui/core/CardContent";
+// import Fade from "@material-ui/core/Fade";
+// import MenuItem from "@material-ui/core/MenuItem";
+import QtyModal from "../../components/QtyModal/QtyModal";
 
 const styles = createStyles({
     root: {
@@ -41,26 +42,25 @@ const styles = createStyles({
     },
 
     addLabel: {
-        marginLeft: '10px'
+        marginLeft: '10px',
+        marginTop: '3px',
+        textTransform: "initial"
     },
 
     ingredient: {
         alignItems: 'center',
 //        flexWrap: 'wrap',
-        paddingLeft: 0,
-        paddingRight: 0
+        padding: 0
     },
 
     newIngredient: {
-        paddingLeft: 0,
-        paddingRight: 0,
-        paddingTop: '10px',
-        paddingBottom: '5px'
+        padding: 0,
+        paddingTop: '2px'
     },
 
-    amountSelector: {
-        minWidth: 'unset'
-    },
+    // amountSelector: {
+    //     minWidth: 'unset'
+    // },
 
     // ingredientQty: {
     //     borderBottom: '1px solid gray',
@@ -69,15 +69,16 @@ const styles = createStyles({
 
     ingredientName: {
         marginLeft: '10px',
+        marginTop: '5px',
         width: '100%'
     },
 
-    amountSelectors: {
-        flexBasis: '100%',
-        height: 0,
-        margin: 0,
-        border: 0
-    }
+    // amountSelectors: {
+    //     flexBasis: '100%',
+    //     height: 0,
+    //     margin: 0,
+    //     border: 0
+    // }
 });
 
 class EditRecipe extends React.Component {
@@ -90,9 +91,7 @@ class EditRecipe extends React.Component {
             recipe: {
                 ingredients: []
             },
-            ingredientCounter: 1,
-            amountPanelExpanded: false
-
+            ingredientCounter: 1
         };
 
         if (id) {
@@ -114,22 +113,6 @@ class EditRecipe extends React.Component {
         this.setState({ recipe, ingredientCounter: this.state.ingredientCounter + 1 });
     };
 
-    handleAmountPanelToggle = (event) => {
-//        console.log('inside handleAmountPanelToggle');
-
-        const amountPanelExpanded = this.state.amountPanelExpanded;
-        this.setState({ amountPanelExpanded: !amountPanelExpanded });
-    };
-
-    handleAmountChange = (event) => {
-    };
-
-    handleFractionalAmountChange = (event) => {
-    };
-
-    handleUnitChange = (event) => {
-    };
-
     handleSubmit = (event) => {
         console.log('saving recipe');
 
@@ -140,9 +123,7 @@ class EditRecipe extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { recipe, amountPanelExpanded } = this.state;
-
-//        console.log('amountPanelExpanded: %o', amountPanelExpanded);
+        const { recipe } = this.state;
 
         return (
             <div className={classes.root}>
@@ -160,15 +141,17 @@ class EditRecipe extends React.Component {
                         <Divider variant="fullWidth" className={classes.divider} />
 
                         <div>
-                            <TextField className={`${classes.textStyle}`}
-                                       placeholder="Drink name"
-                                       margin="dense"
-                                       variant="outlined"
-                                       name="recipeName"
-                                       fullWidth= {true}
-                                       value={recipe.name}
-                                       size='small'
-                                       inputProps={{ maxLength: 50 }}/>
+                            <TextField
+                                className={`${classes.textStyle}`}
+                                placeholder="Drink name"
+                                margin="dense"
+                                variant="outlined"
+                                name="recipeName"
+                                fullWidth= {true}
+                                value={recipe.name}
+                                size='small'
+                                inputProps={{ maxLength: 50 }}
+                            />
                         </div>
 
                         <div>
@@ -177,70 +160,26 @@ class EditRecipe extends React.Component {
                                     recipe.ingredients.map(ingredient => {
                                         return (
                                             <ListItem key={ingredient.id} className={classes.ingredient}>
-                                                <Button onClick={this.handleAmountPanelToggle} className={classes.amountSelector}>Qty</Button>
-                                                <TextField className={classes.ingredientName}
-                                                            placeholder="Ingredient"
-                                                            margin="dense"
-                                                            variant="outlined"
-                                                            name="description">
+                                                <QtyModal ingredient={ingredient} />
+
+                                                <TextField
+                                                        className={classes.ingredientName}
+                                                        placeholder="Ingredient"
+                                                        margin="dense"
+                                                        variant="outlined"
+                                                        name="description">
                                                     {ingredient.name}
                                                 </TextField>
-
-                                                {
-                                                    amountPanelExpanded ?
-                                                        <hr className={classes.amountSelectors}/> : ''
-                                                }
-                                                {
-                                                    amountPanelExpanded ?
-                                                        <div>
-                                                            <div>
-                                                                <Select value={ingredient.amount} onChange={this.handleAmountChange}>
-                                                                    <MenuItem>1</MenuItem>
-                                                                    <MenuItem>2</MenuItem>
-                                                                    <MenuItem>3</MenuItem>
-                                                                    <MenuItem>4</MenuItem>
-                                                                    <MenuItem>5</MenuItem>
-                                                                    <MenuItem>6</MenuItem>
-                                                                    <MenuItem>7</MenuItem>
-                                                                    <MenuItem>8</MenuItem>
-                                                                    <MenuItem>9</MenuItem>
-                                                                    <MenuItem>10</MenuItem>
-                                                                </Select>
-                                                                <Select value={ingredient.fractionalAmount} onChange={this.handleFractionalAmountChange}>
-                                                                    <MenuItem>1/8</MenuItem>
-                                                                    <MenuItem>1/4</MenuItem>
-                                                                    <MenuItem>1/3</MenuItem>
-                                                                    <MenuItem>1/2</MenuItem>
-                                                                    <MenuItem>2/3</MenuItem>
-                                                                    <MenuItem>3/4</MenuItem>
-                                                                </Select>
-                                                                <Select value={ingredient.unit} onChange={this.handleUnitChange}>
-                                                                    <MenuItem>oz</MenuItem>
-                                                                    <MenuItem>ml</MenuItem>
-                                                                    <MenuItem>dash</MenuItem>
-                                                                    <MenuItem>tsp</MenuItem>
-                                                                    <MenuItem>tbsp</MenuItem>
-                                                                </Select>
-                                                            </div>
-                                                        </div>
-                                                    : ''
-                                                }
                                             </ListItem>
                                         )
                                     })
                                 }
                                 {
                                     <ListItem className={classes.newIngredient}>
-                                        <Link className='app-link' onClick={() => {
-                                            this.handleAddIngredient();
-                                        }}>
+                                        <Button className='app-link' onClick={() => { this.handleAddIngredient(); }}>
                                             <AddCircleOutlineRoundedIcon color='primary' />
-                                        </Link>
-                                        <Link className='app-link' onClick={() => {
-                                            this.handleAddIngredient();
-                                        }}>
                                             <span className={classes.addLabel}>Add Ingredient</span>
-                                        </Link>
+                                        </Button>
                                     </ListItem>
                                 }
                             </List>

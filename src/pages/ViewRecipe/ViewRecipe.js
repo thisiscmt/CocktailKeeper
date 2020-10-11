@@ -1,7 +1,7 @@
 import React from 'react';
 import {withRouter, Link} from "react-router-dom"
 import Button from "@material-ui/core/Button";
-import {createStyles, withStyles} from "@material-ui/styles";
+import {createStyles, withStyles} from '@material-ui/core/styles';
 
 import RecipeService from "../../services/RecipeService";
 import Container from "@material-ui/core/Container";
