@@ -49,7 +49,6 @@ const styles = createStyles({
 
     ingredient: {
         alignItems: 'center',
-//        flexWrap: 'wrap',
         padding: 0
     },
 
@@ -58,27 +57,11 @@ const styles = createStyles({
         paddingTop: '2px'
     },
 
-    // amountSelector: {
-    //     minWidth: 'unset'
-    // },
-
-    // ingredientQty: {
-    //     borderBottom: '1px solid gray',
-    //     borderRight: '1px solid gray'
-    // },
-
     ingredientName: {
         marginLeft: '10px',
         marginTop: '5px',
         width: '100%'
     },
-
-    // amountSelectors: {
-    //     flexBasis: '100%',
-    //     height: 0,
-    //     margin: 0,
-    //     border: 0
-    // }
 });
 
 class EditRecipe extends React.Component {
@@ -105,19 +88,39 @@ class EditRecipe extends React.Component {
         recipe.ingredients.push({
             id: this.state.ingredientCounter,
             name: '',
-            amount: '',
-            fractionalAmount: '',
-            unit: ''
+            amount: '0',
+            fractionalAmount: '0',
+            unit: '0',
+            qtyDesc: ''
         });
 
         this.setState({ recipe, ingredientCounter: this.state.ingredientCounter + 1 });
     };
 
+    handleSaveIngredient = (newData) => {
+        const index = this.state.recipe.ingredients.findIndex(item => {
+            return item.id === newData.id;
+        })
+
+        if (index > -1) {
+            const recipe = this.state.recipe;
+
+            recipe.ingredients[index] = newData;
+            this.setState({ recipe });
+        }
+    }
+
     handleSubmit = (event) => {
         console.log('saving recipe');
 
 //        RecipeService.saveRecipe(this.state.recipe);
+//        this.props.history.push('/');
 
+        event.preventDefault();
+    };
+
+    handleCancel = (event) => {
+        this.props.history.push('/');
         event.preventDefault();
     };
 
@@ -133,7 +136,7 @@ class EditRecipe extends React.Component {
                             <Button type='submit' variant='outlined' color='primary' size='small'>
                                 Save
                             </Button>
-                            <Button variant='outlined' color='default' size='small'>
+                            <Button variant='outlined' color='default' size='small' onClick={this.handleCancel}>
                                 Cancel
                             </Button>
                         </div>
@@ -160,7 +163,7 @@ class EditRecipe extends React.Component {
                                     recipe.ingredients.map(ingredient => {
                                         return (
                                             <ListItem key={ingredient.id} className={classes.ingredient}>
-                                                <QtyModal ingredient={ingredient} />
+                                                <QtyModal ingredient={ingredient} onSave={this.handleSaveIngredient} />
 
                                                 <TextField
                                                         className={classes.ingredientName}
