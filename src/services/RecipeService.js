@@ -46,7 +46,7 @@ class RecipeService {
             recipes = JSON.parse(recipesJSON);
 
             recipeIndex = recipes.findIndex((item) => {
-                return item.id === recipe.id;
+                return item.id === id;
             });
 
             recipe = recipes[recipeIndex];

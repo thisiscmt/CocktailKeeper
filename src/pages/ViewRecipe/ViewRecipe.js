@@ -44,7 +44,7 @@ class ViewRecipe extends React.Component {
             <div className={classes.root}>
                 <Container maxWidth='sm'>
                     <div className={classes.topControls}>
-                        <Button component={ Link } to={`recipe/edit/${recipe.id}`} variant='outlined' color='primary' size='medium'>
+                        <Button component={ Link } to={`/recipe/${recipe.id}/edit`} variant='outlined' color='primary' size='medium'>
                             Edit
                         </Button>
                     </div>

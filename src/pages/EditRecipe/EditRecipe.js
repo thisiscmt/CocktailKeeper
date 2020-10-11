@@ -70,7 +70,12 @@ class EditRecipe extends React.Component {
         let id = props.match.params.id;
 
         if (id) {
-            this.state.recipe = RecipeService.getRecipe(id)
+            const recipe = RecipeService.getRecipe(id);
+
+            this.state = {
+                recipe,
+                ingredientCounter: recipe.ingredients.length + 1
+            }
         } else {
             this.state = {
                 recipe: {
