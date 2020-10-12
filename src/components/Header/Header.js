@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link} from 'react-router-dom';
 import {createStyles, withStyles} from '@material-ui/core/styles';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 
@@ -37,7 +37,7 @@ class Header extends React.Component {
 
                 <div className={classes.headerControls}>
                     <div>
-                        <Link to={'/recipe'} className={'nav-link'} title={'Add a new recipe'}>
+                        <Link to={'/recipe?origin=header'} className={'nav-link'} title={'Add a new recipe'}>
                             <AddBoxOutlinedIcon fontSize={'large'} />
                         </Link>
                     </div>

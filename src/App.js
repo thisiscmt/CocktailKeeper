@@ -1,16 +1,16 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Paper from '@material-ui/core/Paper';
 import {Helmet} from 'react-helmet';
 
 import Home from './pages/Home/Home';
 import ViewRecipe from './pages/ViewRecipe/ViewRecipe';
 import EditRecipe from './pages/EditRecipe/EditRecipe';
 import Settings from './pages/Settings/Settings';
-import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import ErrorPage from './pages/ErrorPage/ErrorPage';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import './App.css';
-import Paper from "@material-ui/core/Paper";
 
 function App() {
     return (
@@ -27,8 +27,8 @@ function App() {
 
                     <Switch>
                         <Route exact path='/' component={Home} />
-                        <Route exact path='/recipe/:id' component={ViewRecipe} />
-                        <Route exact path={['/recipe', '/recipe/:id/edit']} component={EditRecipe} />
+                        <Route exact path='/recipe/:recipeName' component={ViewRecipe} />
+                        <Route exact path={['/recipe', '/recipe/:recipeName/edit']} component={EditRecipe} />
                         <Route exact path='/settings' component={Settings} />
                         <Route component={ErrorPage} />
                     </Switch>

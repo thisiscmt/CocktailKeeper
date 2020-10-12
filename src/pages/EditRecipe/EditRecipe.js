@@ -1,22 +1,22 @@
 import React from 'react';
-import { withRouter } from "react-router-dom";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
+import { withRouter } from 'react-router-dom';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
-import Divider from "@material-ui/core/Divider";
-import Container from "@material-ui/core/Container";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
+import Divider from '@material-ui/core/Divider';
+import Container from '@material-ui/core/Container';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import {createStyles, withStyles} from '@material-ui/core/styles';
-import * as UUID from 'uuid';
+import * as queryString from 'query-string'
 
-import RecipeService from "../../services/RecipeService";
-import QtyModal from "../../components/QtyModal/QtyModal";
+import RecipeService from '../../services/RecipeService';
+import QtyModal from '../../components/QtyModal/QtyModal';
 
 const styles = createStyles({
     root: {
-        paddingTop: '5px',
+        paddingTop: '5px'
     },
 
     divider: {
@@ -39,7 +39,7 @@ const styles = createStyles({
     addLabel: {
         marginLeft: '10px',
         marginTop: '3px',
-        textTransform: "initial"
+        textTransform: 'initial'
     },
 
     ingredient: {
@@ -58,8 +58,13 @@ const styles = createStyles({
         width: '100%'
     },
 
+    drinkImage: {
+        paddingTop: '8px',
+        paddingBottom: '8px'
+    },
+
     changeBackgroundColor: {
-        fontSize: '14px'
+        fontSize: '13px'
     }
 });
 
@@ -67,10 +72,10 @@ class EditRecipe extends React.Component {
     constructor(props) {
         super(props);
 
-        let id = props.match.params.id;
+        let recipeName = props.match.params.recipeName;
 
-        if (id) {
-            const recipe = RecipeService.getRecipe(id);
+        if (recipeName) {
+            const recipe = RecipeService.getRecipe(recipeName);
 
             this.state = {
                 recipe,
@@ -79,7 +84,6 @@ class EditRecipe extends React.Component {
         } else {
             this.state = {
                 recipe: {
-                    id: UUID.v4(),
                     name: '',
                     ingredients: [],
                     directions: '',
@@ -88,15 +92,24 @@ class EditRecipe extends React.Component {
                 ingredientCounter: 1
             };
         }
+
+        const queryParams = queryString.parse(this.props.location.search);
+
+        if (queryParams) {
+            this.state.origin = queryParams.origin;
+        }
+
+        this.state.validationError = false;
     }
 
     handleChangeName = (event) => {
         event.preventDefault();
 
+        const validationError = event.target.value === '';
         const recipe = this.state.recipe;
-        recipe.name = event.target.value;
 
-        this.setState({ recipe });
+        recipe.name = event.target.value;
+        this.setState({ recipe, validationError });
     };
 
     handleAddIngredient = (event) => {
@@ -154,31 +167,55 @@ class EditRecipe extends React.Component {
     handleChangeImage = (event) => {
         event.preventDefault();
 
-        console.log('changing image');
+        // TODO
     };
 
     handleChangeBackgroundColor = (event) => {
         event.preventDefault();
 
-        console.log('changing background color');
+        // TODO
     };
 
-
     handleSubmit = (event) => {
-        RecipeService.saveRecipe(this.state.recipe);
-        this.props.history.push('/');
-
         event.preventDefault();
+
+        if (this.state.recipe.name === '') {
+            this.setState({ validationError: true });
+            return;
+        }
+
+        this.setState({ validationError: false });
+
+        RecipeService.saveRecipe(this.state.recipe);
+        this.doNavigation();
     };
 
     handleCancel = (event) => {
         event.preventDefault();
+
+        this.doNavigation();
+    };
+
+    handleDelete = (event) => {
+        event.preventDefault();
+
+        // TODO: Add a confirmation prompt
+
+        RecipeService.deleteRecipe(this.state.recipe.name);
         this.props.history.push('/');
     };
 
+    doNavigation = () => {
+        if (this.state.origin === 'view') {
+            this.props.history.push('/recipe/' +  encodeURIComponent(this.state.recipe.name));
+        } else {
+            this.props.history.push('/');
+        }
+    }
+
     render() {
         const { classes } = this.props;
-        const { recipe } = this.state;
+        const { recipe, validationError } = this.state;
 
         return (
             <div className={classes.root}>
@@ -188,23 +225,25 @@ class EditRecipe extends React.Component {
                             <Button type='submit' variant='outlined' color='primary' size='small'>
                                 Save
                             </Button>
-                            <Button variant='outlined' color='default' size='small' onClick={this.handleCancel}>
-                                Cancel
-                            </Button>
+                                <Button variant='outlined' color='default' size='small' onClick={this.handleCancel}>
+                                    Cancel
+                                </Button>
                         </div>
 
-                        <Divider variant="fullWidth" className={classes.divider} />
+                        <Divider variant='fullWidth' className={classes.divider} />
 
                         <div>
                             <TextField
-                                placeholder="Drink name"
-                                margin="dense"
-                                variant="outlined"
-                                name="recipeName"
-                                required
+                                placeholder='Drink name'
+                                margin='dense'
+                                variant='outlined'
+                                name='recipeName'
+                                autoFocus
                                 fullWidth= {true}
                                 value={recipe.name}
                                 size='small'
+                                error={validationError}
+                                helperText={validationError === true ? 'Name is required' : ''}
                                 inputProps={{ maxLength: 50 }}
                                 onChange={this.handleChangeName}
                             />
@@ -220,10 +259,10 @@ class EditRecipe extends React.Component {
 
                                                 <TextField
                                                     className={classes.ingredientName}
-                                                    placeholder="Ingredient"
-                                                    margin="dense"
-                                                    variant="outlined"
-                                                    name="description"
+                                                    placeholder='Ingredient'
+                                                    margin='dense'
+                                                    variant='outlined'
+                                                    name='description'
                                                     value={ingredient.name}
                                                     onChange={(event) => {
                                                         this.handleChangeIngredientName(ingredient.id, event.target.value);}
@@ -246,10 +285,10 @@ class EditRecipe extends React.Component {
 
                         <div>
                             <TextField
-                                placeholder="Directions"
-                                margin="dense"
-                                variant="outlined"
-                                name="description"
+                                placeholder='Directions'
+                                margin='dense'
+                                variant='outlined'
+                                name='description'
                                 fullWidth= {true}
                                 multiline={true}
                                 rows={4}
@@ -261,19 +300,21 @@ class EditRecipe extends React.Component {
                         </div>
 
 
-                        <div>
+                        <div className={classes.drinkImage}>
                             Drink image
                         </div>
 
                         <div>
-                            <Link component="button" className={classes.changeBackgroundColor} onClick={this.handleChangeBackgroundColor}>
-                                Change background color
+                            <Link component='button' className={classes.changeBackgroundColor} onClick={this.handleChangeBackgroundColor}>
+                                CHANGE BACKGROUND COLOR
                             </Link>
 
                         </div>
 
+                        <Divider variant='fullWidth' className={classes.divider} />
+
                         <div className={classes.bottomControls}>
-                            <Button variant='outlined' color='default' size='small'>
+                            <Button variant='outlined' color='default' size='small' onClick={this.handleDelete}>
                                 Delete Recipe
                             </Button>
                         </div>

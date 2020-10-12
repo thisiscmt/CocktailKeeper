@@ -1,9 +1,8 @@
 import React from 'react';
-import Button from "@material-ui/core/Button";
+import Button from '@material-ui/core/Button';
 
-import RecipeService from "../../services/RecipeService";
-import Card from "@material-ui/core/Card";
-import {createStyles, withStyles} from "@material-ui/core/styles";
+import RecipeService from '../../services/RecipeService';
+import {createStyles, withStyles} from '@material-ui/core/styles';
 
 const styles = createStyles({
     recipeContainer: {
@@ -14,11 +13,7 @@ const styles = createStyles({
         paddingLeft: '8px',
         paddingTop: '8px',
         paddingRight: '8px'
-    },
-
-    // recipeLink: {
-    //     border: 0
-    // }
+    }
 });
 
 class Home extends React.Component {
@@ -31,7 +26,7 @@ class Home extends React.Component {
     };
 
     handleViewRecipe = (recipe) => {
-        this.props.history.push('/recipe/' + recipe.id);
+        this.props.history.push('/recipe/' + encodeURIComponent(recipe.name));
     };
 
     render() {
@@ -50,7 +45,7 @@ class Home extends React.Component {
                             {
                                 recipes.map(recipe => {
                                     return (
-                                        <div key={recipe.id} className={classes.recipe}>
+                                        <div key={recipe.name} className={classes.recipe}>
                                             <Button
                                                 onClick={() => {this.handleViewRecipe(recipe)}}
                                                 variant='outlined'
