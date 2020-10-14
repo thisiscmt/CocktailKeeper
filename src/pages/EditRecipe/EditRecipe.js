@@ -16,7 +16,8 @@ import QtyModal from '../../components/QtyModal/QtyModal';
 
 const styles = createStyles({
     root: {
-        paddingTop: '5px'
+        paddingTop: '5px',
+        paddingBottom: '6px'
     },
 
     divider: {
@@ -59,12 +60,11 @@ const styles = createStyles({
     },
 
     drinkImage: {
-        paddingTop: '8px',
-        paddingBottom: '8px'
+        textAlign: 'center'
     },
 
     changeBackgroundColor: {
-        fontSize: '13px'
+        fontSize: '14px'
     }
 });
 
@@ -79,7 +79,8 @@ class EditRecipe extends React.Component {
 
             this.state = {
                 recipe,
-                ingredientCounter: recipe.ingredients.length + 1
+                ingredientCounter: recipe.ingredients.length + 1,
+                mode: 'Edit'
             }
         } else {
             this.state = {
@@ -89,7 +90,8 @@ class EditRecipe extends React.Component {
                     directions: '',
                     backgroundColor: ''
                 },
-                ingredientCounter: 1
+                ingredientCounter: 1,
+                mode: 'Add',
             };
         }
 
@@ -97,6 +99,7 @@ class EditRecipe extends React.Component {
 
         if (queryParams) {
             this.state.origin = queryParams.origin;
+            this.state.mode = queryParams.mode;
         }
 
         this.state.validationError = false;
@@ -215,7 +218,7 @@ class EditRecipe extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { recipe, validationError } = this.state;
+        const { recipe, validationError, mode } = this.state;
 
         return (
             <div className={classes.root}>
@@ -225,9 +228,9 @@ class EditRecipe extends React.Component {
                             <Button type='submit' variant='outlined' color='primary' size='small'>
                                 Save
                             </Button>
-                                <Button variant='outlined' color='default' size='small' onClick={this.handleCancel}>
-                                    Cancel
-                                </Button>
+                            <Button variant='outlined' color='default' size='small' onClick={this.handleCancel}>
+                                Cancel
+                            </Button>
                         </div>
 
                         <Divider variant='fullWidth' className={classes.divider} />
@@ -249,39 +252,36 @@ class EditRecipe extends React.Component {
                             />
                         </div>
 
-                        <div>
-                            <List disablePadding={true}>
-                                {
-                                    recipe.ingredients.map(ingredient => {
-                                        return (
-                                            <ListItem key={ingredient.id} className={classes.ingredient}>
-                                                <QtyModal ingredient={ingredient} onSave={this.handleSaveIngredientQty} />
+                        <List disablePadding={true}>
+                            {
+                                recipe.ingredients.map(ingredient => {
+                                    return (
+                                        <ListItem key={ingredient.id} className={classes.ingredient}>
+                                            <QtyModal ingredient={ingredient} onSave={this.handleSaveIngredientQty} />
 
-                                                <TextField
-                                                    className={classes.ingredientName}
-                                                    placeholder='Ingredient'
-                                                    margin='dense'
-                                                    variant='outlined'
-                                                    name='description'
-                                                    value={ingredient.name}
-                                                    onChange={(event) => {
-                                                        this.handleChangeIngredientName(ingredient.id, event.target.value);}
-                                                    }
-                                                />
-                                            </ListItem>
-                                        )
-                                    })
-                                }
-                                {
-                                    <ListItem className={classes.newIngredient}>
-                                        <Button className='app-link' onClick={this.handleAddIngredient}>
-                                            <AddCircleOutlineRoundedIcon color='primary' />
-                                            <span className={classes.addLabel}>Add Ingredient</span>
-                                        </Button>
-                                    </ListItem>
-                                }
-                            </List>
-                        </div>
+                                            <TextField
+                                                className={classes.ingredientName}
+                                                placeholder='Ingredient'
+                                                margin='dense'
+                                                variant='outlined'
+                                                name='description'
+                                                value={ingredient.name}
+                                                onChange={(event) => {
+                                                    this.handleChangeIngredientName(ingredient.id, event.target.value);}
+                                                }
+                                            />
+                                        </ListItem>
+                                    )
+                                })
+                            }
+
+                            <ListItem className={classes.newIngredient}>
+                                <Button className='app-link' onClick={this.handleAddIngredient}>
+                                    <AddCircleOutlineRoundedIcon color='primary' />
+                                    <span className={classes.addLabel}>Add Ingredient</span>
+                                </Button>
+                            </ListItem>
+                        </List>
 
                         <div>
                             <TextField
@@ -299,9 +299,8 @@ class EditRecipe extends React.Component {
                             />
                         </div>
 
-
                         <div className={classes.drinkImage}>
-                            Drink image
+                            <img href={window.location.protocol + '//' + window.location.host + '/images/rocks.png'} alt={'Vessel image'} />
                         </div>
 
                         <div>
@@ -311,13 +310,18 @@ class EditRecipe extends React.Component {
 
                         </div>
 
-                        <Divider variant='fullWidth' className={classes.divider} />
+                        {
+                            mode && mode === 'Edit' &&
+                            <div>
+                                <Divider variant='fullWidth' className={classes.divider} />
 
-                        <div className={classes.bottomControls}>
-                            <Button variant='outlined' color='default' size='small' onClick={this.handleDelete}>
-                                Delete Recipe
-                            </Button>
-                        </div>
+                                <div className={classes.bottomControls}>
+                                    <Button variant='outlined' color='default' size='small' onClick={this.handleDelete}>
+                                        Delete Recipe
+                                    </Button>
+                                </div>
+                            </div>
+                        }
                     </form>
                 </Container>
             </div>

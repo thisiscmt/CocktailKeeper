@@ -29,6 +29,12 @@ a.app-link:active {
     text-align: center;
 }
 
+.drink-image {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
 .fancy-nav {
-    font-family: 'Rye', cursive, Roboto, Arial, Helvetica, sans-serif;
+    font-family: 'Rye', Roboto, Arial, Helvetica, sans-serif;
 }

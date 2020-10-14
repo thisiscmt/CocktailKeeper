@@ -35,7 +35,26 @@ const styles = createStyles({
         paddingBottom: '8px'
     },
 
+    ingredient: {
+        fontSize: '14px',
+        paddingBottom: 0
+    },
+
+    recipeDirections: {
+        padding: '8px 16px 8px 16px',
+        textAlign: 'left',
+        whiteSpace: 'pre-line'
+    },
+
+    drinkImage: {
+        paddingTop: '8px',
+        paddingBottom: '8px',
+        textAlign: 'center'
+    },
+
     qtyDesc: {
+        fontSize: '14px',
+        fontStyle: 'italic',
         width: '64px'
     }
 });
@@ -54,7 +73,7 @@ class ViewRecipe extends React.Component {
         const { recipe } = this.state;
 
         return (
-            <div className={classes.root}>
+            <div className={classes.root} style={{ }}>
                 <Container maxWidth='sm'>
                     {
                         recipe ?
@@ -77,24 +96,30 @@ class ViewRecipe extends React.Component {
                                 { recipe.name }
                             </div>
 
-                            <div>
-                                <List disablePadding={true}>
-                                    {
-                                        recipe.ingredients.map(ingredient => {
-                                            return (
-                                                <ListItem key={ingredient.id} className={classes.ingredient}>
-                                                    {
-                                                        ingredient.qtyDesc ?
-                                                        <span className={classes.qtyDesc}>{ ingredient.qtyDesc }</span> :
-                                                        ''
-                                                    }
+                            <List disablePadding={true}>
+                                {
+                                    recipe.ingredients.map(ingredient => {
+                                        return (
+                                            <ListItem key={ingredient.id} className={classes.ingredient}>
+                                                {
+                                                    ingredient.qtyDesc ?
+                                                    <span className={classes.qtyDesc}>{ ingredient.qtyDesc }</span> :
+                                                    ''
+                                                }
 
-                                                    <span>{ ingredient.name }</span>
-                                                </ListItem>
-                                            )
-                                        })
-                                    }
-                                </List>
+                                                <span>{ ingredient.name }</span>
+                                            </ListItem>
+                                        )
+                                    })
+                                }
+                            </List>
+
+                            <div className={classes.recipeDirections}>
+                                { recipe.directions }
+                            </div>
+
+                            <div className={classes.drinkImage}>
+                                <img href={window.location.protocol + '//' + window.location.host + '/images/rocks.png'} alt={'Vessel image'} />
                             </div>
                         </div> :
                         <div>
@@ -103,8 +128,6 @@ class ViewRecipe extends React.Component {
                             </p>
                         </div>
                     }
-
-                    <Divider variant='fullWidth' className={classes.divider} />
                 </Container>
             </div>
         )}

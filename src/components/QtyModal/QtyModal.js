@@ -23,10 +23,14 @@ const styles = createStyles({
     },
 
     ingredientQty: {
+    },
+
+    qtyDesc: {
         border: 0,
-        padding: 0,
-        fontSize: '12px'
-    }
+        fontSize: '14px',
+        fontStyle: 'italic',
+        padding: 0
+    },
 });
 
 class QtyModal extends React.Component {
@@ -116,7 +120,7 @@ class QtyModal extends React.Component {
             <div>
                 <Button
                     onClick={this.handleOpen}
-                    className={ ingredient.qtyDesc ? classes.ingredientQty : null }
+                    className={ ingredient.qtyDesc ? classes.qtyDesc : null }
                     variant='outlined'
                     color='default'
                     size='medium'

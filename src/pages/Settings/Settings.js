@@ -7,16 +7,10 @@ import RecipeService from '../../services/RecipeService';
 
 const styles = createStyles({
     root: {
-        paddingTop: '5px'
-    },
-
-    customFileUpload: {
-        cursor: 'pointer',
-        display: 'inline-block'
-//        fontWeight: 600,
-//        marginLeft: '5px',
-//        verticalAlign: 'top'
+        paddingTop: '5px',
+        paddingBottom: '5px'
     }
+
 });
 
 class Settings extends React.Component {
@@ -39,10 +33,6 @@ class Settings extends React.Component {
         }
     };
 
-    handleSelectFile = () => {
-
-    };
-
     render() {
         const { classes } = this.props;
 
@@ -52,14 +42,6 @@ class Settings extends React.Component {
                     <Button variant='outlined' color='default' size='small' onClick={this.handleDownload}>
                         Download
                     </Button>
-
-                    <label htmlFor='FileUpload' className={classes.customFileUpload}>Browse
-                        <input type='file'
-                               id='FileUpload'
-                               name='file'
-                               onChange={this.handleSelectFile}
-                               accept=".json"/>
-                    </label>
                 </Container>
             </div>
         );
