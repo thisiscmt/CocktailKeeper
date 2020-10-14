@@ -31,8 +31,8 @@ const styles = createStyles({
 
     recipeName: {
         fontSize: '18px',
-        paddingTop: '8px',
-        paddingBottom: '8px'
+        marginTop: '16px',
+        marginBottom: '8px'
     },
 
     ingredient: {
@@ -41,15 +41,11 @@ const styles = createStyles({
     },
 
     recipeDirections: {
-        padding: '8px 16px 8px 16px',
+        marginTop: '16px',
+        paddingLeft: '16px',
+        paddingRight: '16px',
         textAlign: 'left',
         whiteSpace: 'pre-line'
-    },
-
-    drinkImage: {
-        paddingTop: '8px',
-        paddingBottom: '8px',
-        textAlign: 'center'
     },
 
     qtyDesc: {
@@ -81,7 +77,7 @@ class ViewRecipe extends React.Component {
                             <div className={classes.topControls}>
                                 <Button
                                     component={ Link }
-                                    to={`/recipe/${encodeURIComponent(recipe.name)}/edit?origin=view`}
+                                    to={`/recipe/${encodeURIComponent(recipe.name)}/edit`}
                                     variant='outlined'
                                     color='primary'
                                     size='small'
@@ -118,7 +114,7 @@ class ViewRecipe extends React.Component {
                                 { recipe.directions }
                             </div>
 
-                            <div className={classes.drinkImage}>
+                            <div className={'drink-image'}>
                                 <img href={window.location.protocol + '//' + window.location.host + '/images/rocks.png'} alt={'Vessel image'} />
                             </div>
                         </div> :

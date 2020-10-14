@@ -1,15 +1,14 @@
+import {createStyles, withStyles} from '@material-ui/core/styles';
 import React from 'react';
+import Ingredient from '../../models/Ingredient';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import {createStyles, withStyles} from '@material-ui/core/styles';
-
-import Ingredient from '../../models/Ingredient';
 
 const styles = createStyles({
     title: {
@@ -18,30 +17,17 @@ const styles = createStyles({
 
     content: {
         textAlign: 'center'
-    },
+    }
 
-    selector: {
-        width: '150px'
-    },
-
-    ingredientQty: {
-    },
-
-    qtyDesc: {
-        border: 0,
-        fontSize: '14px',
-        fontStyle: 'italic',
-        padding: 0
-    },
 });
 
-class QtyModal extends React.Component {
+class ColorSelectorModal extends React.Component {
     constructor (props) {
         super(props);
 
         this.state = {
             open: false,
-            ingredient: this.props.ingredient
+            color: this.props.color
         };
     }
 
@@ -193,4 +179,4 @@ class QtyModal extends React.Component {
     };
 }
 
-export default withStyles(styles)(QtyModal);
+export default withStyles(styles)(ColorSelectorModal);

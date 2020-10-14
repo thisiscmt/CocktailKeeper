@@ -29,12 +29,9 @@
         "resolve": "1.12.0",
         "semver": "6.3.0",
         "ts-pnp": "1.1.4",
-        "uuid": "^8.3.1",
         "webpack": "4.41.0"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^2.2.0",
-        "@typescript-eslint/parser": "^2.2.0",
         "babel-eslint": "10.0.3",
         "babel-jest": "^24.9.0",
         "babel-loader": "8.0.6",

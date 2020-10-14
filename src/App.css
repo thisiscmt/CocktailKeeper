@@ -30,8 +30,9 @@ a.app-link:active {
 }
 
 .drink-image {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    text-align: center;
 }
 
 

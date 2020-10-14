@@ -11,8 +11,10 @@ import ListItem from '@material-ui/core/ListItem';
 import {createStyles, withStyles} from '@material-ui/core/styles';
 import * as queryString from 'query-string'
 
-import RecipeService from '../../services/RecipeService';
 import QtyModal from '../../components/QtyModal/QtyModal';
+import RecipeService from '../../services/RecipeService';
+import Recipe from '../../models/Recipe';
+import Ingredient from '../../models/Ingredient';
 
 const styles = createStyles({
     root: {
@@ -59,12 +61,9 @@ const styles = createStyles({
         width: '100%'
     },
 
-    drinkImage: {
-        textAlign: 'center'
-    },
-
     changeBackgroundColor: {
-        fontSize: '14px'
+        fontSize: '14px',
+        marginBottom: '10px'
     }
 });
 
@@ -84,12 +83,7 @@ class EditRecipe extends React.Component {
             }
         } else {
             this.state = {
-                recipe: {
-                    name: '',
-                    ingredients: [],
-                    directions: '',
-                    backgroundColor: ''
-                },
+                recipe: new Recipe(),
                 ingredientCounter: 1,
                 mode: 'Add',
             };
@@ -98,7 +92,6 @@ class EditRecipe extends React.Component {
         const queryParams = queryString.parse(this.props.location.search);
 
         if (queryParams) {
-            this.state.origin = queryParams.origin;
             this.state.mode = queryParams.mode;
         }
 
@@ -119,15 +112,10 @@ class EditRecipe extends React.Component {
         event.preventDefault();
 
         const recipe = this.state.recipe;
+        const ingredient = new Ingredient();
 
-        recipe.ingredients.push({
-            id: this.state.ingredientCounter,
-            name: '',
-            amount: '0',
-            fractionalAmount: '0',
-            unit: '0',
-            qtyDesc: ''
-        });
+        ingredient.id = this.state.ingredientCounter;
+        recipe.ingredients.push(ingredient);
 
         this.setState({ recipe, ingredientCounter: this.state.ingredientCounter + 1 });
     };
@@ -209,7 +197,7 @@ class EditRecipe extends React.Component {
     };
 
     doNavigation = () => {
-        if (this.state.origin === 'view') {
+        if (this.state.mode === 'Edit') {
             this.props.history.push('/recipe/' +  encodeURIComponent(this.state.recipe.name));
         } else {
             this.props.history.push('/');
@@ -299,7 +287,7 @@ class EditRecipe extends React.Component {
                             />
                         </div>
 
-                        <div className={classes.drinkImage}>
+                        <div className={'drink-image'}>
                             <img href={window.location.protocol + '//' + window.location.host + '/images/rocks.png'} alt={'Vessel image'} />
                         </div>
 
