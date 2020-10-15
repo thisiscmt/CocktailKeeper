@@ -7,7 +7,7 @@ class RecipeService {
             recipes = JSON.parse(recipesJSON);
         }
 
-        console.log('current recipe list: %o', recipes);
+        console.log('recipes: %o', recipes);
 
         return recipes;
     }

@@ -25,12 +25,16 @@ class Settings extends React.Component {
         document.body.removeChild(element);
     }
 
-    handleDownload = () => {
+    handleBackup = () => {
         const recipeData = RecipeService.getRecipeData();
 
         if (recipeData) {
             this.download('Cocktail Keeper recipes.json', recipeData);
         }
+    };
+
+    handleRestore = () => {
+        // TODO
     };
 
     render() {
@@ -39,8 +43,16 @@ class Settings extends React.Component {
         return (
             <div className={classes.root}>
                 <Container maxWidth='sm'>
-                    <Button variant='outlined' color='default' size='small' onClick={this.handleDownload}>
-                        Download
+                    <p>Back up all recipe data</p>
+
+                    <Button variant='outlined' color='default' size='small' onClick={this.handleBackup}>
+                        Backup
+                    </Button>
+
+                    <p>Restore recipe data</p>
+
+                    <Button variant='outlined' color='default' size='small' onClick={this.handleRestore}>
+                        Restore
                     </Button>
                 </Container>
             </div>

@@ -2,19 +2,18 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {createStyles, withStyles} from '@material-ui/core/styles';
-import * as queryString from 'query-string'
 
 import QtyModal from '../../components/QtyModal/QtyModal';
 import RecipeService from '../../services/RecipeService';
 import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
+import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
 
 const styles = createStyles({
     root: {
@@ -62,7 +61,7 @@ const styles = createStyles({
     },
 
     changeBackgroundColor: {
-        fontSize: '14px',
+        marginTop: '16px',
         marginBottom: '10px'
     }
 });
@@ -87,12 +86,6 @@ class EditRecipe extends React.Component {
                 ingredientCounter: 1,
                 mode: 'Add',
             };
-        }
-
-        const queryParams = queryString.parse(this.props.location.search);
-
-        if (queryParams) {
-            this.state.mode = queryParams.mode;
         }
 
         this.state.validationError = false;
@@ -127,8 +120,16 @@ class EditRecipe extends React.Component {
 
         if (index > -1) {
             const recipe = this.state.recipe;
+            const ingredient = new Ingredient();
 
-            recipe.ingredients[index] = { ...qtyData, name: this.state.recipe.ingredients[index].name };
+            ingredient.id = recipe.ingredients[index].id;
+            ingredient.name = recipe.ingredients[index].name;
+            ingredient.amount = qtyData.amount;
+            ingredient.fractionalAmount = qtyData.fractionalAmount;
+            ingredient.unit = qtyData.unit;
+            ingredient.qtyDesc = qtyData.qtyDesc;
+
+            recipe.ingredients[index] = ingredient;
             this.setState({ recipe });
         }
     }
@@ -161,11 +162,14 @@ class EditRecipe extends React.Component {
         // TODO
     };
 
-    handleChangeBackgroundColor = (event) => {
-        event.preventDefault();
+    handleSaveBackgroundColor = (colorData) => {
+        const recipe = this.state.recipe;
 
-        // TODO
-    };
+        recipe.backgroundColor = colorData.colorCode;
+        recipe.textColor = colorData.textColorCode;
+
+        this.setState({ recipe });
+    }
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -209,7 +213,10 @@ class EditRecipe extends React.Component {
         const { recipe, validationError, mode } = this.state;
 
         return (
-            <div className={classes.root}>
+            <div
+                className={classes.root}
+                style={recipe.backgroundColor ? { backgroundColor: recipe.backgroundColor, color: recipe.textColor} : null}
+            >
                 <Container maxWidth='sm'>
                     <form onSubmit={this.handleSubmit}>
                         <div className={classes.topControls}>
@@ -279,7 +286,7 @@ class EditRecipe extends React.Component {
                                 name='description'
                                 fullWidth= {true}
                                 multiline={true}
-                                rows={4}
+                                rows={6}
                                 value={recipe.directions}
                                 size='small'
                                 inputProps={{ maxLength: 250 }}
@@ -291,15 +298,15 @@ class EditRecipe extends React.Component {
                             <img href={window.location.protocol + '//' + window.location.host + '/images/rocks.png'} alt={'Vessel image'} />
                         </div>
 
-                        <div>
-                            <Link component='button' className={classes.changeBackgroundColor} onClick={this.handleChangeBackgroundColor}>
-                                CHANGE BACKGROUND COLOR
-                            </Link>
-
+                        <div className={classes.changeBackgroundColor}>
+                            <ColorSelectorModal
+                                linkLabel={'CHANGE BACKGROUND COLOR'}
+                                colorCode={'#FF0000'}
+                                onSave={this.handleSaveBackgroundColor} />
                         </div>
 
                         {
-                            mode && mode === 'Edit' &&
+                            mode === 'Edit' &&
                             <div>
                                 <Divider variant='fullWidth' className={classes.divider} />
 

@@ -12,6 +12,7 @@ import RecipeService from '../../services/RecipeService';
 const styles = createStyles({
     root: {
         paddingTop: '5px',
+        paddingBottom: '16px'
     },
 
     mainContainer: {
@@ -69,7 +70,7 @@ class ViewRecipe extends React.Component {
         const { recipe } = this.state;
 
         return (
-            <div className={classes.root} style={{ }}>
+            <div className={classes.root} style={recipe.backgroundColor !== '0' ? { backgroundColor: recipe.backgroundColor} : null}>
                 <Container maxWidth='sm'>
                     {
                         recipe ?
