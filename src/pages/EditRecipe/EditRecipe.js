@@ -8,19 +8,16 @@ import Container from '@material-ui/core/Container';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {createStyles, withStyles} from '@material-ui/core/styles';
+import {createMuiTheme, MuiThemeProvider} from '@material-ui/core';
 
 import QtyModal from '../../components/QtyModal/QtyModal';
 import RecipeService from '../../services/RecipeService';
+import SharedService from '../../services/SharedService';
 import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
 import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
 
 const styles = createStyles({
-    root: {
-        paddingTop: '5px',
-        paddingBottom: '6px'
-    },
-
     topControls: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -66,20 +63,30 @@ class EditRecipe extends React.Component {
         super(props);
 
         let recipeName = props.match.params.recipeName;
+        let theme;
 
         if (recipeName) {
             const recipe = RecipeService.getRecipe(recipeName);
+            theme = SharedService.buildThemeConfig(recipe);
 
             this.state = {
                 recipe,
                 ingredientCounter: recipe.ingredients.length + 1,
-                mode: 'Edit'
+                mode: 'Edit',
+                theme
             }
         } else {
+            theme = createMuiTheme({
+                palette: {
+                    type: 'light'
+                },
+            });
+
             this.state = {
                 recipe: new Recipe(),
                 ingredientCounter: 1,
                 mode: 'Add',
+                theme
             };
         }
 
@@ -163,7 +170,9 @@ class EditRecipe extends React.Component {
         recipe.backgroundColor = colorData.colorCode;
         recipe.textColor = colorData.textColorCode;
 
-        this.setState({ recipe });
+        const theme = SharedService.buildThemeConfig(recipe);
+
+        this.setState({ recipe, theme });
     }
 
     handleSubmit = (event) => {
@@ -203,15 +212,12 @@ class EditRecipe extends React.Component {
         }
     }
 
-        render() {
+    render() {
         const { classes } = this.props;
-        const { recipe, validationError, mode } = this.state;
+        const { recipe, validationError, mode, theme } = this.state;
 
         return (
-            <div
-                className={classes.root}
-                style={recipe.backgroundColor ? { backgroundColor: recipe.backgroundColor, color: recipe.textColor} : null}
-            >
+            <MuiThemeProvider theme={theme}>
                 <Container maxWidth='sm'>
                     <form onSubmit={this.handleSubmit} autoComplete={'on'}>
                         <div className={classes.topControls}>
@@ -225,30 +231,28 @@ class EditRecipe extends React.Component {
 
                         <Divider variant='fullWidth' className={'divider'} />
 
-                        <div>
-                            <TextField
-                                autoComplete={'recipeName'}
-                                placeholder='Drink name'
-                                margin='dense'
-                                variant='outlined'
-                                name='recipeName'
-                                autoFocus
-                                fullWidth= {true}
-                                value={recipe.name}
-                                size='small'
-                                error={validationError}
-                                helperText={validationError === true ? 'Name is required' : ''}
-                                inputProps={{ maxLength: 50 }}
-                                onChange={this.handleChangeName}
-                            />
-                        </div>
+                        <TextField
+                            autoComplete={'recipeName'}
+                            placeholder='Drink name'
+                            margin='dense'
+                            variant='outlined'
+                            name='recipeName'
+                            autoFocus
+                            fullWidth= {true}
+                            value={recipe.name}
+                            size='small'
+                            error={validationError}
+                            helperText={validationError === true ? 'Name is required' : ''}
+                            inputProps={{ maxLength: 50 }}
+                            onChange={this.handleChangeName}
+                        />
 
                         <List disablePadding={true}>
                             {
                                 recipe.ingredients.map(ingredient => {
                                     return (
                                         <ListItem key={ingredient.id} className={classes.ingredient}>
-                                            <QtyModal ingredient={ingredient} onSave={this.handleSaveIngredientQty} />
+                                            <QtyModal ingredient={ingredient} textColor={recipe.textColor} onSave={this.handleSaveIngredientQty} />
 
                                             <TextField
                                                 className={classes.ingredientName}
@@ -315,7 +319,7 @@ class EditRecipe extends React.Component {
                         }
                     </form>
                 </Container>
-            </div>
+            </MuiThemeProvider>
         )
     }
 }

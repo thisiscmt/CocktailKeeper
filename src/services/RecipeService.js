@@ -9,8 +9,6 @@ class RecipeService {
             recipeData = JSON.parse(recipesJSON);
         }
 
-        console.log('recipes: %o', recipeData.recipes);
-
         return recipeData.recipes;
     }
 

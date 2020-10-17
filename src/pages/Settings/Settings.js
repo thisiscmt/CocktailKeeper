@@ -54,9 +54,11 @@ class Settings extends React.Component {
 
                     <p>Restore recipe data</p>
 
-                    <Button variant='outlined' color='default' size='small' onClick={this.handleRestore}>
-                        Restore
-                    </Button>
+                    <p>
+                        <Button variant='outlined' color='default' size='small' onClick={this.handleRestore}>
+                            Restore
+                        </Button>
+                    </p>
                 </Container>
             </div>
         );

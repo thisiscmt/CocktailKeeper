@@ -14,7 +14,7 @@ const styles = createStyles({
 
     dialogPaper: {
 
-        height : '396px'
+        height : '390px'
     },
 
     title: {
@@ -23,10 +23,6 @@ const styles = createStyles({
 
     content: {
         textAlign: 'center'
-    },
-
-    link: {
-        fontSize: '14px'
     },
 
     colorList: {
@@ -44,12 +40,18 @@ const styles = createStyles({
 
     selectedColor: {
         marginRight: '5px'
+    },
+
+    saveData: {
+        color: 'black'
     }
 });
 
 class ColorSelectorModal extends React.Component {
     constructor (props) {
         super(props);
+
+        this.selectedColorElement = React.createRef();
 
         this.state = {
             open: false,
@@ -75,21 +77,20 @@ class ColorSelectorModal extends React.Component {
                 }
 
                 this.state.selectedTextColor = textColorCode;
-            })
+            });
     }
 
     handleOpen = () => {
         this.setState({ open: true });
+
+        setTimeout(() => {
+            this.scrollToSelectedColor();
+        })
     }
 
     handleClose = () => {
         this.setState({ open: false });
     }
-
-    handleSave = () => {
-        this.props.onSave({ colorCode: this.state.selectedColor, textColorCode: this.state.selectedTextColor });
-        this.setState({ open: false });
-    };
 
     handleSelectColor = (event) => {
         const colors = this.state.colors;
@@ -108,6 +109,25 @@ class ColorSelectorModal extends React.Component {
         this.setState({ colors, selectedColor, selectedTextColor: colors[selectedColorIndex].textColorCode });
     };
 
+    handleSave = () => {
+        this.props.onSave({ colorCode: this.state.selectedColor, textColorCode: this.state.selectedTextColor });
+        this.setState({ open: false });
+    };
+
+    scrollToSelectedColor = () => {
+        if (this.selectedColorElement && this.selectedColorElement.current) {
+            window.scrollTo(0, this.selectedColorElement.current.offsetTop);
+        }
+
+        // if (ref) {
+        //     ref.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        // }
+    }
+
+    componentDidMount() {
+//        this.scrollToSelectedColor();
+    }
+
     render() {
         const { classes, linkLabel } = this.props;
         const { open, colors, selectedColor } = this.state;
@@ -119,7 +139,7 @@ class ColorSelectorModal extends React.Component {
                     className={classes.link}
                     variant='outlined'
                     color='default'
-                    size='medium'
+                    size='small'
                 >
                     { linkLabel }
                 </Button>
@@ -145,6 +165,7 @@ class ColorSelectorModal extends React.Component {
                                         data-color-code={color.colorCode}
                                         data-text-color-code={color.textColorCode}
                                         onClick={this.handleSelectColor}
+                                        ref={color.colorCode === selectedColor ? this.selectedColor : null}
                                     >
                                         {
                                             color.colorCode === selectedColor &&
@@ -157,7 +178,7 @@ class ColorSelectorModal extends React.Component {
                     </DialogContent>
 
                     <DialogActions className={classes.content}>
-                        <Button onClick={this.handleSave}>Save</Button>
+                        <Button onClick={this.handleSave} className={classes.saveData} variant='outlined' size={'small'}>Save</Button>
                     </DialogActions>
                 </Dialog>
             </div>

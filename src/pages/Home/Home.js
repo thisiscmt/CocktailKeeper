@@ -47,7 +47,10 @@ class Home extends React.Component {
                                     return (
                                         <div key={recipe.name} className={classes.recipe}>
                                             <Button
-                                                style={recipe.backgroundColor !== '0' ? { backgroundColor: recipe.backgroundColor} : null}
+                                                style={
+                                                    recipe.backgroundColor ?
+                                                        { backgroundColor: recipe.backgroundColor, color: recipe.textColor } :
+                                                        null}
                                                 onClick={() => {this.handleViewRecipe(recipe)}}
                                                 variant='outlined'
                                                 color='default'
