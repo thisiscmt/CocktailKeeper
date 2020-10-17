@@ -8,7 +8,7 @@ import Container from '@material-ui/core/Container';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {createStyles, withStyles} from '@material-ui/core/styles';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core';
+import {MuiThemeProvider} from '@material-ui/core';
 
 import QtyModal from '../../components/QtyModal/QtyModal';
 import RecipeService from '../../services/RecipeService';
@@ -16,6 +16,7 @@ import SharedService from '../../services/SharedService';
 import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
 import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 
 const styles = createStyles({
     topControls: {
@@ -63,12 +64,16 @@ class EditRecipe extends React.Component {
         super(props);
 
         let recipeName = props.match.params.recipeName;
+        let recipe;
         let theme;
 
         if (recipeName) {
-            const recipe = RecipeService.getRecipe(recipeName);
-            theme = SharedService.buildThemeConfig(recipe);
+            recipe = RecipeService.getRecipe(recipeName);
+        }
 
+        theme = SharedService.buildThemeConfig(recipe);
+
+        if (recipe) {
             this.state = {
                 recipe,
                 ingredientCounter: recipe.ingredients.length + 1,
@@ -76,16 +81,8 @@ class EditRecipe extends React.Component {
                 theme
             }
         } else {
-            theme = createMuiTheme({
-                palette: {
-                    type: 'light'
-                },
-            });
-
             this.state = {
-                recipe: new Recipe(),
-                ingredientCounter: 1,
-                mode: 'Add',
+                recipe,
                 theme
             };
         }
@@ -198,8 +195,6 @@ class EditRecipe extends React.Component {
     handleDelete = (event) => {
         event.preventDefault();
 
-        // TODO: Add a confirmation prompt
-
         RecipeService.deleteRecipe(this.state.recipe.name);
         this.props.history.push('/');
     };
@@ -219,105 +214,111 @@ class EditRecipe extends React.Component {
         return (
             <MuiThemeProvider theme={theme}>
                 <Container maxWidth='sm'>
-                    <form onSubmit={this.handleSubmit} autoComplete={'on'}>
-                        <div className={classes.topControls}>
-                            <Button type='submit' variant='outlined' color='primary' size='small'>
-                                Save
-                            </Button>
-                            <Button variant='outlined' color='default' size='small' onClick={this.handleCancel}>
-                                Cancel
-                            </Button>
-                        </div>
-
-                        <Divider variant='fullWidth' className={'divider'} />
-
-                        <TextField
-                            autoComplete={'recipeName'}
-                            placeholder='Drink name'
-                            margin='dense'
-                            variant='outlined'
-                            name='recipeName'
-                            autoFocus
-                            fullWidth= {true}
-                            value={recipe.name}
-                            size='small'
-                            error={validationError}
-                            helperText={validationError === true ? 'Name is required' : ''}
-                            inputProps={{ maxLength: 50 }}
-                            onChange={this.handleChangeName}
-                        />
-
-                        <List disablePadding={true}>
-                            {
-                                recipe.ingredients.map(ingredient => {
-                                    return (
-                                        <ListItem key={ingredient.id} className={classes.ingredient}>
-                                            <QtyModal ingredient={ingredient} textColor={recipe.textColor} onSave={this.handleSaveIngredientQty} />
-
-                                            <TextField
-                                                className={classes.ingredientName}
-                                                placeholder='Ingredient'
-                                                margin='dense'
-                                                variant='outlined'
-                                                name='description'
-                                                value={ingredient.name}
-                                                onChange={(event) => {
-                                                    this.handleChangeIngredientName(ingredient.id, event.target.value);}
-                                                }
-                                            />
-                                        </ListItem>
-                                    )
-                                })
-                            }
-
-                            <ListItem className={classes.newIngredient}>
-                                <Button className='app-link' onClick={this.handleAddIngredient}>
-                                    <AddCircleOutlineRoundedIcon color='primary' />
-                                    <span className={classes.addLabel}>Add Ingredient</span>
+                    {
+                        recipe ?
+                        <form onSubmit={this.handleSubmit} autoComplete={'on'}>
+                            <div className={classes.topControls}>
+                                <Button type='submit' variant='outlined' color='primary' size='small'>
+                                    Save
                                 </Button>
-                            </ListItem>
-                        </List>
+                                <Button variant='outlined' color='default' size='small' onClick={this.handleCancel}>
+                                    Cancel
+                                </Button>
+                            </div>
 
-                        <div>
+                            <Divider variant='fullWidth' className={'divider'} />
+
                             <TextField
-                                placeholder='Directions'
+                                autoComplete={'recipeName'}
+                                placeholder='Drink name'
                                 margin='dense'
                                 variant='outlined'
-                                name='description'
+                                name='recipeName'
+                                autoFocus
                                 fullWidth= {true}
-                                multiline={true}
-                                rows={6}
-                                value={recipe.directions}
+                                value={recipe.name}
                                 size='small'
-                                inputProps={{ maxLength: 250 }}
-                                onChange={this.handleChangeDirections}
+                                error={validationError}
+                                helperText={validationError === true ? 'Name is required' : ''}
+                                inputProps={{ maxLength: 50 }}
+                                onChange={this.handleChangeName}
                             />
-                        </div>
 
-                        <div className={'drink-image'}>
-                            <img src={window.location.protocol + '//' + window.location.host + '/images/rocks.png'} />
-                        </div>
+                            <List disablePadding={true}>
+                                {
+                                    recipe.ingredients.map(ingredient => {
+                                        return (
+                                            <ListItem key={ingredient.id} className={classes.ingredient}>
+                                                <QtyModal ingredient={ingredient} textColor={recipe.textColor} onSave={this.handleSaveIngredientQty} />
 
-                        <div className={classes.changeBackgroundColor}>
-                            <ColorSelectorModal
-                                linkLabel={'CHANGE BACKGROUND COLOR'}
-                                colorCode={recipe.backgroundColor}
-                                onSave={this.handleSaveBackgroundColor} />
-                        </div>
+                                                <TextField
+                                                    className={classes.ingredientName}
+                                                    placeholder='Ingredient'
+                                                    margin='dense'
+                                                    variant='outlined'
+                                                    name='description'
+                                                    value={ingredient.name}
+                                                    onChange={(event) => {
+                                                        this.handleChangeIngredientName(ingredient.id, event.target.value);}
+                                                    }
+                                                />
+                                            </ListItem>
+                                        )
+                                    })
+                                }
 
-                        {
-                            mode === 'Edit' &&
-                            <div>
-                                <Divider variant='fullWidth' className={'divider'} />
-
-                                <div className={classes.bottomControls}>
-                                    <Button variant='outlined' color='default' size='small' onClick={this.handleDelete}>
-                                        Delete Recipe
+                                <ListItem className={classes.newIngredient}>
+                                    <Button className='app-link' onClick={this.handleAddIngredient}>
+                                        <AddCircleOutlineRoundedIcon color='primary' />
+                                        <span className={classes.addLabel}>Add Ingredient</span>
                                     </Button>
-                                </div>
+                                </ListItem>
+                            </List>
+
+                            <div>
+                                <TextField
+                                    placeholder='Directions'
+                                    margin='dense'
+                                    variant='outlined'
+                                    name='description'
+                                    fullWidth= {true}
+                                    multiline={true}
+                                    rows={6}
+                                    value={recipe.directions}
+                                    size='small'
+                                    inputProps={{ maxLength: 250 }}
+                                    onChange={this.handleChangeDirections}
+                                />
                             </div>
-                        }
-                    </form>
+
+                            <div className={'drink-image'}>
+                                <img src={window.location.protocol + '//' + window.location.host + '/images/rocks.png'} />
+                            </div>
+
+                            <div className={classes.changeBackgroundColor}>
+                                <ColorSelectorModal
+                                    linkLabel={'CHANGE BACKGROUND COLOR'}
+                                    colorCode={recipe.backgroundColor}
+                                    onSave={this.handleSaveBackgroundColor} />
+                            </div>
+
+                            {
+                                mode === 'Edit' &&
+                                <div>
+                                    <Divider variant='fullWidth' className={'divider'} />
+
+                                    <div className={classes.bottomControls}>
+                                        <DeleteConfirmationModal onDelete={this.handleDelete} />
+                                    </div>
+                                </div>
+                            }
+                        </form> :
+                        <div>
+                            <p>
+                                The specified recipe could not be found.
+                            </p>
+                        </div>
+                    }
                 </Container>
             </MuiThemeProvider>
         )

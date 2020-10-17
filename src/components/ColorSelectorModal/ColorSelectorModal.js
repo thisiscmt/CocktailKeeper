@@ -4,7 +4,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import CheckIcon from '@material-ui/icons/Check';
+import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
 import {createStyles, withStyles} from '@material-ui/core/styles';
 
 const styles = createStyles({
@@ -13,7 +13,6 @@ const styles = createStyles({
     },
 
     dialogPaper: {
-
         height : '390px'
     },
 
@@ -116,21 +115,13 @@ class ColorSelectorModal extends React.Component {
 
     scrollToSelectedColor = () => {
         if (this.selectedColorElement && this.selectedColorElement.current) {
-            window.scrollTo(0, this.selectedColorElement.current.offsetTop);
+            this.selectedColorElement.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }
-
-        // if (ref) {
-        //     ref.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        // }
-    }
-
-    componentDidMount() {
-//        this.scrollToSelectedColor();
     }
 
     render() {
         const { classes, linkLabel } = this.props;
-        const { open, colors, selectedColor } = this.state;
+        const { open, colors, selectedColor, selectedTextColor } = this.state;
 
         return (
             <div>
@@ -165,11 +156,11 @@ class ColorSelectorModal extends React.Component {
                                         data-color-code={color.colorCode}
                                         data-text-color-code={color.textColorCode}
                                         onClick={this.handleSelectColor}
-                                        ref={color.colorCode === selectedColor ? this.selectedColor : null}
+                                        ref={color.colorCode === selectedColor ? this.selectedColorElement : null}
                                     >
                                         {
                                             color.colorCode === selectedColor &&
-                                            <CheckIcon color='primary' className={classes.selectedColor} />
+                                            <CheckCircleOutlineOutlinedIcon style={{ color: selectedTextColor }} className={classes.selectedColor} />
                                         }
                                     </div>
                                 )

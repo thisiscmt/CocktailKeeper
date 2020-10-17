@@ -14,9 +14,9 @@ const styles = createStyles({
 });
 
 class Settings extends React.Component {
-    download = (fileName, text) => {
+    download = (fileName, data) => {
         const element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
         element.setAttribute('download', fileName);
         element.style.display = 'none';
         document.body.appendChild(element);
@@ -32,7 +32,7 @@ class Settings extends React.Component {
             const recipeJSON = JSON.parse(recipeData);
             recipeJSON.savedOn = new Date().getTime();
 
-            this.download('Cocktail Keeper recipes.json', recipeJSON);
+            this.download('Cocktail Keeper recipes.json', JSON.stringify(recipeJSON));
         }
     };
 
