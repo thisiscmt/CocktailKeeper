@@ -1,55 +1,61 @@
 class RecipeService {
     static getRecipes = () => {
         const recipesJSON = localStorage.getItem('ck.recipes');
-        let recipes = [];
+        let recipeData = {
+            recipes: []
+        };
 
         if (recipesJSON) {
-            recipes = JSON.parse(recipesJSON);
+            recipeData = JSON.parse(recipesJSON);
         }
 
-        console.log('recipes: %o', recipes);
+        console.log('recipes: %o', recipeData.recipes);
 
-        return recipes;
+        return recipeData.recipes;
     }
 
     static saveRecipe = (recipe) => {
         const recipesJSON = localStorage.getItem('ck.recipes');
         let recipeIndex = -1;
-        let recipes;
+        let recipeData;
 
         if (recipesJSON) {
-            recipes = JSON.parse(recipesJSON);
+            recipeData = JSON.parse(recipesJSON);
 
-            recipeIndex = recipes.findIndex((item) => {
+            recipeIndex = recipeData.recipes.findIndex((item) => {
                 return item.name === recipe.name;
             });
         } else {
-            recipes = [];
+            recipeData = {
+                recipes: []
+            };
         }
 
         if (recipeIndex > -1) {
-            recipes[recipeIndex] = recipe;
+            recipeData.recipes[recipeIndex] = recipe;
         } else {
-            recipes.push(recipe);
+            recipeData.recipes.push(recipe);
         }
 
-        localStorage.setItem('ck.recipes', JSON.stringify(recipes));
+        localStorage.setItem('ck.recipes', JSON.stringify(recipeData));
     };
 
     static getRecipe = (name) => {
         const recipesJSON = localStorage.getItem('ck.recipes');
         let recipeIndex = -1;
-        let recipes;
+        let recipeData;
         let recipe;
 
         if (recipesJSON) {
-            recipes = JSON.parse(recipesJSON);
+            recipeData = JSON.parse(recipesJSON);
 
-            recipeIndex = recipes.findIndex((item) => {
+            recipeIndex = recipeData.recipes.findIndex((item) => {
                 return item.name === name;
             });
 
-            recipe = recipes[recipeIndex];
+            if (recipeIndex > -1) {
+                recipe = recipeData.recipes[recipeIndex];
+            }
         } else {
             recipe = {};
         }
@@ -60,20 +66,20 @@ class RecipeService {
     static deleteRecipe = (recipeName) => {
         const recipesJSON = localStorage.getItem('ck.recipes');
         let recipeIndex = -1;
-        let recipes;
+        let recipeData;
 
         if (recipesJSON) {
-            recipes = JSON.parse(recipesJSON);
+            recipeData = JSON.parse(recipesJSON);
 
-            recipeIndex = recipes.findIndex((item) => {
+            recipeIndex = recipeData.recipes.findIndex((item) => {
                 return item.name === recipeName;
             });
 
             if (recipeIndex > -1) {
-                recipes.splice(recipeIndex, 1);
+                recipeData.recipes.splice(recipeIndex, 1);
             }
 
-            localStorage.setItem('ck.recipes', JSON.stringify(recipes));
+            localStorage.setItem('ck.recipes', JSON.stringify(recipeData));
         }
     }
 

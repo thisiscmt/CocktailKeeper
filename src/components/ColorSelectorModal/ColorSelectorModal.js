@@ -4,12 +4,17 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
+import CheckIcon from '@material-ui/icons/Check';
 import {createStyles, withStyles} from '@material-ui/core/styles';
 
 const styles = createStyles({
     root: {
         padding: 0
+    },
+
+    dialogPaper: {
+
+        height : '396px'
     },
 
     title: {
@@ -25,19 +30,20 @@ const styles = createStyles({
     },
 
     colorList: {
-        marginBottom: '10px',
-        padding: 0,
+        padding: 0
     },
 
     colorListItem: {
+        alignItems: 'center',
         cursor: 'pointer',
+        display: 'flex',
         height: '35px',
-        textAlign: 'right',
+        justifyContent: 'flex-end',
         width: '100%'
     },
 
     selectedColor: {
-        textAlign: 'right'
+        marginRight: '5px'
     }
 });
 
@@ -45,62 +51,31 @@ class ColorSelectorModal extends React.Component {
     constructor (props) {
         super(props);
 
-        this.colors = [
-            { colorCode: '#BC4044', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#DC8162', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#C9624B', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#B0523F', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#A9652E', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#794422', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#6C2618', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#8C351F', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#A3491F', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#A9652E', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#C8713A', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#D6AD47', textColorCode: '#000000', selected: false },
-            { colorCode: '#E5D865', textColorCode: '#000000', selected: false },
-            { colorCode: '#F4EE9C', textColorCode: '#000000', selected: false },
-            { colorCode: '#E6D084', textColorCode: '#000000', selected: false },
-            { colorCode: '#B8A261', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#A69F58', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#72814B', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#859558', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#91A173', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#8E9576', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#4E564E', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#293227', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#2E2E2D', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#475F61', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#507B7F', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#618178', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#869884', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#ADC4BD', textColorCode: '#000000', selected: false },
-            { colorCode: '#B8B295', textColorCode: '#000000', selected: false },
-            { colorCode: '#E4DDCD', textColorCode: '#000000', selected: false },
-            { colorCode: '#FFFFFF', textColorCode: '#000000', selected: false },
-            { colorCode: '#B8A398', textColorCode: '#000000', selected: false },
-            { colorCode: '#9F576B', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#504655', textColorCode: '#FFFFFF', selected: false },
-            { colorCode: '#4E2636', textColorCode: '#FFFFFF', selected: false }
-        ];
-
-        const selectedColorIndex = this.colors.findIndex(color => {
-            return color.colorCode === this.props.colorCode;
-        })
-
-        let textColorCode = '#FFFFFF';
-
-        if (selectedColorIndex > -1) {
-            this.colors[selectedColorIndex].selected = true;
-            textColorCode = this.colors[selectedColorIndex].textColorCode;
-        }
-
         this.state = {
             open: false,
-            colors: this.colors,
+            colors: [],
             selectedColor: this.props.colorCode,
-            selectedTextColor: textColorCode
+            selectedTextColor: '#FFFFFF'
         };
+
+        fetch('/data/colors.json')
+            .then(response => response.json())
+            .then(data => {
+                this.state.colors = data;
+
+                const selectedColorIndex = this.state.colors.findIndex(color => {
+                    return color.colorCode === this.props.colorCode;
+                })
+
+                let textColorCode = '#FFFFFF';
+
+                if (selectedColorIndex > -1) {
+                    this.state.colors[selectedColorIndex].selected = true;
+                    textColorCode = this.state.colors[selectedColorIndex].textColorCode;
+                }
+
+                this.state.selectedTextColor = textColorCode;
+            })
     }
 
     handleOpen = () => {
@@ -155,6 +130,7 @@ class ColorSelectorModal extends React.Component {
                     maxWidth={'xs'}
                     fullWidth={true}
                     disableBackdropClick={false}
+                    classes={{ paper: classes.dialogPaper }}
                 >
                     <DialogTitle className={classes.title}>Select Color</DialogTitle>
 
@@ -172,7 +148,7 @@ class ColorSelectorModal extends React.Component {
                                     >
                                         {
                                             color.colorCode === selectedColor &&
-                                            <AddCircleOutlineRoundedIcon color='primary' className={classes.selectedColor} />
+                                            <CheckIcon color='primary' className={classes.selectedColor} />
                                         }
                                     </div>
                                 )

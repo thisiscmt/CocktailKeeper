@@ -21,11 +21,6 @@ const styles = createStyles({
         paddingBottom: '6px'
     },
 
-    divider: {
-        marginBottom: '5px',
-        marginTop: '10px'
-    },
-
     topControls: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -208,7 +203,7 @@ class EditRecipe extends React.Component {
         }
     }
 
-    render() {
+        render() {
         const { classes } = this.props;
         const { recipe, validationError, mode } = this.state;
 
@@ -218,7 +213,7 @@ class EditRecipe extends React.Component {
                 style={recipe.backgroundColor ? { backgroundColor: recipe.backgroundColor, color: recipe.textColor} : null}
             >
                 <Container maxWidth='sm'>
-                    <form onSubmit={this.handleSubmit}>
+                    <form onSubmit={this.handleSubmit} autoComplete={'on'}>
                         <div className={classes.topControls}>
                             <Button type='submit' variant='outlined' color='primary' size='small'>
                                 Save
@@ -228,10 +223,11 @@ class EditRecipe extends React.Component {
                             </Button>
                         </div>
 
-                        <Divider variant='fullWidth' className={classes.divider} />
+                        <Divider variant='fullWidth' className={'divider'} />
 
                         <div>
                             <TextField
+                                autoComplete={'recipeName'}
                                 placeholder='Drink name'
                                 margin='dense'
                                 variant='outlined'
@@ -295,20 +291,20 @@ class EditRecipe extends React.Component {
                         </div>
 
                         <div className={'drink-image'}>
-                            <img href={window.location.protocol + '//' + window.location.host + '/images/rocks.png'} alt={'Vessel image'} />
+                            <img src={window.location.protocol + '//' + window.location.host + '/images/rocks.png'} />
                         </div>
 
                         <div className={classes.changeBackgroundColor}>
                             <ColorSelectorModal
                                 linkLabel={'CHANGE BACKGROUND COLOR'}
-                                colorCode={'#FF0000'}
+                                colorCode={recipe.backgroundColor}
                                 onSave={this.handleSaveBackgroundColor} />
                         </div>
 
                         {
                             mode === 'Edit' &&
                             <div>
-                                <Divider variant='fullWidth' className={classes.divider} />
+                                <Divider variant='fullWidth' className={'divider'} />
 
                                 <div className={classes.bottomControls}>
                                     <Button variant='outlined' color='default' size='small' onClick={this.handleDelete}>

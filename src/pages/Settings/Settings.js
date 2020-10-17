@@ -29,7 +29,10 @@ class Settings extends React.Component {
         const recipeData = RecipeService.getRecipeData();
 
         if (recipeData) {
-            this.download('Cocktail Keeper recipes.json', recipeData);
+            const recipeJSON = JSON.parse(recipeData);
+            recipeJSON.savedOn = new Date().getTime();
+
+            this.download('Cocktail Keeper recipes.json', recipeJSON);
         }
     };
 
