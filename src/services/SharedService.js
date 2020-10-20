@@ -1,33 +1,33 @@
 import {createMuiTheme} from '@material-ui/core';
 
 class SharedService {
-    static buildThemeConfig = (recipe) => {
-        if (recipe) {
+    static buildThemeConfig = (overrides) => {
+        if (overrides) {
             return createMuiTheme({
                 palette: {
                     primary: {
-                        main: recipe.textColor
+                        main: overrides.textColor
                     }
                 },
                 overrides: {
                     MuiContainer: {
                         root: {
-                            backgroundColor: recipe.backgroundColor,
+                            backgroundColor: overrides.backgroundColor,
                             paddingTop: '5px',
                             paddingBottom: '6px'
                         }
                     },
                     MuiButton: {
                         root: {
-                            color: recipe.textColor
+                            color: overrides.textColor
                         }
                     },
                     MuiCard: {
                         root: {
-                            backgroundColor: recipe.backgroundColor,
+                            backgroundColor: overrides.backgroundColor,
                             border: 'none',
                             boxShadow: 'none',
-                            color: recipe.textColor
+                            color: overrides.textColor
                         }
                     },
                     MuiCardContent: {
@@ -40,12 +40,12 @@ class SharedService {
                     },
                     MuiList: {
                         root: {
-                            color: recipe.textColor
+                            color: overrides.textColor
                         }
                     },
                     MuiInputBase: {
                         root: {
-                            color: recipe.textColor
+                            color: overrides.textColor
                         }
                     },
                     MuiDivider: {

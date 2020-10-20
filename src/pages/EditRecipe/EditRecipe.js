@@ -13,7 +13,6 @@ import {MuiThemeProvider} from '@material-ui/core';
 import QtyModal from '../../components/QtyModal/QtyModal';
 import RecipeService from '../../services/RecipeService';
 import SharedService from '../../services/SharedService';
-import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
 import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';

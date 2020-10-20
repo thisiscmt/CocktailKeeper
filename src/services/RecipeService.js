@@ -84,6 +84,10 @@ class RecipeService {
     static getRecipeData = () => {
         return localStorage.getItem('ck.recipes');
     }
+
+    static setRecipeData = (data) => {
+        localStorage.setItem('ck.recipes', data);
+    }
 }
 
 export default RecipeService;

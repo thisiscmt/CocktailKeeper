@@ -1,18 +1,15 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-
-import RecipeService from '../../services/RecipeService';
+import {DndProvider, useDrag, useDrop} from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
 import {createStyles, withStyles} from '@material-ui/core/styles';
 
-const styles = createStyles({
-    recipeContainer: {
-        paddingBottom: '8px'
-    },
+import RecipeService from '../../services/RecipeService';
 
+const styles = createStyles({
     recipe: {
-        paddingLeft: '8px',
-        paddingTop: '8px',
-        paddingRight: '8px'
+        margin: '8px'
     }
 });
 
@@ -20,8 +17,45 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
 
+        let hasTouchSupport = false;
+
+        // Set a flag to determine which backend provider should be used with react-dnd, since there isn't a single one that can handle both
+        // types of input effectively (see https://react-dnd.github.io/react-dnd/docs/backends/touch)
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+            hasTouchSupport = true;
+        }
+
+        // const [{isDragging}, drag] = useDrag({
+        //     item: { type: 'recipe', name: 'recipeName' },
+        //     end: (item, monitor) => {
+        //         const dropResult = monitor.getDropResult();
+        //
+        //         if (item && dropResult) {
+        //             alert(`You dropped ${item.name} into ${dropResult.name}!`);
+        //         }
+        //     },
+        //     collect: monitor => ({
+        //         isDragging: !!monitor.isDragging(),
+        //     }),
+        // })
+        //
+        // const [{ canDrop, isOver }, drop] = useDrop({
+        //     accept: 'recipe',
+        //     drop: () => ({ name: 'Dustbin' }),
+        //     collect: (monitor) => ({
+        //         isOver: monitor.isOver(),
+        //         canDrop: monitor.canDrop(),
+        //     }),
+        // });
+        //
+        // const opacity = isDragging ? 0.4 : 1;
+
         this.state = {
-            recipes: RecipeService.getRecipes()
+            recipes: RecipeService.getRecipes(),
+            hasTouchSupport
+            // drag,
+            // drop,
+            // opacity
         };
     };
 
@@ -31,7 +65,7 @@ class Home extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { recipes } = this.state;
+        const { recipes, hasTouchSupport, drag, drop, opacity } = this.state;
 
         return (
             <section>
