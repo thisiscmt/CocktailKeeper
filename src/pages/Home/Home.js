@@ -16,10 +16,10 @@ const styles = makeStyles({
 const RecipeItem = SortableElement(({recipe, classes}) => {
     return (
         <div>
-            <div key={recipe.recipeName} className={classes.recipe}>
+            <div key={recipe.name} className={classes.recipe}>
                 <Button
                     component={Link}
-                    to={`/recipe/${encodeURIComponent(recipe.recipeName)}`}
+                    to={`/recipe/${encodeURIComponent(recipe.name)}`}
                     style={
                         recipe.backgroundColor ?
                             {backgroundColor: recipe.backgroundColor, color: recipe.textColor} :
@@ -42,7 +42,7 @@ const RecipeList = SortableContainer(({recipes, classes}) => {
             {
                 recipes.map((recipe, index) => {
                     return (
-                        <RecipeItem key={`${recipe.recipeName}` + index} index={index} recipe={ recipe } classes={ classes } />
+                        <RecipeItem key={`${recipe.name}` + index} index={index} recipe={ recipe } classes={ classes } />
                     )
                 })
             }
@@ -68,7 +68,7 @@ const Home = (props) => {
                         <p>Select the add recipe button in the upper-right to get started.</p>
                     </div> :
                     <div>
-                        <RecipeList recipes={recipes} classes={classes} onSortEnd={handleSortEnd} />
+                        <RecipeList distance={1} recipes={recipes} classes={classes} onSortEnd={handleSortEnd} />
                     </div>
             }
         </section>
