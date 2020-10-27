@@ -131,7 +131,10 @@ class ViewRecipe extends React.Component {
                             </Card>
 
                             <div className={'drink-image'}>
-                                <img src={window.location.protocol + '//' + window.location.host + '/images/rocks.png'} />
+                                <img
+                                    src={window.location.protocol + '//' + window.location.host + '/images/rocks.png'}
+                                    alt={'Drink vessel'}
+                                />
                             </div>
                         </div> :
                         <div>

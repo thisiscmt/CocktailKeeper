@@ -13,6 +13,7 @@ import {MuiThemeProvider} from '@material-ui/core';
 import QtyModal from '../../components/QtyModal/QtyModal';
 import RecipeService from '../../services/RecipeService';
 import SharedService from '../../services/SharedService';
+import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
 import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
@@ -80,8 +81,11 @@ class EditRecipe extends React.Component {
                 theme
             }
         } else {
+            recipe = new Recipe();
+
             this.state = {
                 recipe,
+                mode: 'Add',
                 theme
             };
         }
@@ -214,7 +218,7 @@ class EditRecipe extends React.Component {
             <MuiThemeProvider theme={theme}>
                 <Container maxWidth='sm'>
                     {
-                        recipe ?
+                        recipe || mode === 'Add' ?
                         <form onSubmit={this.handleSubmit} autoComplete={'on'}>
                             <div className={classes.topControls}>
                                 <Button type='submit' variant='outlined' color='primary' size='small'>
@@ -291,7 +295,10 @@ class EditRecipe extends React.Component {
                             </div>
 
                             <div className={'drink-image'}>
-                                <img src={window.location.protocol + '//' + window.location.host + '/images/rocks.png'} />
+                                <img
+                                    src={window.location.protocol + '//' + window.location.host + '/images/rocks.png'}
+                                    alt={'Drink vessel'}
+                                />
                             </div>
 
                             <div className={classes.changeBackgroundColor}>

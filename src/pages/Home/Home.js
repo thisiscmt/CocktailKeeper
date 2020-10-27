@@ -1,106 +1,78 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import {DndProvider, useDrag, useDrop} from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { TouchBackend } from 'react-dnd-touch-backend';
-import {createStyles, withStyles} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
+import ArrayMove from 'array-move';
 
 import RecipeService from '../../services/RecipeService';
+import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 
-const styles = createStyles({
+const styles = makeStyles({
     recipe: {
         margin: '8px'
     }
 });
 
-class Home extends React.Component {
-    constructor(props) {
-        super(props);
+const RecipeItem = SortableElement(({recipe, classes}) => {
+    return (
+        <div>
+            <div key={recipe.recipeName} className={classes.recipe}>
+                <Button
+                    component={Link}
+                    to={`/recipe/${encodeURIComponent(recipe.recipeName)}`}
+                    style={
+                        recipe.backgroundColor ?
+                            {backgroundColor: recipe.backgroundColor, color: recipe.textColor} :
+                            null}
+                    variant='outlined'
+                    color='default'
+                    fullWidth={true}
+                    disableRipple={true}
+                >
+                    {recipe.name}
+                </Button>
+            </div>
+        </div>
+    );
+})
 
-        let hasTouchSupport = false;
+const RecipeList = SortableContainer(({recipes, classes}) => {
+    return (
+        <div>
+            {
+                recipes.map((recipe, index) => {
+                    return (
+                        <RecipeItem key={`${recipe.recipeName}` + index} index={index} recipe={ recipe } classes={ classes } />
+                    )
+                })
+            }
+        </div>
+    );
+});
 
-        // Set a flag to determine which backend provider should be used with react-dnd, since there isn't a single one that can handle both
-        // types of input effectively (see https://react-dnd.github.io/react-dnd/docs/backends/touch)
-        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-            hasTouchSupport = true;
-        }
+const Home = (props) => {
+    const classes = styles(props);
+    const [ recipes, setRecipes ] = useState(RecipeService.getRecipes());
 
-        // const [{isDragging}, drag] = useDrag({
-        //     item: { type: 'recipe', name: 'recipeName' },
-        //     end: (item, monitor) => {
-        //         const dropResult = monitor.getDropResult();
-        //
-        //         if (item && dropResult) {
-        //             alert(`You dropped ${item.name} into ${dropResult.name}!`);
-        //         }
-        //     },
-        //     collect: monitor => ({
-        //         isDragging: !!monitor.isDragging(),
-        //     }),
-        // })
-        //
-        // const [{ canDrop, isOver }, drop] = useDrop({
-        //     accept: 'recipe',
-        //     drop: () => ({ name: 'Dustbin' }),
-        //     collect: (monitor) => ({
-        //         isOver: monitor.isOver(),
-        //         canDrop: monitor.canDrop(),
-        //     }),
-        // });
-        //
-        // const opacity = isDragging ? 0.4 : 1;
+    const handleSortEnd = ({oldIndex, newIndex}) => {
+        const recipesToUpdate = ArrayMove(recipes, oldIndex, newIndex)
+        setRecipes(recipesToUpdate);
+    }
 
-        this.state = {
-            recipes: RecipeService.getRecipes(),
-            hasTouchSupport
-            // drag,
-            // drop,
-            // opacity
-        };
-    };
-
-    handleViewRecipe = (recipe) => {
-        this.props.history.push('/recipe/' + encodeURIComponent(recipe.name));
-    };
-
-    render() {
-        const { classes } = this.props;
-        const { recipes, hasTouchSupport, drag, drop, opacity } = this.state;
-
-        return (
-            <section>
-                {
-                    recipes.length === 0 ?
-                        <div>
-                            <p>Welcome to the cocktail keeper.</p>
-                            <p>Click the add recipe button in the upper-right to get started.</p>
-                        </div> :
-                        <div className={classes.recipeContainer}>
-                            {
-                                recipes.map(recipe => {
-                                    return (
-                                        <div key={recipe.name} className={classes.recipe}>
-                                            <Button
-                                                style={
-                                                    recipe.backgroundColor ?
-                                                        { backgroundColor: recipe.backgroundColor, color: recipe.textColor } :
-                                                        null}
-                                                onClick={() => {this.handleViewRecipe(recipe)}}
-                                                variant='outlined'
-                                                color='default'
-                                                fullWidth={true}
-                                            >
-                                                { recipe.name }
-                                            </Button>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                }
-            </section>
-        );
-    };
+    return(
+        <section>
+            {
+                recipes.length === 0 ?
+                    <div>
+                        <p>Welcome to the cocktail keeper.</p>
+                        <p>Select the add recipe button in the upper-right to get started.</p>
+                    </div> :
+                    <div>
+                        <RecipeList recipes={recipes} classes={classes} onSortEnd={handleSortEnd} />
+                    </div>
+            }
+        </section>
+    );
 }
 
-export default withStyles(styles)(Home);
+export default Home;

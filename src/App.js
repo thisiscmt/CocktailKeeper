@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Paper from '@material-ui/core/Paper';
 import {Helmet} from 'react-helmet';
+import Paper from '@material-ui/core/Paper';
 
 import Home from './pages/Home/Home';
 import ViewRecipe from './pages/ViewRecipe/ViewRecipe';
