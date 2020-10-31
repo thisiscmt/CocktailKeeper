@@ -5,7 +5,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
-import {createStyles, withStyles} from '@material-ui/core/styles';
+import { createStyles, withStyles } from '@material-ui/core/styles';
 
 const styles = createStyles({
     root: {

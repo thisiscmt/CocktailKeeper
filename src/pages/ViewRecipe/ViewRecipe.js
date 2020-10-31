@@ -1,5 +1,5 @@
 import React from 'react';
-import {withRouter, Link} from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
@@ -7,8 +7,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import {createStyles, withStyles} from '@material-ui/core/styles';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/core/styles';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 import RecipeService from '../../services/RecipeService';
 import SharedService from '../../services/SharedService';

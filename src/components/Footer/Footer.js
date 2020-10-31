@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {createStyles, withStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-const styles = createStyles({
+const styles = makeStyles({
     footer: {
         alignItems: 'center',
         backgroundColor: 'darkcyan',
@@ -12,17 +12,17 @@ const styles = createStyles({
     }
 });
 
-class Footer extends React.Component {
-    render() {
-        const { classes } = this.props;
+const Footer = (props) => {
+    const classes = styles(props);
 
-        return (
-            <footer className={classes.footer}>
-                <Link to={'/settings'} className={'nav-link'}>
-                    <span className={'fancy-nav'}>Settings</span>
-                </Link>
-            </footer>
-        )}
+
+    return (
+        <footer className={classes.footer}>
+            <Link to={'/settings'} className={'nav-link'}>
+                <span className={'fancy-nav'}>Settings</span>
+            </Link>
+        </footer>
+    )
 }
 
-export default withStyles(styles)(Footer);
+export default Footer;
