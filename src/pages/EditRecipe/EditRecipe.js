@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { withRouter } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -7,18 +7,18 @@ import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import {createStyles, withStyles} from '@material-ui/core/styles';
-import {MuiThemeProvider} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { MuiThemeProvider } from '@material-ui/core';
 
 import QtyModal from '../../components/QtyModal/QtyModal';
+import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 import RecipeService from '../../services/RecipeService';
 import SharedService from '../../services/SharedService';
 import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
-import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
-import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 
-const styles = createStyles({
+const styles = makeStyles({
     topControls: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -59,172 +59,151 @@ const styles = createStyles({
     }
 });
 
-class EditRecipe extends React.Component {
-    constructor(props) {
-        super(props);
-
+const EditRecipe = (props) => {
+    const initRecipe = (props) => {
         let recipeName = props.match.params.recipeName;
-        let recipe;
-        let theme;
 
         if (recipeName) {
-            recipe = RecipeService.getRecipe(recipeName);
-        }
-
-        theme = SharedService.buildThemeConfig(recipe);
-
-        if (recipe) {
-            this.state = {
-                recipe,
-                ingredientCounter: recipe.ingredients.length + 1,
-                mode: 'Edit',
-                theme
-            }
+            return RecipeService.getRecipe(recipeName);
         } else {
-            recipe = new Recipe();
-
-            this.state = {
-                recipe,
-                mode: 'Add',
-                theme
-            };
+            return new Recipe();
         }
-
-        this.state.validationError = false;
     }
 
-    handleChangeName = (event) => {
+    const classes = styles(props);
+
+    const [ recipe, setRecipe ] = useState(initRecipe(props));
+    const [ ingredientCounter, setIngredientCounter ] = useState(recipe ? recipe.ingredients.length + 1 : 1);
+    const [ validationError, setValidationError ] = useState(false);
+    const [ theme, setTheme ] = useState(SharedService.buildThemeConfig(RecipeService.getRecipe(props.match.params.recipeName)));
+
+    const mode = recipe ? 'Edit' : 'Add';
+
+    const doNavigation = () => {
+        if (mode === 'Edit') {
+            props.history.push('/recipe/' +  encodeURIComponent(recipe.name));
+        } else {
+            props.history.push('/');
+        }
+    }
+
+    const handleChangeName = (event) => {
         event.preventDefault();
 
-        const validationError = event.target.value === '';
-        const recipe = this.state.recipe;
+        const newRecipe = recipe;
+        newRecipe.name = event.target.value;
 
-        recipe.name = event.target.value;
-        this.setState({ recipe, validationError });
+        setRecipe(newRecipe);
+        setValidationError(event.target.value === '');
     };
 
-    handleAddIngredient = (event) => {
+    const handleAddIngredient = (event) => {
         event.preventDefault();
 
-        const recipe = this.state.recipe;
+        const newRecipe = recipe;
         const ingredient = new Ingredient();
+        ingredient.id = ingredientCounter;
+        newRecipe.ingredients.push(ingredient);
 
-        ingredient.id = this.state.ingredientCounter;
-        recipe.ingredients.push(ingredient);
-
-        this.setState({ recipe, ingredientCounter: this.state.ingredientCounter + 1 });
+        setRecipe(newRecipe);
+        setIngredientCounter(ingredientCounter + 1);
     };
 
-    handleSaveIngredientQty = (qtyData) => {
-        const index = this.state.recipe.ingredients.findIndex(item => {
+    const handleSaveIngredientQty = (qtyData) => {
+        const newRecipe = recipe;
+        const index = newRecipe.ingredients.findIndex(item => {
             return item.id === qtyData.id;
         })
 
         if (index > -1) {
-            const recipe = this.state.recipe;
             const ingredient = new Ingredient();
 
-            ingredient.id = recipe.ingredients[index].id;
-            ingredient.name = recipe.ingredients[index].name;
+            ingredient.id = newRecipe.ingredients[index].id;
+            ingredient.name = newRecipe.ingredients[index].name;
             ingredient.amount = qtyData.amount;
             ingredient.fractionalAmount = qtyData.fractionalAmount;
             ingredient.unit = qtyData.unit;
             ingredient.qtyDesc = qtyData.qtyDesc;
 
-            recipe.ingredients[index] = ingredient;
-            this.setState({ recipe });
+            newRecipe.ingredients[index] = ingredient;
+            setRecipe(newRecipe);
         }
     }
 
-    handleChangeIngredientName = (id, name) => {
-        const index = this.state.recipe.ingredients.findIndex(item => {
+    const handleChangeIngredientName = (id, name) => {
+        const newRecipe = recipe;
+        const index = newRecipe.ingredients.findIndex(item => {
             return item.id === id;
         })
 
         if (index > -1) {
-            const recipe = this.state.recipe;
-
-            recipe.ingredients[index].name = name;
-            this.setState({ recipe });
+            newRecipe.ingredients[index].name = name;
+            setRecipe(newRecipe);
         }
     };
 
-    handleChangeDirections = (event) => {
+    const handleChangeDirections = (event) => {
         event.preventDefault();
 
-        const recipe = this.state.recipe;
-        recipe.directions = event.target.value;
-
-        this.setState({ recipe });
+        const newRecipe = recipe;
+        newRecipe.directions = event.target.value;
+        setRecipe(newRecipe);
     };
 
-    handleChangeImage = (event) => {
+    const handleChangeImage = (event) => {
         event.preventDefault();
 
         // TODO
     };
 
-    handleSaveBackgroundColor = (colorData) => {
-        const recipe = this.state.recipe;
+    const handleSaveBackgroundColor = (colorData) => {
+        const newRecipe = recipe;
+        newRecipe.backgroundColor = colorData.colorCode;
+        newRecipe.textColor = colorData.textColorCode;
 
-        recipe.backgroundColor = colorData.colorCode;
-        recipe.textColor = colorData.textColorCode;
-
-        const theme = SharedService.buildThemeConfig(recipe);
-
-        this.setState({ recipe, theme });
+        const newTheme = SharedService.buildThemeConfig(newRecipe);
+        setRecipe(newRecipe);
+        setTheme(newTheme);
     }
 
-    handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (this.state.recipe.name === '') {
-            this.setState({ validationError: true });
+        if (recipe.name === '') {
+            setValidationError(true);
             return;
         }
 
-        this.setState({ validationError: false });
+        setValidationError(false);
 
-        RecipeService.saveRecipe(this.state.recipe);
-        this.doNavigation();
+        RecipeService.saveRecipe(recipe);
+        doNavigation();
     };
 
-    handleCancel = (event) => {
+    const handleCancel = (event) => {
         event.preventDefault();
 
-        this.doNavigation();
+        doNavigation();
     };
 
-    handleDelete = (event) => {
+    const handleDelete = (event) => {
         event.preventDefault();
 
-        RecipeService.deleteRecipe(this.state.recipe.name);
-        this.props.history.push('/');
+        RecipeService.deleteRecipe(recipe.name);
+        props.history.push('/');
     };
 
-    doNavigation = () => {
-        if (this.state.mode === 'Edit') {
-            this.props.history.push('/recipe/' +  encodeURIComponent(this.state.recipe.name));
-        } else {
-            this.props.history.push('/');
-        }
-    }
-
-    render() {
-        const { classes } = this.props;
-        const { recipe, validationError, mode, theme } = this.state;
-
-        return (
-            <MuiThemeProvider theme={theme}>
-                <Container maxWidth='sm'>
-                    {
-                        recipe || mode === 'Add' ?
-                        <form onSubmit={this.handleSubmit} autoComplete={'on'}>
+    return (
+        <MuiThemeProvider theme={theme}>
+            <Container maxWidth='sm'>
+                {
+                    recipe || mode === 'Add' ?
+                        <form onSubmit={handleSubmit} autoComplete={'on'}>
                             <div className={classes.topControls}>
                                 <Button type='submit' variant='outlined' color='primary' size='small'>
                                     Save
                                 </Button>
-                                <Button variant='outlined' color='default' size='small' onClick={this.handleCancel}>
+                                <Button variant='outlined' color='default' size='small' onClick={handleCancel}>
                                     Cancel
                                 </Button>
                             </div>
@@ -244,7 +223,7 @@ class EditRecipe extends React.Component {
                                 error={validationError}
                                 helperText={validationError === true ? 'Name is required' : ''}
                                 inputProps={{ maxLength: 50 }}
-                                onChange={this.handleChangeName}
+                                onChange={handleChangeName}
                             />
 
                             <List disablePadding={true}>
@@ -252,7 +231,11 @@ class EditRecipe extends React.Component {
                                     recipe.ingredients.map(ingredient => {
                                         return (
                                             <ListItem key={ingredient.id} className={classes.ingredient}>
-                                                <QtyModal ingredient={ingredient} textColor={recipe.textColor} onSave={this.handleSaveIngredientQty} />
+                                                <QtyModal
+                                                    ingredient={ingredient}
+                                                    textColor={recipe.textColor}
+                                                    onSave={handleSaveIngredientQty}
+                                                />
 
                                                 <TextField
                                                     className={classes.ingredientName}
@@ -262,7 +245,7 @@ class EditRecipe extends React.Component {
                                                     name='description'
                                                     value={ingredient.name}
                                                     onChange={(event) => {
-                                                        this.handleChangeIngredientName(ingredient.id, event.target.value);}
+                                                        handleChangeIngredientName(ingredient.id, event.target.value);}
                                                     }
                                                 />
                                             </ListItem>
@@ -271,7 +254,7 @@ class EditRecipe extends React.Component {
                                 }
 
                                 <ListItem className={classes.newIngredient}>
-                                    <Button className='app-link' onClick={this.handleAddIngredient}>
+                                    <Button className='app-link' onClick={handleAddIngredient}>
                                         <AddCircleOutlineRoundedIcon color='primary' />
                                         <span className={classes.addLabel}>Add Ingredient</span>
                                     </Button>
@@ -290,7 +273,7 @@ class EditRecipe extends React.Component {
                                     value={recipe.directions}
                                     size='small'
                                     inputProps={{ maxLength: 250 }}
-                                    onChange={this.handleChangeDirections}
+                                    onChange={handleChangeDirections}
                                 />
                             </div>
 
@@ -305,7 +288,7 @@ class EditRecipe extends React.Component {
                                 <ColorSelectorModal
                                     linkLabel={'CHANGE BACKGROUND COLOR'}
                                     colorCode={recipe.backgroundColor}
-                                    onSave={this.handleSaveBackgroundColor} />
+                                    onSave={handleSaveBackgroundColor} />
                             </div>
 
                             {
@@ -314,7 +297,7 @@ class EditRecipe extends React.Component {
                                     <Divider variant='fullWidth' className={'divider'} />
 
                                     <div className={classes.bottomControls}>
-                                        <DeleteConfirmationModal onDelete={this.handleDelete} />
+                                        <DeleteConfirmationModal onDelete={handleDelete} />
                                     </div>
                                 </div>
                             }
@@ -324,11 +307,10 @@ class EditRecipe extends React.Component {
                                 The specified recipe could not be found.
                             </p>
                         </div>
-                    }
-                </Container>
-            </MuiThemeProvider>
-        )
-    }
+                }
+            </Container>
+        </MuiThemeProvider>
+    )
 }
 
-export default withRouter(withStyles(styles)(EditRecipe));
+export default withRouter(EditRecipe);

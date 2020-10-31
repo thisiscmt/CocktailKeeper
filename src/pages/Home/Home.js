@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
+import {SortableContainer, SortableElement } from 'react-sortable-hoc';
 import ArrayMove from 'array-move';
 
 import RecipeService from '../../services/RecipeService';
-import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 
 const styles = makeStyles({
     recipe: {
@@ -56,7 +56,9 @@ const Home = (props) => {
 
     const handleSortEnd = ({oldIndex, newIndex}) => {
         const recipesToUpdate = ArrayMove(recipes, oldIndex, newIndex)
+
         setRecipes(recipesToUpdate);
+        RecipeService.saveRecipes(recipesToUpdate);
     }
 
     return(

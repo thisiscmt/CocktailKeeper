@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
@@ -7,12 +7,13 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {createStyles, withStyles} from '@material-ui/core/styles';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { MuiThemeProvider } from '@material-ui/core';
 
 import Ingredient from '../../models/Ingredient';
+import SharedService from '../../services/SharedService';
 
-const styles = createStyles({
+const styles = makeStyles({
     title: {
         paddingBottom: '8px',
         textAlign: 'center'
@@ -38,33 +39,21 @@ const styles = createStyles({
     },
 });
 
-class QtyModal extends React.Component {
-    constructor (props) {
-        super(props);
+const QtyModal = (props) => {
+    const classes = styles(props);
+    const theme = SharedService.buildThemeConfig();
+    const [ open, setOpen ] = useState(false);
+    const [ ingredient, setIngredient ] = useState(props.ingredient);
 
-        const theme = createMuiTheme({
-            palette: {
-                type: 'light'
-            },
-        });
-
-        this.state = {
-            open: false,
-            ingredient: this.props.ingredient,
-            theme
-        };
+    const handleOpen = () => {
+        setOpen(true);
     }
 
-    handleOpen = () => {
-        this.setState({ open: true });
+    const handleClose = () => {
+        setOpen(false);
     }
 
-    handleClose = () => {
-        this.setState({ open: false });
-    }
-
-    handleSave = () => {
-        const ingredient = this.state.ingredient;
+    const handleSave = () => {
         let qtyDesc = '';
 
         if (ingredient.amount !== '0') {
@@ -84,126 +73,121 @@ class QtyModal extends React.Component {
         }
 
         ingredient.qtyDesc = qtyDesc;
-        this.props.onSave(ingredient)
-        this.setState({ open: false });
+        props.onSave(ingredient)
+        setOpen(false);
     };
 
-    handleAmountChange = (event) => {
-        const ingredient = new Ingredient();
+    const handleAmountChange = (event) => {
+        const updatedIngredient = new Ingredient();
 
-        ingredient.id = this.state.ingredient.id;
-        ingredient.name = this.state.ingredient.name;
-        ingredient.amount = event.target.value;
-        ingredient.fractionalAmount = this.state.ingredient.fractionalAmount;
-        ingredient.unit = this.state.ingredient.unit;
+        updatedIngredient.id = ingredient.id;
+        updatedIngredient.name = ingredient.name;
+        updatedIngredient.amount = event.target.value;
+        updatedIngredient.fractionalAmount = ingredient.fractionalAmount;
+        updatedIngredient.unit = ingredient.unit;
 
-        this.setState({ ingredient });
+        setIngredient(updatedIngredient);
     };
 
-    handleFractionalAmountChange = (event) => {
-        const ingredient = new Ingredient();
+    const handleFractionalAmountChange = (event) => {
+        const updatedIngredient = new Ingredient();
 
-        ingredient.id = this.state.ingredient.id;
-        ingredient.name = this.state.ingredient.name;
-        ingredient.amount = this.state.ingredient.amount;
-        ingredient.fractionalAmount = event.target.value;
-        ingredient.unit = this.state.ingredient.unit;
+        updatedIngredient.id = ingredient.id;
+        updatedIngredient.name = ingredient.name;
+        updatedIngredient.amount = ingredient.amount;
+        updatedIngredient.fractionalAmount = event.target.value;
+        updatedIngredient.unit = ingredient.unit;
 
-        this.setState({ ingredient });
+        setIngredient(updatedIngredient);
     };
 
-    handleUnitChange = (event) => {
-        const ingredient = new Ingredient();
+    const handleUnitChange = (event) => {
+        const updatedIngredient = new Ingredient();
 
-        ingredient.id = this.state.ingredient.id;
-        ingredient.name = this.state.ingredient.name;
-        ingredient.amount = this.state.ingredient.amount;
-        ingredient.fractionalAmount = this.state.ingredient.fractionalAmount;
-        ingredient.unit = event.target.value;
+        updatedIngredient.id = ingredient.id;
+        updatedIngredient.name = ingredient.name;
+        updatedIngredient.amount = ingredient.amount;
+        updatedIngredient.fractionalAmount = ingredient.fractionalAmount;
+        updatedIngredient.unit = event.target.value;
 
-        this.setState({ ingredient });
+        setIngredient(updatedIngredient);
     };
 
-    render() {
-        const { classes, textColor } = this.props;
-        const { open, ingredient, theme } = this.state;
+    return (
+        <MuiThemeProvider theme={theme}>
+            <div>
+                <Button
+                    onClick={handleOpen}
+                    className={ ingredient.qtyDesc ? classes.qtyDesc : null }
+                    style={{ color: props.textColor }}
+                    variant='outlined'
+                    color='default'
+                    size='medium'
+                >
+                    { ingredient.qtyDesc ? ingredient.qtyDesc : 'Qty' }
+                </Button>
 
-        return (
-            <MuiThemeProvider theme={theme}>
-                <div>
-                    <Button
-                        onClick={this.handleOpen}
-                        className={ ingredient.qtyDesc ? classes.qtyDesc : null }
-                        style={{ color: textColor }}
-                        variant='outlined'
-                        color='default'
-                        size='medium'
-                    >
-                        { ingredient.qtyDesc ? ingredient.qtyDesc : 'Qty' }
-                    </Button>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    maxWidth={'xs'}
+                    fullWidth={true}
+                    disableBackdropClick={false}
+                >
+                    <DialogTitle className={classes.title}>Quantity</DialogTitle>
 
-                    <Dialog
-                        open={open}
-                        onClose={this.handleClose}
-                        maxWidth={'xs'}
-                        fullWidth={true}
-                        disableBackdropClick={false}
-                    >
-                        <DialogTitle className={classes.title}>Quantity</DialogTitle>
+                    <DialogContent className={classes.content}>
+                        <FormControl className={classes.formControl}>
+                            <Select value={ingredient.amount} onChange={handleAmountChange} className={classes.selector}>
+                                <MenuItem value='0'>- Select amount -</MenuItem>
+                                <MenuItem value={'1'}>1</MenuItem>
+                                <MenuItem value={'2'}>2</MenuItem>
+                                <MenuItem value={'3'}>3</MenuItem>
+                                <MenuItem value={'4'}>4</MenuItem>
+                                <MenuItem value={'5'}>5</MenuItem>
+                                <MenuItem value={'6'}>6</MenuItem>
+                                <MenuItem value={'7'}>7</MenuItem>
+                                <MenuItem value={'8'}>8</MenuItem>
+                                <MenuItem value={'9'}>9</MenuItem>
+                                <MenuItem value={'10'}>10</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </DialogContent>
 
-                        <DialogContent className={classes.content}>
-                            <FormControl className={classes.formControl}>
-                                <Select value={ingredient.amount} onChange={this.handleAmountChange} className={classes.selector}>
-                                    <MenuItem value='0'>- Select amount -</MenuItem>
-                                    <MenuItem value={'1'}>1</MenuItem>
-                                    <MenuItem value={'2'}>2</MenuItem>
-                                    <MenuItem value={'3'}>3</MenuItem>
-                                    <MenuItem value={'4'}>4</MenuItem>
-                                    <MenuItem value={'5'}>5</MenuItem>
-                                    <MenuItem value={'6'}>6</MenuItem>
-                                    <MenuItem value={'7'}>7</MenuItem>
-                                    <MenuItem value={'8'}>8</MenuItem>
-                                    <MenuItem value={'9'}>9</MenuItem>
-                                    <MenuItem value={'10'}>10</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </DialogContent>
+                    <DialogContent className={classes.content}>
+                        <FormControl className={classes.formControl}>
+                            <Select value={ingredient.fractionalAmount} onChange={handleFractionalAmountChange} className={classes.selector}>
+                                <MenuItem value={'0'}>- Select fraction -</MenuItem>
+                                <MenuItem value={'1/8'}>1/8</MenuItem>
+                                <MenuItem value={'1/4'}>1/4</MenuItem>
+                                <MenuItem value={'1/3'}>1/3</MenuItem>
+                                <MenuItem value={'1/2'}>1/2</MenuItem>
+                                <MenuItem value={'2/3'}>2/3</MenuItem>
+                                <MenuItem value={'3/4'}>3/4</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </DialogContent>
 
-                        <DialogContent className={classes.content}>
-                            <FormControl className={classes.formControl}>
-                                <Select value={ingredient.fractionalAmount} onChange={this.handleFractionalAmountChange} className={classes.selector}>
-                                    <MenuItem value={'0'}>- Select fraction -</MenuItem>
-                                    <MenuItem value={'1/8'}>1/8</MenuItem>
-                                    <MenuItem value={'1/4'}>1/4</MenuItem>
-                                    <MenuItem value={'1/3'}>1/3</MenuItem>
-                                    <MenuItem value={'1/2'}>1/2</MenuItem>
-                                    <MenuItem value={'2/3'}>2/3</MenuItem>
-                                    <MenuItem value={'3/4'}>3/4</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </DialogContent>
+                    <DialogContent className={classes.content}>
+                        <FormControl className={classes.formControl}>
+                            <Select value={ingredient.unit} onChange={handleUnitChange} className={classes.selector}>
+                                <MenuItem value={'0'}>- Select unit -</MenuItem>
+                                <MenuItem value={'oz'}>oz</MenuItem>
+                                <MenuItem value={'ml'}>ml</MenuItem>
+                                <MenuItem value={'dash'}>dash</MenuItem>
+                                <MenuItem value={'tsp'}>tsp</MenuItem>
+                                <MenuItem value={'tbsp'}>tbsp</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </DialogContent>
 
-                        <DialogContent className={classes.content}>
-                            <FormControl className={classes.formControl}>
-                                <Select value={ingredient.unit} onChange={this.handleUnitChange} className={classes.selector}>
-                                    <MenuItem value={'0'}>- Select unit -</MenuItem>
-                                    <MenuItem value={'oz'}>oz</MenuItem>
-                                    <MenuItem value={'ml'}>ml</MenuItem>
-                                    <MenuItem value={'dash'}>dash</MenuItem>
-                                    <MenuItem value={'tsp'}>tsp</MenuItem>
-                                    <MenuItem value={'tbsp'}>tbsp</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </DialogContent>
-
-                        <DialogActions className={classes.content}>
-                            <Button variant='outlined' color='primary' onClick={this.handleSave}>Save</Button>
-                        </DialogActions>
-                    </Dialog>
-                </div>
-            </MuiThemeProvider>
-        );
-    };
+                    <DialogActions className={classes.content}>
+                        <Button variant='outlined' color='primary' onClick={handleSave}>Save</Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        </MuiThemeProvider>
+    );
 }
 
-export default withStyles(styles)(QtyModal);
+export default QtyModal;

@@ -1,24 +1,24 @@
 class RecipeService {
     static getRecipes = () => {
-        const recipesJSON = localStorage.getItem('ck.recipes');
+        const recipeJSON = localStorage.getItem('ck.recipes');
         let recipeData = {
             recipes: []
         };
 
-        if (recipesJSON) {
-            recipeData = JSON.parse(recipesJSON);
+        if (recipeJSON) {
+            recipeData = JSON.parse(recipeJSON);
         }
 
         return recipeData.recipes;
     }
 
     static saveRecipe = (recipe) => {
-        const recipesJSON = localStorage.getItem('ck.recipes');
+        const recipeJSON = localStorage.getItem('ck.recipes');
         let recipeIndex = -1;
         let recipeData;
 
-        if (recipesJSON) {
-            recipeData = JSON.parse(recipesJSON);
+        if (recipeJSON) {
+            recipeData = JSON.parse(recipeJSON);
 
             recipeIndex = recipeData.recipes.findIndex((item) => {
                 return item.name === recipe.name;
@@ -39,13 +39,13 @@ class RecipeService {
     };
 
     static getRecipe = (name) => {
-        const recipesJSON = localStorage.getItem('ck.recipes');
+        const recipeJSON = localStorage.getItem('ck.recipes');
         let recipeIndex = -1;
         let recipeData;
         let recipe;
 
-        if (recipesJSON) {
-            recipeData = JSON.parse(recipesJSON);
+        if (recipeJSON) {
+            recipeData = JSON.parse(recipeJSON);
 
             recipeIndex = recipeData.recipes.findIndex((item) => {
                 return item.name === name;
@@ -54,20 +54,18 @@ class RecipeService {
             if (recipeIndex > -1) {
                 recipe = recipeData.recipes[recipeIndex];
             }
-        } else {
-            recipe = {};
         }
 
         return recipe;
     };
 
     static deleteRecipe = (recipeName) => {
-        const recipesJSON = localStorage.getItem('ck.recipes');
+        const recipeJSON = localStorage.getItem('ck.recipes');
         let recipeIndex = -1;
         let recipeData;
 
-        if (recipesJSON) {
-            recipeData = JSON.parse(recipesJSON);
+        if (recipeJSON) {
+            recipeData = JSON.parse(recipeJSON);
 
             recipeIndex = recipeData.recipes.findIndex((item) => {
                 return item.name === recipeName;
@@ -79,6 +77,21 @@ class RecipeService {
 
             localStorage.setItem('ck.recipes', JSON.stringify(recipeData));
         }
+    }
+
+    static saveRecipes = (recipes) => {
+        const recipeJSON = localStorage.getItem('ck.recipes');
+        let recipeData;
+
+        if (recipeJSON) {
+            recipeData = JSON.parse(recipeJSON);
+
+        } else {
+            recipeData = {};
+        }
+
+        recipeData.recipes = recipes;
+        localStorage.setItem('ck.recipes', JSON.stringify(recipeData));
     }
 
     static getRecipeData = () => {

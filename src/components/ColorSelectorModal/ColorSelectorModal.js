@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
-import { createStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-const styles = createStyles({
+const styles = makeStyles({
     root: {
         padding: 0
     },
@@ -46,56 +46,31 @@ const styles = createStyles({
     }
 });
 
-class ColorSelectorModal extends React.Component {
-    constructor (props) {
-        super(props);
+const ColorSelectorModal = (props) => {
+    const classes = styles(props);
+    const selectedColorElement = useRef();
 
-        this.selectedColorElement = React.createRef();
+    const [ open, setOpen ] = useState(false);
+    const [ colors, setColors ] = useState([]);
+    const [ selectedColor, setSelectedColor ] = useState(props.colorCode);
+    const [ selectedTextColor, setSelectedTextColor ] = useState('#FFFFFF');
 
-        this.state = {
-            open: false,
-            colors: [],
-            selectedColor: this.props.colorCode,
-            selectedTextColor: '#FFFFFF'
-        };
-
-        fetch('/data/colors.json')
-            .then(response => response.json())
-            .then(data => {
-                this.state.colors = data;
-
-                const selectedColorIndex = this.state.colors.findIndex(color => {
-                    return color.colorCode === this.props.colorCode;
-                })
-
-                let textColorCode = '#FFFFFF';
-
-                if (selectedColorIndex > -1) {
-                    this.state.colors[selectedColorIndex].selected = true;
-                    textColorCode = this.state.colors[selectedColorIndex].textColorCode;
-                }
-
-                this.state.selectedTextColor = textColorCode;
-            });
-    }
-
-    handleOpen = () => {
-        this.setState({ open: true });
+    const handleOpen = () => {
+        setOpen(true);
 
         setTimeout(() => {
-            this.scrollToSelectedColor();
+            scrollToSelectedColor();
         })
     }
 
-    handleClose = () => {
-        this.setState({ open: false });
+    const handleClose = () => {
+        setOpen(false);
     }
 
-    handleSelectColor = (event) => {
-        const colors = this.state.colors;
+    const handleSelectColor = (event) => {
         const selectedColor = event.target.dataset.colorCode;
 
-        const selectedColorIndex = this.state.colors.findIndex(color => {
+        const selectedColorIndex = colors.findIndex(color => {
             return color.colorCode === selectedColor;
         })
 
@@ -104,77 +79,94 @@ class ColorSelectorModal extends React.Component {
         })
 
         colors[selectedColorIndex].selected = true
-
-        this.setState({ colors, selectedColor, selectedTextColor: colors[selectedColorIndex].textColorCode });
+        setColors(colors);
+        setSelectedColor(selectedColor);
+        setSelectedTextColor(colors[selectedColorIndex].textColorCode);
     };
 
-    handleSave = () => {
-        this.props.onSave({ colorCode: this.state.selectedColor, textColorCode: this.state.selectedTextColor });
-        this.setState({ open: false });
+    const handleSave = () => {
+        props.onSave({ colorCode: selectedColor, textColorCode: selectedTextColor });
+        setOpen(false);
     };
 
-    scrollToSelectedColor = () => {
-        if (this.selectedColorElement && this.selectedColorElement.current) {
-            this.selectedColorElement.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    const scrollToSelectedColor = () => {
+        if (selectedColorElement && selectedColorElement.current) {
+            selectedColorElement.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }
     }
 
-    render() {
-        const { classes, linkLabel } = this.props;
-        const { open, colors, selectedColor, selectedTextColor } = this.state;
+    // This check for an empty color list prevents an endless series of fetches of the colors data file
+    if (colors.length === 0) {
+        fetch('/data/colors.json')
+            .then(response => response.json())
+            .then(data => {
+                const selectedColorIndex = data.findIndex(color => {
+                    return color.colorCode === props.colorCode;
+                })
 
-        return (
-            <div>
-                <Button
-                    onClick={this.handleOpen}
-                    className={classes.link}
-                    variant='outlined'
-                    color='default'
-                    size='small'
-                >
-                    { linkLabel }
-                </Button>
+                let textColorCode = '#FFFFFF';
 
-                <Dialog
-                    open={open}
-                    onClose={this.handleClose}
-                    maxWidth={'xs'}
-                    fullWidth={true}
-                    disableBackdropClick={false}
-                    classes={{ paper: classes.dialogPaper }}
-                >
-                    <DialogTitle className={classes.title}>Select Color</DialogTitle>
+                if (selectedColorIndex > -1) {
+                    data[selectedColorIndex].selected = true;
+                    textColorCode = data[selectedColorIndex].textColorCode;
+                }
 
-                    <DialogContent className={classes.content + ' ' + classes.colorList}>
-                        {
-                            colors.map((color, index) => {
-                                return (
-                                    <div
-                                        key={index}
-                                        className={classes.colorListItem}
-                                        style={{backgroundColor: color.colorCode}}
-                                        data-color-code={color.colorCode}
-                                        data-text-color-code={color.textColorCode}
-                                        onClick={this.handleSelectColor}
-                                        ref={color.colorCode === selectedColor ? this.selectedColorElement : null}
-                                    >
-                                        {
-                                            color.colorCode === selectedColor &&
-                                            <CheckCircleOutlineOutlinedIcon style={{ color: selectedTextColor }} className={classes.selectedColor} />
-                                        }
-                                    </div>
-                                )
-                            })
-                        }
-                    </DialogContent>
+                setColors(data);
+                setSelectedTextColor(textColorCode);
+            });
+    }
 
-                    <DialogActions className={classes.content}>
-                        <Button onClick={this.handleSave} className={classes.saveData} variant='outlined' size={'small'}>Save</Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        );
-    };
+    return (
+        <div>
+            <Button
+                onClick={handleOpen}
+                className={classes.link}
+                variant='outlined'
+                color='default'
+                size='small'
+            >
+                { props.linkLabel }
+            </Button>
+
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                maxWidth={'xs'}
+                fullWidth={true}
+                disableBackdropClick={false}
+                classes={{ paper: classes.dialogPaper }}
+            >
+                <DialogTitle className={classes.title}>Select Color</DialogTitle>
+
+                <DialogContent className={classes.content + ' ' + classes.colorList}>
+                    {
+                        colors.map((color, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    className={classes.colorListItem}
+                                    style={{backgroundColor: color.colorCode}}
+                                    data-color-code={color.colorCode}
+                                    data-text-color-code={color.textColorCode}
+                                    onClick={handleSelectColor}
+                                    ref={color.colorCode === selectedColor ? selectedColorElement : null}
+                                >
+                                    {
+                                        color.colorCode === selectedColor &&
+                                        <CheckCircleOutlineOutlinedIcon style={{ color: selectedTextColor }} className={classes.selectedColor} />
+                                    }
+                                </div>
+                            )
+                        })
+                    }
+                </DialogContent>
+
+                <DialogActions className={classes.content}>
+                    <Button onClick={handleSave} className={classes.saveData} variant='outlined' size={'small'}>Save</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
 }
 
-export default withStyles(styles)(ColorSelectorModal);
+export default ColorSelectorModal;
