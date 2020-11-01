@@ -35,6 +35,10 @@ const styles = makeStyles({
     userMessage: {
         fontSize: '14px',
         marginBottom: '10px'
+    },
+
+    restoreSection: {
+        marginTop: '20px'
     }
 });
 
@@ -92,13 +96,13 @@ const SettingsPage = (props) => {
     return (
         <div className={classes.root}>
             <Container maxWidth='sm'>
-                <p>Back up all recipe data</p>
+                <p>Back up recipe data</p>
 
                 <Button variant='outlined' color='default' size='small' onClick={handleBackup}>
                     Backup
                 </Button>
 
-                <p>Restore recipe data</p>
+                <p className={classes.restoreSection}>Restore recipe data</p>
 
                 <div className={classes.restoreContainer}>
                     <label htmlFor="FileUpload" className={classes.fileUploadLabel} style={{color: theme.palette.primary.main}}>Browse

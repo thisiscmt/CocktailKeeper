@@ -70,7 +70,7 @@ const Home = (props) => {
                         <p>Select the add recipe button in the upper-right to get started.</p>
                     </div> :
                     <div>
-                        <RecipeList distance={1} recipes={recipes} classes={classes} onSortEnd={handleSortEnd} />
+                        <RecipeList distance={2} recipes={recipes} classes={classes} onSortEnd={handleSortEnd} />
                     </div>
             }
         </section>
