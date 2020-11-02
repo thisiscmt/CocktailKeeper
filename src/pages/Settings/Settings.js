@@ -53,7 +53,7 @@ const SettingsPage = (props) => {
 
     const handleDownload = (fileName, data) => {
         const element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+        element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(data));
         element.setAttribute('download', fileName);
         element.style.display = 'none';
         document.body.appendChild(element);

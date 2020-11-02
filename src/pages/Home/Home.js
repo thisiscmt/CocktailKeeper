@@ -10,6 +10,11 @@ import RecipeService from '../../services/RecipeService';
 const styles = makeStyles({
     recipe: {
         margin: '8px'
+    },
+
+    recipeLink: {
+        paddingTop: '8px',
+        paddingBottom: '8px'
     }
 });
 
@@ -24,6 +29,7 @@ const RecipeItem = SortableElement(({recipe, classes}) => {
                         recipe.backgroundColor ?
                             {backgroundColor: recipe.backgroundColor, color: recipe.textColor} :
                             null}
+                    className={classes.recipeLink}
                     variant='outlined'
                     color='default'
                     fullWidth={true}

@@ -28,15 +28,21 @@ const styles = makeStyles({
         width: '150px'
     },
 
-    ingredientQty: {
-    },
-
     qtyDesc: {
         border: 0,
         fontSize: '14px',
         fontStyle: 'italic',
         padding: 0
     },
+
+    dialogActions: {
+        display: 'flex',
+        justifyContent: 'space-between'
+    },
+
+    defaultButtonColor: {
+        color: 'black'
+    }
 });
 
 const QtyModal = (props) => {
@@ -181,8 +187,13 @@ const QtyModal = (props) => {
                         </FormControl>
                     </DialogContent>
 
-                    <DialogActions className={classes.content}>
-                        <Button variant='outlined' color='primary' onClick={handleSave}>Save</Button>
+                    <DialogActions className={classes.dialogActions}>
+                        <Button onClick={handleSave} className={classes.defaultButtonColor} variant='outlined' size={'small'}>
+                            Save
+                        </Button>
+                        <Button onClick={handleClose} className={classes.defaultButtonColor} variant='outlined' color='default' size='small'>
+                            Cancel
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </div>

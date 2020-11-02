@@ -225,7 +225,7 @@ class EditRecipe extends React.Component {
                                     <Button type='submit' variant='outlined' color='primary' size='small'>
                                         Save
                                     </Button>
-                                    <Button variant='outlined' color='default' size='small' onClick={this.handleCancel}>
+                                    <Button variant='outlined' color='primary' size='small' onClick={this.handleCancel}>
                                         Cancel
                                     </Button>
                                 </div>
@@ -238,7 +238,6 @@ class EditRecipe extends React.Component {
                                     margin='dense'
                                     variant='outlined'
                                     name='recipeName'
-                                    autoFocus
                                     fullWidth= {true}
                                     value={recipe.name}
                                     size='small'

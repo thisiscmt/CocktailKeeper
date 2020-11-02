@@ -13,7 +13,7 @@ const styles = makeStyles({
     },
 
     dialogPaper: {
-        height : '390px'
+        height : '426px'
     },
 
     title: {
@@ -32,7 +32,7 @@ const styles = makeStyles({
         alignItems: 'center',
         cursor: 'pointer',
         display: 'flex',
-        height: '35px',
+        height: '45px',
         justifyContent: 'flex-end',
         width: '100%'
     },
@@ -41,7 +41,12 @@ const styles = makeStyles({
         marginRight: '5px'
     },
 
-    saveData: {
+    dialogActions: {
+        display: 'flex',
+        justifyContent: 'space-between'
+    },
+
+    defaultButtonColor: {
         color: 'black'
     }
 });
@@ -161,8 +166,13 @@ const ColorSelectorModal = (props) => {
                     }
                 </DialogContent>
 
-                <DialogActions className={classes.content}>
-                    <Button onClick={handleSave} className={classes.saveData} variant='outlined' size={'small'}>Save</Button>
+                <DialogActions className={classes.dialogActions}>
+                    <Button onClick={handleSave} className={classes.defaultButtonColor} variant='outlined' size={'small'}>
+                        Save
+                    </Button>
+                    <Button onClick={handleClose} className={classes.defaultButtonColor} variant='outlined' color='default' size='small'>
+                        Cancel
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>
