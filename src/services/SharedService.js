@@ -1,6 +1,19 @@
 import {createMuiTheme} from '@material-ui/core';
 
 class SharedService {
+    static getSettings = () => {
+        const settingsJSON = localStorage.getItem('ck.settings');
+        let settings = {};
+
+        if (settingsJSON) {
+            settings = JSON.parse(settingsJSON);
+        } else {
+            settings.defaultUnit = '0';
+        }
+
+        return settings;
+    }
+
     static buildThemeConfig = (overrides) => {
         if (overrides) {
             return createMuiTheme({

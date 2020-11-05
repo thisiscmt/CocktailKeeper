@@ -1,15 +1,21 @@
+import Recipe from '../models/Recipe';
+import Ingredient from '../models/Ingredient';
+
 class RecipeService {
     static getRecipes = () => {
         const recipeJSON = localStorage.getItem('ck.recipes');
-        let recipeData = {
-            recipes: []
-        };
+        let recipeData;
+        let recipes = [];
 
         if (recipeJSON) {
             recipeData = JSON.parse(recipeJSON);
+
+            recipes = recipeData.recipes.map(item => {
+                return this.buildRecipe(item);
+            })
         }
 
-        return recipeData.recipes;
+        return recipes;
     }
 
     static saveRecipe = (recipe) => {
@@ -52,7 +58,7 @@ class RecipeService {
             });
 
             if (recipeIndex > -1) {
-                recipe = recipeData.recipes[recipeIndex];
+                recipe = this.buildRecipe(recipeData.recipes[recipeIndex]);
             }
         }
 
@@ -100,6 +106,31 @@ class RecipeService {
 
     static setRecipeData = (data) => {
         localStorage.setItem('ck.recipes', data);
+    }
+
+    static buildRecipe = (data) => {
+        const recipe = new Recipe();
+        let ingredient;
+
+        recipe.name = data.name;
+        recipe.directions = data.directions;
+        recipe.drinkImage = data.drinkImage;
+        recipe.backgroundColor = data.backgroundColor;
+        recipe.textColor = data.textColor;
+
+        recipe.ingredients = data.ingredients.map(item => {
+            ingredient = new Ingredient();
+            ingredient.id = item.id;
+            ingredient.name = item.name;
+            ingredient.amount = item.amount;
+            ingredient.fractionalAmount = item.fractionalAmount;
+            ingredient.unit = item.unit;
+            ingredient.qtyDesc = item.qtyDesc;
+
+            return ingredient;
+        })
+
+        return recipe;
     }
 }
 

@@ -9,12 +9,20 @@ import RecipeService from '../../services/RecipeService';
 
 const styles = makeStyles({
     recipe: {
-        margin: '8px'
+        margin: '0 0 8px 0'
+    },
+
+    recipeList: {
+        backgroundColor: '#f1f1f1',
+        padding: '8px',
+        '&:last-child': {
+            paddingBottom: 0
+        }
     },
 
     recipeLink: {
-        paddingTop: '8px',
-        paddingBottom: '8px'
+        paddingTop: '10px',
+        paddingBottom: '10px'
     }
 });
 
@@ -44,7 +52,7 @@ const RecipeItem = SortableElement(({recipe, classes}) => {
 
 const RecipeList = SortableContainer(({recipes, classes}) => {
     return (
-        <div>
+        <div className={classes.recipeList}>
             {
                 recipes.map((recipe, index) => {
                     return (
@@ -76,7 +84,7 @@ const Home = (props) => {
                         <p>Select the add recipe button in the upper-right to get started.</p>
                     </div> :
                     <div>
-                        <RecipeList distance={2} recipes={recipes} classes={classes} onSortEnd={handleSortEnd} />
+                        <RecipeList pressDelay={200} recipes={recipes} classes={classes} onSortEnd={handleSortEnd} />
                     </div>
             }
         </section>

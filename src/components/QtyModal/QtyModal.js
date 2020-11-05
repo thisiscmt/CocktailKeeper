@@ -29,9 +29,13 @@ const styles = makeStyles({
     },
 
     qtyDesc: {
-        border: 0,
         fontSize: '14px',
         fontStyle: 'italic',
+        width: '75px'
+    },
+
+    qtyDescValue: {
+        border: 0,
         padding: 0
     },
 
@@ -50,6 +54,7 @@ const QtyModal = (props) => {
     const theme = SharedService.buildThemeConfig();
     const [ open, setOpen ] = useState(false);
     const [ ingredient, setIngredient ] = useState(props.ingredient);
+    const [ qtyDesc, setQtyDesc ] = useState(props.ingredient.qtyDesc);
 
     const handleOpen = () => {
         setOpen(true);
@@ -60,26 +65,9 @@ const QtyModal = (props) => {
     }
 
     const handleSave = () => {
-        let qtyDesc = '';
-
-        if (ingredient.amount !== '0') {
-            qtyDesc = ingredient.amount;
-        }
-
-        if (ingredient.fractionalAmount !== '0') {
-            if (qtyDesc) {
-                qtyDesc += ' ' + ingredient.fractionalAmount;
-            } else {
-                qtyDesc = ingredient.fractionalAmount;
-            }
-        }
-
-        if (ingredient.unit !== '0' && qtyDesc) {
-            qtyDesc += ' ' + ingredient.unit;
-        }
-
-        ingredient.qtyDesc = qtyDesc;
         props.onSave(ingredient)
+
+        setQtyDesc(ingredient.qtyDesc);
         setOpen(false);
     };
 
@@ -91,6 +79,7 @@ const QtyModal = (props) => {
         updatedIngredient.amount = event.target.value;
         updatedIngredient.fractionalAmount = ingredient.fractionalAmount;
         updatedIngredient.unit = ingredient.unit;
+        updatedIngredient.updateQtyDescription();
 
         setIngredient(updatedIngredient);
     };
@@ -103,6 +92,7 @@ const QtyModal = (props) => {
         updatedIngredient.amount = ingredient.amount;
         updatedIngredient.fractionalAmount = event.target.value;
         updatedIngredient.unit = ingredient.unit;
+        updatedIngredient.updateQtyDescription();
 
         setIngredient(updatedIngredient);
     };
@@ -115,6 +105,7 @@ const QtyModal = (props) => {
         updatedIngredient.amount = ingredient.amount;
         updatedIngredient.fractionalAmount = ingredient.fractionalAmount;
         updatedIngredient.unit = event.target.value;
+        updatedIngredient.updateQtyDescription();
 
         setIngredient(updatedIngredient);
     };
@@ -124,13 +115,13 @@ const QtyModal = (props) => {
             <div>
                 <Button
                     onClick={handleOpen}
-                    className={ ingredient.qtyDesc ? classes.qtyDesc : null }
+                    className={ ingredient.qtyDesc ? classes.qtyDesc + ' ' + classes.qtyDescValue : classes.qtyDesc  }
                     style={{ color: props.textColor }}
                     variant='outlined'
                     color='default'
                     size='medium'
                 >
-                    { ingredient.qtyDesc ? ingredient.qtyDesc : 'Qty' }
+                    { qtyDesc ? qtyDesc : 'Qty' }
                 </Button>
 
                 <Dialog
@@ -143,7 +134,7 @@ const QtyModal = (props) => {
                     <DialogTitle className={classes.title}>Quantity</DialogTitle>
 
                     <DialogContent className={classes.content}>
-                        <FormControl className={classes.formControl}>
+                        <FormControl>
                             <Select value={ingredient.amount} onChange={handleAmountChange} className={classes.selector}>
                                 <MenuItem value='0'>- Select amount -</MenuItem>
                                 <MenuItem value={'1'}>1</MenuItem>
@@ -161,7 +152,7 @@ const QtyModal = (props) => {
                     </DialogContent>
 
                     <DialogContent className={classes.content}>
-                        <FormControl className={classes.formControl}>
+                        <FormControl>
                             <Select value={ingredient.fractionalAmount} onChange={handleFractionalAmountChange} className={classes.selector}>
                                 <MenuItem value={'0'}>- Select fraction -</MenuItem>
                                 <MenuItem value={'1/8'}>1/8</MenuItem>
@@ -175,7 +166,7 @@ const QtyModal = (props) => {
                     </DialogContent>
 
                     <DialogContent className={classes.content}>
-                        <FormControl className={classes.formControl}>
+                        <FormControl>
                             <Select value={ingredient.unit} onChange={handleUnitChange} className={classes.selector}>
                                 <MenuItem value={'0'}>- Select unit -</MenuItem>
                                 <MenuItem value={'oz'}>oz</MenuItem>

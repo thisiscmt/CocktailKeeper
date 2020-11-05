@@ -109,8 +109,10 @@ class EditRecipe extends React.Component {
 
         const recipe = this.state.recipe;
         const ingredient = new Ingredient();
+        const settings = SharedService.getSettings();
 
         ingredient.id = this.state.ingredientCounter;
+        ingredient.unit = settings.defaultUnit;
         recipe.ingredients.push(ingredient);
 
         this.setState({ recipe, ingredientCounter: this.state.ingredientCounter + 1 });
@@ -252,7 +254,11 @@ class EditRecipe extends React.Component {
                                         recipe.ingredients.map(ingredient => {
                                             return (
                                                 <ListItem key={ingredient.id} className={classes.ingredient}>
-                                                    <QtyModal ingredient={ingredient} textColor={recipe.textColor} onSave={this.handleSaveIngredientQty} />
+                                                    <QtyModal
+                                                        ingredient={ingredient}
+                                                        textColor={recipe.textColor}
+                                                        onSave={this.handleSaveIngredientQty}
+                                                    />
 
                                                     <TextField
                                                         className={classes.ingredientName}

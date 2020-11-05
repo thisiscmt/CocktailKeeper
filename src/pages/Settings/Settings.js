@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Container from '@material-ui/core/Container';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -9,7 +11,31 @@ import SharedService from '../../services/SharedService';
 const styles = makeStyles({
     root: {
         paddingTop: '5px',
-        paddingBottom: '5px'
+        paddingBottom: '5px',
+    },
+
+    section : {
+        marginBottom: '18px'
+    },
+
+    sectionText : {
+        marginTop: 0,
+        marginBottom: '14px'
+    },
+
+    action: {
+        marginTop: '16px'
+    },
+
+    defaultUnitLabel: {
+        display: 'inline-flex',
+        marginRight: '15px'
+    },
+
+    defaultUnitSelector: {
+        color: 'black',
+        fontSize: '14px',
+        width: '100px'
     },
 
     restoreContainer: {
@@ -32,24 +58,36 @@ const styles = makeStyles({
         marginBottom: '10px'
     },
 
-    userMessage: {
+    messageContainer: {
+        color: '#DC143C',
         fontSize: '14px',
-        marginBottom: '10px'
-    },
-
-    restoreSection: {
-        marginTop: '20px'
+        marginBottom: '8px',
+        marginTop: '8px'
     }
 });
 
 const SettingsPage = (props) => {
     const classes = styles(props);
     const theme = SharedService.buildThemeConfig();
-    const fileInput = React.createRef();
+    const fileInput = useRef();
     let reader;
 
+    const [ defaultUnit, setDefaultUnit ] = useState(SharedService.getSettings().defaultUnit);
     const [ selectedFile, setSelectedFile ] = useState(null);
-    const [ success, setSuccess ] = useState(false);
+    const [ message, setMessage ] = useState('');
+
+    const handleDefaultUnitChange = (event) => {
+        setDefaultUnit(event.target.value);
+    };
+
+    const handleSave = () => {
+        const settings = {
+            defaultUnit
+        };
+
+        localStorage.setItem('ck.settings', JSON.stringify(settings));
+        setMessage('Settings saved')
+    };
 
     const handleDownload = (fileName, data) => {
         const element = document.createElement('a');
@@ -72,7 +110,7 @@ const SettingsPage = (props) => {
         if (reader.result) {
             RecipeService.setRecipeData(reader.result);
             setSelectedFile(null);
-            setSuccess(true);
+            setMessage('Data restored successfully');
         }
     };
 
@@ -96,48 +134,83 @@ const SettingsPage = (props) => {
     return (
         <div className={classes.root}>
             <Container maxWidth='sm'>
-                <p>Back up recipe data</p>
-
-                <Button variant='outlined' color='default' size='small' onClick={handleBackup}>
-                    Backup
-                </Button>
-
-                <p className={classes.restoreSection}>Restore recipe data</p>
-
-                <div className={classes.restoreContainer}>
-                    <label htmlFor="FileUpload" className={classes.fileUploadLabel} style={{color: theme.palette.primary.main}}>Browse
-                        <input
-                            type="file"
-                            id="FileUpload"
-                            name="file"
-                            className={classes.fileUploadInput}
-                            ref={fileInput}
-                            onChange={handleSelectFile}
-                            accept='.json'/>
-                    </label>
-
+                <section>
                     {
-                        selectedFile &&
-                        <div className={classes.selectedFile}>{ selectedFile.name }</div>
+                        message &&
+                        <div className={classes.messageContainer}>
+                            {message}
+                        </div>
                     }
+                </section>
 
-                    {
-                        success &&
-                        <div className={classes.userMessage}>Data restored successfully</div>
-                    }
+                <section className={classes.section}>
+                        <label className={classes.defaultUnitLabel}>Default unit:</label>
+                        <Select
+                            value={defaultUnit}
+                            onChange={handleDefaultUnitChange}
+                            className={classes.defaultUnitSelector}
+                        >
+                            <MenuItem value={'0'}>Select unit</MenuItem>
+                            <MenuItem value={'oz'}>oz</MenuItem>
+                            <MenuItem value={'ml'}>ml</MenuItem>
+                            <MenuItem value={'dash'}>dash</MenuItem>
+                            <MenuItem value={'tsp'}>tsp</MenuItem>
+                            <MenuItem value={'tbsp'}>tbsp</MenuItem>
+                        </Select>
 
-                    <div>
+                    <div className={classes.action}>
                         <Button
                             variant='outlined'
                             color='default'
                             size='small'
-                            disabled={!selectedFile}
-                            onClick={handleRestore}
+                            onClick={handleSave}
                         >
-                            Restore
+                            Save
                         </Button>
                     </div>
-                </div>
+                </section>
+
+                <section className={classes.section}>
+                    <div className={classes.sectionText}>Back up recipe data</div>
+
+                    <Button variant='outlined' color='default' size='small' onClick={handleBackup}>
+                        Backup
+                    </Button>
+                </section>
+
+                <section>
+                    <div className={classes.sectionText}>Restore recipe data</div>
+
+                    <div className={classes.restoreContainer}>
+                        <label htmlFor="FileUpload" className={classes.fileUploadLabel} style={{color: theme.palette.primary.main}}>Browse
+                            <input
+                                type="file"
+                                id="FileUpload"
+                                name="file"
+                                className={classes.fileUploadInput}
+                                ref={fileInput}
+                                onChange={handleSelectFile}
+                                accept='.json'/>
+                        </label>
+
+                        {
+                            selectedFile &&
+                            <div className={classes.selectedFile}>{ selectedFile.name }</div>
+                        }
+
+                        <div>
+                            <Button
+                                variant='outlined'
+                                color='default'
+                                size='small'
+                                disabled={!selectedFile}
+                                onClick={handleRestore}
+                            >
+                                Restore
+                            </Button>
+                        </div>
+                    </div>
+                </section>
             </Container>
         </div>
     );
