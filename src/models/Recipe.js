@@ -1,5 +1,8 @@
+import * as UUID from 'uuid'
+
 class Recipe {
     constructor() {
+        this.id = UUID.v4();
         this.name = '';
         this.ingredients = [];
         this.directions = '';

@@ -27,7 +27,7 @@ class RecipeService {
             recipeData = JSON.parse(recipeJSON);
 
             recipeIndex = recipeData.recipes.findIndex((item) => {
-                return item.name === recipe.name;
+                return item.id === recipe.id;
             });
         } else {
             recipeData = {
@@ -46,6 +46,7 @@ class RecipeService {
 
     static getRecipe = (name) => {
         const recipeJSON = localStorage.getItem('ck.recipes');
+        const nameForCompare = name.toLowerCase();
         let recipeIndex = -1;
         let recipeData;
         let recipe;
@@ -54,7 +55,7 @@ class RecipeService {
             recipeData = JSON.parse(recipeJSON);
 
             recipeIndex = recipeData.recipes.findIndex((item) => {
-                return item.name === name;
+                return item.name.toLowerCase() === nameForCompare;
             });
 
             if (recipeIndex > -1) {
@@ -65,7 +66,7 @@ class RecipeService {
         return recipe;
     };
 
-    static deleteRecipe = (recipeName) => {
+    static deleteRecipe = (id) => {
         const recipeJSON = localStorage.getItem('ck.recipes');
         let recipeIndex = -1;
         let recipeData;
@@ -74,7 +75,7 @@ class RecipeService {
             recipeData = JSON.parse(recipeJSON);
 
             recipeIndex = recipeData.recipes.findIndex((item) => {
-                return item.name === recipeName;
+                return item.id === id;
             });
 
             if (recipeIndex > -1) {
@@ -112,6 +113,7 @@ class RecipeService {
         const recipe = new Recipe();
         let ingredient;
 
+        recipe.id = data.id;
         recipe.name = data.name;
         recipe.directions = data.directions;
         recipe.drinkImage = data.drinkImage;

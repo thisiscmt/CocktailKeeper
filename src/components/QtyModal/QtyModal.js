@@ -46,6 +46,11 @@ const styles = makeStyles({
 
     defaultButtonColor: {
         color: 'black'
+    },
+
+    deleteButton: {
+        color: '#DC143C',
+        fontSize: '12px'
     }
 });
 
@@ -65,9 +70,15 @@ const QtyModal = (props) => {
     }
 
     const handleSave = () => {
-        props.onSave(ingredient)
+        props.onSave(ingredient);
 
         setQtyDesc(ingredient.qtyDesc);
+        setOpen(false);
+    };
+
+    const handleDelete = () => {
+        props.onDelete(ingredient);
+
         setOpen(false);
     };
 
@@ -179,10 +190,30 @@ const QtyModal = (props) => {
                     </DialogContent>
 
                     <DialogActions className={classes.dialogActions}>
-                        <Button onClick={handleSave} className={classes.defaultButtonColor} variant='outlined' size={'small'}>
+                        <Button
+                            onClick={handleSave}
+                            className={classes.defaultButtonColor}
+                            variant='outlined'
+                            size={'small'}
+                        >
                             Save
                         </Button>
-                        <Button onClick={handleClose} className={classes.defaultButtonColor} variant='outlined' color='default' size='small'>
+
+                        <Button
+                            onClick={handleDelete}
+                            variant={'text'}
+                            className={classes.deleteButton}
+                            size='small'
+                        >
+                            Delete
+                        </Button>
+
+                        <Button
+                            onClick={handleClose}
+                            className={classes.defaultButtonColor}
+                            variant='outlined'
+                            size='small'
+                        >
                             Cancel
                         </Button>
                     </DialogActions>

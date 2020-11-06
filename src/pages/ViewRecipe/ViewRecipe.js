@@ -35,14 +35,16 @@ const styles = makeStyles({
 
     ingredient: {
         fontSize: '14px',
-        paddingBottom: 0
+        paddingBottom: 0,
+        paddingLeft: '4px',
+        paddingRight: '4px'
     },
 
     recipeDirections: {
         fontSize: '14px',
         marginTop: '16px',
-        paddingLeft: '16px',
-        paddingRight: '16px',
+        paddingLeft: 0,
+        paddingRight: 0,
         textAlign: 'left',
         whiteSpace: 'pre-line'
     },
@@ -50,8 +52,8 @@ const styles = makeStyles({
     qtyDesc: {
         fontSize: '14px',
         fontStyle: 'italic',
-        width: '64px'
-    }
+        flex: '0 0 75px'
+    },
 });
 
 const ViewRecipe = (props) => {

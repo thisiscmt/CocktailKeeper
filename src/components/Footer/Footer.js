@@ -8,7 +8,8 @@ const styles = makeStyles({
         backgroundColor: 'darkcyan',
         display: 'flex',
         height: '40px',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginBottom: '15px'
     }
 });
 

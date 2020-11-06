@@ -78,7 +78,9 @@ class EditRecipe extends React.Component {
                 recipe,
                 ingredientCounter: recipe.ingredients.length + 1,
                 mode: 'Edit',
-                theme
+                theme,
+                validationError: false,
+                validationMsg: ''
             }
         } else {
             recipe = new Recipe();
@@ -87,7 +89,9 @@ class EditRecipe extends React.Component {
                 recipe,
                 ingredientCounter: 1,
                 mode: 'Add',
-                theme
+                theme,
+                validationError: false,
+                validationMsg: ''
             };
         }
 
@@ -152,6 +156,20 @@ class EditRecipe extends React.Component {
         }
     };
 
+    handleDeleteIngredient = (ingredient) => {
+        const index = this.state.recipe.ingredients.findIndex(item => {
+            return item.id === ingredient.id;
+        })
+
+        if (index > -1) {
+            const recipe = this.state.recipe;
+
+            recipe.ingredients.splice(index, 1);
+            this.setState({ recipe });
+        }
+
+    };
+
     handleChangeDirections = (event) => {
         event.preventDefault();
 
@@ -182,7 +200,12 @@ class EditRecipe extends React.Component {
         event.preventDefault();
 
         if (this.state.recipe.name === '') {
-            this.setState({ validationError: true });
+            this.setState({ validationMsg: 'Name is required', validationError: true });
+            return;
+        }
+
+        if (RecipeService.getRecipe(this.state.recipe.name)) {
+            this.setState({ validationMsg: 'Name is already in use', validationError: true });
             return;
         }
 
@@ -201,13 +224,13 @@ class EditRecipe extends React.Component {
     handleDelete = (event) => {
         event.preventDefault();
 
-        RecipeService.deleteRecipe(this.state.recipe.name);
+        RecipeService.deleteRecipe(this.state.recipe.id);
         this.props.history.push('/');
     };
 
     doNavigation = () => {
         if (this.state.mode === 'Edit') {
-            this.props.history.push('/recipe/' +  encodeURIComponent(this.state.recipe.name));
+            this.props.history.push('/recipe/' +  encodeURIComponent(this.props.match.params.recipeName));
         } else {
             this.props.history.push('/');
         }
@@ -215,7 +238,7 @@ class EditRecipe extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { recipe, validationError, mode, theme } = this.state;
+        const { recipe, validationError, validationMsg, mode, theme } = this.state;
 
         return (
             <MuiThemeProvider theme={theme}>
@@ -244,7 +267,7 @@ class EditRecipe extends React.Component {
                                     value={recipe.name}
                                     size='small'
                                     error={validationError}
-                                    helperText={validationError === true ? 'Name is required' : ''}
+                                    helperText={validationError === true ? validationMsg : ''}
                                     inputProps={{ maxLength: 50 }}
                                     onChange={this.handleChangeName}
                                 />
@@ -258,6 +281,7 @@ class EditRecipe extends React.Component {
                                                         ingredient={ingredient}
                                                         textColor={recipe.textColor}
                                                         onSave={this.handleSaveIngredientQty}
+                                                        onDelete={this.handleDeleteIngredient}
                                                     />
 
                                                     <TextField
