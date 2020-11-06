@@ -204,7 +204,9 @@ class EditRecipe extends React.Component {
             return;
         }
 
-        if (RecipeService.getRecipe(this.state.recipe.name)) {
+        const recipe = RecipeService.getRecipe(this.state.recipe.name)
+
+        if (recipe && recipe.id !== this.state.recipe.id) {
             this.setState({ validationMsg: 'Name is already in use', validationError: true });
             return;
         }
@@ -212,13 +214,13 @@ class EditRecipe extends React.Component {
         this.setState({ validationError: false });
 
         RecipeService.saveRecipe(this.state.recipe);
-        this.doNavigation();
+        this.doNavigation('Save');
     };
 
     handleCancel = (event) => {
         event.preventDefault();
 
-        this.doNavigation();
+        this.doNavigation('Cancel');
     };
 
     handleDelete = (event) => {
@@ -228,9 +230,13 @@ class EditRecipe extends React.Component {
         this.props.history.push('/');
     };
 
-    doNavigation = () => {
+    doNavigation = (action) => {
         if (this.state.mode === 'Edit') {
-            this.props.history.push('/recipe/' +  encodeURIComponent(this.props.match.params.recipeName));
+            if (action === 'Save') {
+                this.props.history.push('/recipe/' +  encodeURIComponent(this.state.recipe.name));
+            } else {
+                this.props.history.push('/recipe/' +  encodeURIComponent(this.props.match.params.recipeName));
+            }
         } else {
             this.props.history.push('/');
         }

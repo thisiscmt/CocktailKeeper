@@ -9,7 +9,7 @@ const styles = makeStyles({
         display: 'flex',
         height: '40px',
         justifyContent: 'center',
-        marginBottom: '15px'
+        marginBottom: '20px'
     }
 });
 

@@ -41,7 +41,8 @@ const styles = makeStyles({
 
     dialogActions: {
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginTop: '8px'
     },
 
     defaultButtonColor: {
