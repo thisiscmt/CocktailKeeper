@@ -21,6 +21,7 @@ const styles = makeStyles({
 
     topControls: {
         display: 'flex',
+        justifyContent: 'space-between',
         marginTop: '5px',
         marginBottom: '10px'
     },
@@ -53,13 +54,17 @@ const styles = makeStyles({
         fontSize: '14px',
         fontStyle: 'italic',
         flex: '0 0 75px'
-    },
+    }
 });
 
 const ViewRecipe = (props) => {
     const classes = styles(props);
     const theme = SharedService.buildThemeConfig(RecipeService.getRecipe(props.match.params.recipeName));
     const [ recipe, ] = useState(RecipeService.getRecipe(props.match.params.recipeName));
+
+    const handleCopy = () => {
+        alert('test');
+    };
 
     return (
         <MuiThemeProvider theme={theme}>
@@ -76,6 +81,15 @@ const ViewRecipe = (props) => {
                                     size='small'
                                 >
                                     Edit
+                                </Button>
+
+                                <Button
+                                    variant='outlined'
+                                    color='primary'
+                                    size='small'
+                                    onClick={handleCopy}
+                                >
+                                    Copy
                                 </Button>
                             </div>
 
@@ -111,10 +125,11 @@ const ViewRecipe = (props) => {
                                 </CardContent>
                             </Card>
 
-                            <div className={'drink-image'}>
+                            <div className={'drink-image-container'}>
                                 <img
-                                    src={window.location.protocol + '//' + window.location.host + '/images/rocks.png'}
+                                    src={window.location.protocol + '//' + window.location.host + '/images/' + recipe.drinkImage}
                                     alt={'Drink vessel'}
+                                    className={'drink-image'}
                                 />
                             </div>
                         </div> :

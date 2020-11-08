@@ -29,11 +29,16 @@ a.app-link:active {
     text-align: center;
 }
 
-.drink-image {
-    margin-top: 20px;
-    text-align: center;
-}
-
 .fancy-nav {
     font-family: 'Rye', Roboto, Arial, Helvetica, sans-serif;
+}
+
+.drink-image-container {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.drink-image {
+    background-color: #ffffff;
+    padding: 5px;
 }

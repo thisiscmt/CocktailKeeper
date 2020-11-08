@@ -338,7 +338,7 @@ class EditRecipe extends React.Component {
                                     />
                                 </div>
 
-                                <div className={'drink-image'}>
+                                <div>
                                     <ImageSelectorModal drinkImage={recipe.drinkImage} onSave={this.handleSaveImage} />
                                 </div>
 

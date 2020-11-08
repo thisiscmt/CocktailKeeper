@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useRef, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -12,7 +12,7 @@ const styles = makeStyles({
     },
 
     dialogPaper: {
-        height : '426px'
+        height : '418px'
     },
 
     title: {
@@ -23,24 +23,27 @@ const styles = makeStyles({
         textAlign: 'center'
     },
 
-    drinkImage: {
-        marginBottom: '10px'
-    },
-
-    selectedImage: {
-        border: '1px solid Gray',
-        borderRadius: '5px'
-    },
-
     imageList: {
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
     },
 
-    imageListItem: {
+    imageContainer: {
+        alignItems: 'center',
+        cursor: 'pointer',
+        display: 'flex',
+        marginBottom: '8px',
         padding: '8px',
-        marginBottom: '10px'
+    },
+
+    imageLabel: {
+        marginLeft: '8px'
+    },
+
+    selectedImage: {
+        border: '1px solid Gray',
+        borderRadius: '5px'
     },
 
     dialogActions: {
@@ -56,53 +59,109 @@ const styles = makeStyles({
 const ImageSelectorModal = (props) => {
     const classes = styles(props);
     const imageBaseURL = window.location.protocol + '//' + window.location.host + '/images'
+    const selectedImageElement = useRef();
 
+    const imageLibrary = [
+        {
+            name: 'Rocks',
+            file: 'rocks.png',
+            alt: 'Rocks glass',
+            selected: false
+        },
+        {
+            name: 'Cocktail',
+            file: 'cocktail.png',
+            alt: 'Cocktail glass',
+            selected: false
+        },
+        {
+            name: 'Coupe',
+            file: 'coupe.png',
+            alt: 'Coupe glass',
+            selected: false
+        },
+        {
+            name: 'Collins',
+            file: 'collins.png',
+            alt: 'Collins glass',
+            selected: false
+        },
+        {
+            name: 'Flute',
+            file: 'flute.png',
+            alt: 'Champagne flute',
+            selected: false
+        },
+        {
+            name: 'Highball',
+            file: 'highball.png',
+            alt: 'Highball glass',
+            selected: false
+        },
+        {
+            name: 'Irish Coffee',
+            file: 'irish_coffee.png',
+            alt: 'Irish coffee mug',
+            selected: false
+        }
+    ]
+
+    const imageIndex = imageLibrary.findIndex(item => item.file === props.drinkImage );
+
+    if (imageIndex > -1) {
+        imageLibrary[imageIndex].selected = true;
+    }
+
+    const [ images, setImages ] = useState(imageLibrary);
     const [ selectedImage, setSelectedImage ] = useState(props.drinkImage);
     const [ open, setOpen ] = useState(false);
 
     const handleOpen = () => {
         setOpen(true);
-    }
+
+        setTimeout(() => {
+            scrollToSelectedImage()
+        });
+    };
 
     const handleClose = () => {
         setOpen(false);
-    }
+    };
 
-    // const handleSelectColor = (event) => {
-    //     const selectedColor = event.target.dataset.colorCode;
-    //
-    //     const selectedColorIndex = colors.findIndex(color => {
-    //         return color.colorCode === selectedColor;
-    //     })
-    //
-    //     colors.forEach(color => {
-    //         color.selected = false;
-    //     })
-    //
-    //     colors[selectedColorIndex].selected = true
-    //     setColors(colors);
-    //     setSelectedColor(selectedColor);
-    //     setSelectedTextColor(colors[selectedColorIndex].textColorCode);
-    // };
+    const handleSelectImage = (image) => {
+        const newImages = images.map(item => {
+            item.selected = false;
+            return item;
+        });
 
-    const handleSelectImage = (event) => {
-        const imageNameIndex = event.target.src.lastIndexOf('/');
-        setSelectedImage(event.target.src.substr(imageNameIndex + 1));
+        const imageIndex = newImages.findIndex(item => item.file === image.file );
+
+        if (imageIndex > -1) {
+            newImages[imageIndex].selected = true;
+            setSelectedImage(image.file);
+            setImages(newImages);
+        }
     };
 
     const handleSave = () => {
         const imageData = {
             drinkImage: selectedImage
-        }
+        };
 
         props.onSave(imageData);
         setOpen(false);
     };
 
+    const scrollToSelectedImage = () => {
+        if (selectedImageElement && selectedImageElement.current) {
+            selectedImageElement.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
     return (
         <div>
-            <div className={classes.drinkImage}>
-                <img src={`${imageBaseURL}/${props.drinkImage}`} alt={'Drink vessel'} />
+            <div className={'drink-image-container'}>
+                <img src={`${imageBaseURL}/${props.drinkImage}`} alt={'Drink vessel'} className={'drink-image'} />
             </div>
             <Button
                 onClick={handleOpen}
@@ -124,54 +183,25 @@ const ImageSelectorModal = (props) => {
                 <DialogTitle className={classes.title}>Select Drink Image</DialogTitle>
 
                 <DialogContent className={classes.content + ' ' + classes.imageList}>
-                    <img
-                        src={`${imageBaseURL}/rocks.png`}
-                        alt={'Rocks glass'}
-                        className={classes.imageListItem + (selectedImage === 'rocks.png' ? ' ' + classes.selectedImage : '')}
-                        onClick={handleSelectImage}
-                    />
+                    {
+                        images.map(image => {
+                            return (
+                                <div
+                                    key={image.file}
+                                    className={classes.imageContainer + (image.selected ? ' ' + classes.selectedImage : '')}
+                                    ref={image.selected ? selectedImageElement : null}
+                                >
+                                    <img
+                                        src={`${imageBaseURL}/${image.file}`}
+                                        alt={image.alt}
+                                        onClick={() => handleSelectImage(image)}
+                                    />
 
-                    <img
-                        src={`${imageBaseURL}/cocktail.png`}
-                        alt={'Cocktail glass'}
-                        className={classes.imageListItem + (selectedImage === 'cocktail.png' ? ' ' + classes.selectedImage : '')}
-                        onClick={handleSelectImage}
-                    />
-
-                    <img
-                        src={`${imageBaseURL}/coupe.png`}
-                        alt={'Coupe glass'}
-                        className={classes.imageListItem + (selectedImage === 'coupe.png' ? ' ' + classes.selectedImage : '')}
-                        onClick={handleSelectImage}
-                    />
-
-                    <img
-                        src={`${imageBaseURL}/collins.png`}
-                        alt={'Collins glass'}
-                        className={classes.imageListItem + (selectedImage === 'collins.png' ? ' ' + classes.selectedImage : '')}
-                        onClick={handleSelectImage}
-                    />
-
-                    <img
-                        src={`${imageBaseURL}/flute.png`}
-                        alt={'Champagne flute'}
-                        className={classes.imageListItem + (selectedImage === 'flute.png' ? ' ' + classes.selectedImage : '')}
-                        onClick={handleSelectImage}
-                    />
-
-                    <img
-                        src={`${imageBaseURL}/highball.png`}
-                        alt={'Highball glass'}
-                        className={classes.imageListItem + (selectedImage === 'highball.png' ? ' ' + classes.selectedImage : '')}
-                        onClick={handleSelectImage}
-                    />
-
-                    <img
-                        src={`${imageBaseURL}/irish_coffee.png`}
-                        alt={'Irish coffee mug'}
-                        className={classes.imageListItem + (selectedImage === 'irish_coffee.png' ? ' ' + classes.selectedImage : '')}
-                        onClick={handleSelectImage}
-                    />
+                                    <span className={classes.imageLabel} onClick={() => handleSelectImage(image)}>{ image.name }</span>
+                                </div>
+                            )
+                        })
+                    }
                 </DialogContent>
 
                 <DialogActions className={classes.dialogActions}>

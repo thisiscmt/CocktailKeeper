@@ -65,12 +65,12 @@ const ColorSelectorModal = (props) => {
 
         setTimeout(() => {
             scrollToSelectedColor();
-        })
+        });
     }
 
     const handleClose = () => {
         setOpen(false);
-    }
+    };
 
     const handleSelectColor = (event) => {
         const selectedColor = event.target.dataset.colorCode;
@@ -98,7 +98,7 @@ const ColorSelectorModal = (props) => {
         if (selectedColorElement && selectedColorElement.current) {
             selectedColorElement.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }
-    }
+    };
 
     // This check for an empty color list prevents an endless series of fetches of the colors data file
     if (colors.length === 0) {
