@@ -16,6 +16,7 @@ import SharedService from '../../services/SharedService';
 import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
 import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
+import ImageSelectorModal from '../../components/ImageSelectorModal/ImageSelectorModal';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 
 const styles = createStyles({
@@ -54,7 +55,7 @@ const styles = createStyles({
     },
 
     changeBackgroundColor: {
-        marginTop: '16px',
+        marginTop: '10px',
         marginBottom: '10px'
     }
 });
@@ -196,6 +197,13 @@ class EditRecipe extends React.Component {
         this.setState({ recipe, theme });
     }
 
+    handleSaveImage = (imageData) => {
+        const recipe = this.state.recipe;
+        recipe.drinkImage = imageData.drinkImage;
+
+        this.setState({ recipe });
+    }
+
     handleSubmit = (event) => {
         event.preventDefault();
 
@@ -331,17 +339,13 @@ class EditRecipe extends React.Component {
                                 </div>
 
                                 <div className={'drink-image'}>
-                                    <img
-                                        src={window.location.protocol + '//' + window.location.host + '/images/rocks.png'}
-                                        alt={'Drink vessel'}
-                                    />
+                                    <ImageSelectorModal drinkImage={recipe.drinkImage} onSave={this.handleSaveImage} />
                                 </div>
 
+                                <Divider variant='fullWidth' className={'divider'} />
+
                                 <div className={classes.changeBackgroundColor}>
-                                    <ColorSelectorModal
-                                        linkLabel={'CHANGE BACKGROUND COLOR'}
-                                        colorCode={recipe.backgroundColor}
-                                        onSave={this.handleSaveBackgroundColor} />
+                                    <ColorSelectorModal colorCode={recipe.backgroundColor} onSave={this.handleSaveBackgroundColor} />
                                 </div>
 
                                 {

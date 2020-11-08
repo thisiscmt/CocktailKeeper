@@ -125,12 +125,11 @@ const ColorSelectorModal = (props) => {
         <div>
             <Button
                 onClick={handleOpen}
-                className={classes.link}
                 variant='outlined'
                 color='default'
                 size='small'
             >
-                { props.linkLabel }
+                CHANGE BACKGROUND COLOR
             </Button>
 
             <Dialog
