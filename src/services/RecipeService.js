@@ -12,11 +12,11 @@ class RecipeService {
 
             recipes = recipeData.recipes.map(item => {
                 return this.buildRecipe(item);
-            })
+            });
         }
 
         return recipes;
-    }
+    };
 
     static saveRecipe = (recipe) => {
         const recipeJSON = localStorage.getItem('ck.recipes');
@@ -84,7 +84,7 @@ class RecipeService {
 
             localStorage.setItem('ck.recipes', JSON.stringify(recipeData));
         }
-    }
+    };
 
     static saveRecipes = (recipes) => {
         const recipeJSON = localStorage.getItem('ck.recipes');
@@ -99,15 +99,15 @@ class RecipeService {
 
         recipeData.recipes = recipes;
         localStorage.setItem('ck.recipes', JSON.stringify(recipeData));
-    }
+    };
 
     static getRecipeData = () => {
         return localStorage.getItem('ck.recipes');
-    }
+    };
 
     static setRecipeData = (data) => {
         localStorage.setItem('ck.recipes', data);
-    }
+    };
 
     static buildRecipe = (data) => {
         const recipe = new Recipe();
@@ -130,10 +130,10 @@ class RecipeService {
             ingredient.qtyDesc = item.qtyDesc;
 
             return ingredient;
-        })
+        });
 
         return recipe;
-    }
+    };
 }
 
 export default RecipeService;

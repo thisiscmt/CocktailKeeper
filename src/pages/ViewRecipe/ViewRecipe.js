@@ -9,6 +9,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core';
+import clone from 'lodash/clone';
+import * as UUID from 'uuid';
 
 import RecipeService from '../../services/RecipeService';
 import SharedService from '../../services/SharedService';
@@ -43,6 +45,7 @@ const styles = makeStyles({
 
     recipeDirections: {
         fontSize: '14px',
+        marginBottom: '12px',
         marginTop: '16px',
         paddingLeft: 0,
         paddingRight: 0,
@@ -63,7 +66,11 @@ const ViewRecipe = (props) => {
     const [ recipe, ] = useState(RecipeService.getRecipe(props.match.params.recipeName));
 
     const handleCopy = () => {
-        alert('test');
+        const newRecipe = clone(recipe);
+        newRecipe.id = UUID.v4();
+        newRecipe.name = newRecipe.name + ' - Copy';
+
+        RecipeService.saveRecipe(newRecipe);
     };
 
     return (

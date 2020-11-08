@@ -98,7 +98,7 @@ const SettingsPage = (props) => {
 
         element.click();
         document.body.removeChild(element);
-    }
+    };
 
     const handleSelectFile = (event) => {
         if (event.target.files.length > 0) {

@@ -69,11 +69,11 @@ const Home = (props) => {
     const [ recipes, setRecipes ] = useState(RecipeService.getRecipes());
 
     const handleSortEnd = ({oldIndex, newIndex}) => {
-        const recipesToUpdate = ArrayMove(recipes, oldIndex, newIndex)
+        const recipesToUpdate = ArrayMove(recipes, oldIndex, newIndex);
 
         setRecipes(recipesToUpdate);
         RecipeService.saveRecipes(recipesToUpdate);
-    }
+    };
 
     return(
         <section>

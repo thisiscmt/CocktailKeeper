@@ -54,6 +54,10 @@ const styles = createStyles({
         width: '100%'
     },
 
+    editImage: {
+        marginBottom: '10px'
+    },
+
     changeBackgroundColor: {
         marginTop: '10px',
         marginBottom: '10px'
@@ -126,7 +130,7 @@ class EditRecipe extends React.Component {
     handleSaveIngredientQty = (qtyData) => {
         const index = this.state.recipe.ingredients.findIndex(item => {
             return item.id === qtyData.id;
-        })
+        });
 
         if (index > -1) {
             const recipe = this.state.recipe;
@@ -142,12 +146,12 @@ class EditRecipe extends React.Component {
             recipe.ingredients[index] = ingredient;
             this.setState({ recipe });
         }
-    }
+    };
 
     handleChangeIngredientName = (id, name) => {
         const index = this.state.recipe.ingredients.findIndex(item => {
             return item.id === id;
-        })
+        });
 
         if (index > -1) {
             const recipe = this.state.recipe;
@@ -160,7 +164,7 @@ class EditRecipe extends React.Component {
     handleDeleteIngredient = (ingredient) => {
         const index = this.state.recipe.ingredients.findIndex(item => {
             return item.id === ingredient.id;
-        })
+        });
 
         if (index > -1) {
             const recipe = this.state.recipe;
@@ -180,20 +184,12 @@ class EditRecipe extends React.Component {
         this.setState({ recipe });
     };
 
-    handleChangeImage = (event) => {
-        event.preventDefault();
-
-        // TODO
-    };
-
     handleSaveBackgroundColor = (colorData) => {
         const recipe = this.state.recipe;
-
         recipe.backgroundColor = colorData.colorCode;
         recipe.textColor = colorData.textColorCode;
 
         const theme = SharedService.buildThemeConfig(recipe);
-
         this.setState({ recipe, theme });
     }
 
@@ -212,7 +208,7 @@ class EditRecipe extends React.Component {
             return;
         }
 
-        const recipe = RecipeService.getRecipe(this.state.recipe.name)
+        const recipe = RecipeService.getRecipe(this.state.recipe.name);
 
         if (recipe && recipe.id !== this.state.recipe.id) {
             this.setState({ validationMsg: 'Name is already in use', validationError: true });
@@ -248,7 +244,7 @@ class EditRecipe extends React.Component {
         } else {
             this.props.history.push('/');
         }
-    }
+    };
 
     render() {
         const { classes } = this.props;
@@ -338,7 +334,7 @@ class EditRecipe extends React.Component {
                                     />
                                 </div>
 
-                                <div>
+                                <div className={classes.editImage}>
                                     <ImageSelectorModal drinkImage={recipe.drinkImage} onSave={this.handleSaveImage} />
                                 </div>
 

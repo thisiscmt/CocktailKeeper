@@ -59,7 +59,6 @@ const styles = makeStyles({
 const ImageSelectorModal = (props) => {
     const classes = styles(props);
     const imageBaseURL = window.location.protocol + '//' + window.location.host + '/images'
-    const selectedImageElement = useRef();
 
     const imageLibrary = [
         {
@@ -115,12 +114,13 @@ const ImageSelectorModal = (props) => {
     const [ images, setImages ] = useState(imageLibrary);
     const [ selectedImage, setSelectedImage ] = useState(props.drinkImage);
     const [ open, setOpen ] = useState(false);
+    const selectedImageElement = useRef();
 
     const handleOpen = () => {
         setOpen(true);
 
         setTimeout(() => {
-            scrollToSelectedImage()
+            scrollToSelectedImage();
         });
     };
 
@@ -156,13 +156,17 @@ const ImageSelectorModal = (props) => {
         if (selectedImageElement && selectedImageElement.current) {
             selectedImageElement.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-    }
+    };
 
     return (
         <div>
             <div className={'drink-image-container'}>
-                <img src={`${imageBaseURL}/${props.drinkImage}`} alt={'Drink vessel'} className={'drink-image'} />
+                {
+                    props.drinkImage &&
+                    <img src={`${imageBaseURL}/${props.drinkImage}`} alt={'Drink vessel'} className={'drink-image'} />
+                }
             </div>
+
             <Button
                 onClick={handleOpen}
                 variant='outlined'

@@ -64,11 +64,11 @@ const QtyModal = (props) => {
 
     const handleOpen = () => {
         setOpen(true);
-    }
+    };
 
     const handleClose = () => {
         setOpen(false);
-    }
+    };
 
     const handleSave = () => {
         props.onSave(ingredient);

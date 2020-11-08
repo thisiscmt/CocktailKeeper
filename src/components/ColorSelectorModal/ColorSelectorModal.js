@@ -66,7 +66,7 @@ const ColorSelectorModal = (props) => {
         setTimeout(() => {
             scrollToSelectedColor();
         });
-    }
+    };
 
     const handleClose = () => {
         setOpen(false);
@@ -77,11 +77,11 @@ const ColorSelectorModal = (props) => {
 
         const selectedColorIndex = colors.findIndex(color => {
             return color.colorCode === selectedColor;
-        })
+        });
 
         colors.forEach(color => {
             color.selected = false;
-        })
+        });
 
         colors[selectedColorIndex].selected = true
         setColors(colors);
@@ -107,7 +107,7 @@ const ColorSelectorModal = (props) => {
             .then(data => {
                 const selectedColorIndex = data.findIndex(color => {
                     return color.colorCode === props.colorCode;
-                })
+                });
 
                 let textColorCode = '#FFFFFF';
 
