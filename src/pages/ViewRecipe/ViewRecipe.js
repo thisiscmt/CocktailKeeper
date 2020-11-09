@@ -67,9 +67,25 @@ const ViewRecipe = (props) => {
 
     const handleCopy = () => {
         const newRecipe = clone(recipe);
-        newRecipe.id = UUID.v4();
-        newRecipe.name = newRecipe.name + ' - Copy';
+        let newName = newRecipe.name + ' - Copy';
+        let done = false;
+        let nameId = 2;
 
+        newRecipe.id = UUID.v4();
+
+        if (RecipeService.getRecipe(newName)) {
+            while (!done) {
+                if (RecipeService.getRecipe(newName + ' ' + nameId.toString())) {
+                    nameId += 1;
+                } else {
+                    done = true;
+                }
+            }
+
+            newName = newRecipe.name + ' - Copy ' + nameId.toString();
+        }
+
+        newRecipe.name = newName;
         RecipeService.saveRecipe(newRecipe);
     };
 

@@ -11,9 +11,9 @@ const styles = makeStyles({
         padding: 0
     },
 
-    dialogPaper: {
-        height : '418px'
-    },
+    // dialogPaper: {
+    //     height : '418px'
+    // },
 
     title: {
         textAlign: 'center'
@@ -29,12 +29,12 @@ const styles = makeStyles({
         flexDirection: 'column',
     },
 
-    imageContainer: {
+    imageListItem: {
         alignItems: 'center',
         cursor: 'pointer',
         display: 'flex',
         marginBottom: '8px',
-        padding: '8px',
+        padding: '8px'
     },
 
     imageLabel: {
@@ -192,7 +192,8 @@ const ImageSelectorModal = (props) => {
                             return (
                                 <div
                                     key={image.file}
-                                    className={classes.imageContainer + (image.selected ? ' ' + classes.selectedImage : '')}
+                                    className={classes.imageListItem + (image.selected ? ' ' + classes.selectedImage : '')}
+                                    onClick={() => handleSelectImage(image)}
                                     ref={image.selected ? selectedImageElement : null}
                                 >
                                     <img
@@ -200,7 +201,6 @@ const ImageSelectorModal = (props) => {
                                         alt={image.alt}
                                         onClick={() => handleSelectImage(image)}
                                     />
-
                                     <span className={classes.imageLabel} onClick={() => handleSelectImage(image)}>{ image.name }</span>
                                 </div>
                             )
