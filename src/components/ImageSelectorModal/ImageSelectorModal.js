@@ -11,10 +11,6 @@ const styles = makeStyles({
         padding: 0
     },
 
-    // dialogPaper: {
-    //     height : '418px'
-    // },
-
     title: {
         textAlign: 'center'
     },
@@ -24,21 +20,17 @@ const styles = makeStyles({
     },
 
     imageList: {
-        alignItems: 'center',
         display: 'flex',
-        flexDirection: 'column',
+        overflow: 'auto',
+        paddingBottom: '5px'
     },
 
     imageListItem: {
-        alignItems: 'center',
         cursor: 'pointer',
-        display: 'flex',
-        marginBottom: '8px',
+        height: 'fit-content',
+        flexDirection: 'column',
+        marginRight: '8px',
         padding: '8px'
-    },
-
-    imageLabel: {
-        marginLeft: '8px'
     },
 
     selectedImage: {
@@ -98,7 +90,7 @@ const ImageSelectorModal = (props) => {
             selected: false
         },
         {
-            name: 'Irish Coffee',
+            name: 'Irish',
             file: 'irish_coffee.png',
             alt: 'Irish coffee mug',
             selected: false
@@ -186,26 +178,28 @@ const ImageSelectorModal = (props) => {
             >
                 <DialogTitle className={classes.title}>Select Drink Image</DialogTitle>
 
-                <DialogContent className={classes.content + ' ' + classes.imageList}>
-                    {
-                        images.map(image => {
-                            return (
-                                <div
-                                    key={image.file}
-                                    className={classes.imageListItem + (image.selected ? ' ' + classes.selectedImage : '')}
-                                    onClick={() => handleSelectImage(image)}
-                                    ref={image.selected ? selectedImageElement : null}
-                                >
-                                    <img
-                                        src={`${imageBaseURL}/${image.file}`}
-                                        alt={image.alt}
+                <DialogContent>
+                    <div className={classes.content + ' ' + classes.imageList}>
+                        {
+                            images.map(image => {
+                                return (
+                                    <div
+                                        key={image.file}
+                                        className={classes.imageListItem + (image.selected ? ' ' + classes.selectedImage : '')}
                                         onClick={() => handleSelectImage(image)}
-                                    />
-                                    <span className={classes.imageLabel} onClick={() => handleSelectImage(image)}>{ image.name }</span>
-                                </div>
-                            )
-                        })
-                    }
+                                        ref={image.selected ? selectedImageElement : null}
+                                    >
+                                        <img
+                                            src={`${imageBaseURL}/${image.file}`}
+                                            alt={image.alt}
+                                            onClick={() => handleSelectImage(image)}
+                                        />
+                                        <span className={classes.imageLabel} onClick={() => handleSelectImage(image)}>{ image.name }</span>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
                 </DialogContent>
 
                 <DialogActions className={classes.dialogActions}>
