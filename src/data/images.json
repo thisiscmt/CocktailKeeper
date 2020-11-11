@@ -1,0 +1,64 @@
+{
+    "images":[
+        {
+            "name": "Rocks",
+            "file": "rocks.png",
+            "alt": "Rocks glass",
+            "selected": false
+        },
+        {
+            "name": "Cocktail",
+            "file": "cocktail.png",
+            "alt": "Cocktail glass",
+            "selected": false
+        },
+        {
+            "name": "Coupe",
+            "file": "coupe.png",
+            "alt": "Coupe glass",
+            "selected": false
+        },
+        {
+            "name": "Highball",
+            "file": "highball.png",
+            "alt": "Highball glass",
+            "selected": false
+        },
+        {
+            "name": "Collins",
+            "file": "collins.png",
+            "alt": "Collins glass",
+            "selected": false
+        },
+        {
+            "name": "Flute",
+            "file": "flute.png",
+            "alt": "Champagne flute",
+            "selected": false
+        },
+        {
+            "name": "Hurricane",
+            "file": "hurricane.png",
+            "alt": "Hurricane glass",
+            "selected": false
+        },
+        {
+            "name": "Nick and Nora",
+            "file": "nick_and_nora.png",
+            "alt": "Nick and Nora glass",
+            "selected": false
+        },
+        {
+            "name": "Snifter",
+            "file": "snifter.png",
+            "alt": "Snifter glass",
+            "selected": false
+        },
+        {
+            "name": "Irish",
+            "file": "irish_coffee.png",
+            "alt": "Irish coffee mug",
+            "selected": false
+        }
+    ]
+}

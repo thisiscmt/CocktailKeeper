@@ -1,10 +1,12 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import { makeStyles } from '@material-ui/core/styles';
+
+const imageLibrary = require('../../data/images.json');
 
 const styles = makeStyles({
     root: {
@@ -28,6 +30,7 @@ const styles = makeStyles({
     imageListItem: {
         cursor: 'pointer',
         height: 'fit-content',
+        fontSize: '12px',
         flexDirection: 'column',
         marginRight: '8px',
         padding: '8px'
@@ -52,59 +55,8 @@ const ImageSelectorModal = (props) => {
     const classes = styles(props);
     const imageBaseURL = window.location.protocol + '//' + window.location.host + '/images'
 
-    const imageLibrary = [
-        {
-            name: 'Rocks',
-            file: 'rocks.png',
-            alt: 'Rocks glass',
-            selected: false
-        },
-        {
-            name: 'Cocktail',
-            file: 'cocktail.png',
-            alt: 'Cocktail glass',
-            selected: false
-        },
-        {
-            name: 'Coupe',
-            file: 'coupe.png',
-            alt: 'Coupe glass',
-            selected: false
-        },
-        {
-            name: 'Collins',
-            file: 'collins.png',
-            alt: 'Collins glass',
-            selected: false
-        },
-        {
-            name: 'Flute',
-            file: 'flute.png',
-            alt: 'Champagne flute',
-            selected: false
-        },
-        {
-            name: 'Highball',
-            file: 'highball.png',
-            alt: 'Highball glass',
-            selected: false
-        },
-        {
-            name: 'Irish',
-            file: 'irish_coffee.png',
-            alt: 'Irish coffee mug',
-            selected: false
-        }
-    ]
-
-    const imageIndex = imageLibrary.findIndex(item => item.file === props.drinkImage );
-
-    if (imageIndex > -1) {
-        imageLibrary[imageIndex].selected = true;
-    }
-
-    const [ images, setImages ] = useState(imageLibrary);
     const [ selectedImage, setSelectedImage ] = useState(props.drinkImage);
+    const [ selectedImageFileName, setSelectedImageFileName ] = useState(props.drinkImageFileName);
     const [ open, setOpen ] = useState(false);
     const selectedImageElement = useRef();
 
@@ -121,23 +73,14 @@ const ImageSelectorModal = (props) => {
     };
 
     const handleSelectImage = (image) => {
-        const newImages = images.map(item => {
-            item.selected = false;
-            return item;
-        });
-
-        const imageIndex = newImages.findIndex(item => item.file === image.file );
-
-        if (imageIndex > -1) {
-            newImages[imageIndex].selected = true;
-            setSelectedImage(image.file);
-            setImages(newImages);
-        }
+        setSelectedImage(image.name);
+        setSelectedImageFileName(image.file);
     };
 
     const handleSave = () => {
         const imageData = {
-            drinkImage: selectedImage
+            drinkImage: selectedImage,
+            drinkImageFileName: selectedImageFileName
         };
 
         props.onSave(imageData);
@@ -154,8 +97,8 @@ const ImageSelectorModal = (props) => {
         <div>
             <div className={'drink-image-container'}>
                 {
-                    props.drinkImage &&
-                    <img src={`${imageBaseURL}/${props.drinkImage}`} alt={'Drink vessel'} className={'drink-image'} />
+                    props.drinkImageFileName &&
+                    <img src={`${imageBaseURL}/${props.drinkImageFileName}`} alt={'Drink vessel'} className={'drink-image'} />
                 }
             </div>
 
@@ -181,13 +124,13 @@ const ImageSelectorModal = (props) => {
                 <DialogContent>
                     <div className={classes.content + ' ' + classes.imageList}>
                         {
-                            images.map(image => {
+                            imageLibrary.images.map(image => {
                                 return (
                                     <div
-                                        key={image.file}
-                                        className={classes.imageListItem + (image.selected ? ' ' + classes.selectedImage : '')}
+                                        key={image.name}
+                                        className={classes.imageListItem + (image.name === selectedImage ? ' ' + classes.selectedImage : '')}
                                         onClick={() => handleSelectImage(image)}
-                                        ref={image.selected ? selectedImageElement : null}
+                                        ref={image.name === selectedImage ? selectedImageElement : null}
                                     >
                                         <img
                                             src={`${imageBaseURL}/${image.file}`}

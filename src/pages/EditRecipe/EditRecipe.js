@@ -11,13 +11,13 @@ import { createStyles, withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core';
 
 import QtyModal from '../../components/QtyModal/QtyModal';
+import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
+import ImageSelectorModal from '../../components/ImageSelectorModal/ImageSelectorModal';
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 import RecipeService from '../../services/RecipeService';
 import SharedService from '../../services/SharedService';
 import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
-import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
-import ImageSelectorModal from '../../components/ImageSelectorModal/ImageSelectorModal';
-import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 
 const styles = createStyles({
     topControls: {
@@ -196,6 +196,7 @@ class EditRecipe extends React.Component {
     handleSaveImage = (imageData) => {
         const recipe = this.state.recipe;
         recipe.drinkImage = imageData.drinkImage;
+        recipe.drinkImageFileName = imageData.drinkImageFileName;
 
         this.setState({ recipe });
     }
@@ -335,7 +336,11 @@ class EditRecipe extends React.Component {
                                 </div>
 
                                 <div className={classes.editImage}>
-                                    <ImageSelectorModal drinkImage={recipe.drinkImage} onSave={this.handleSaveImage} />
+                                    <ImageSelectorModal
+                                        drinkImage={recipe.drinkImage}
+                                        drinkImageFileName={recipe.drinkImageFileName}
+                                        onSave={this.handleSaveImage}
+                                    />
                                 </div>
 
                                 <Divider variant='fullWidth' className={'divider'} />

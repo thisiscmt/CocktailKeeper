@@ -7,6 +7,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
+const colorLibrary = require('../../data/colors.json');
+
 const styles = makeStyles({
     root: {
         padding: 0
@@ -53,12 +55,11 @@ const styles = makeStyles({
 
 const ColorSelectorModal = (props) => {
     const classes = styles(props);
-    const selectedColorElement = useRef();
 
     const [ open, setOpen ] = useState(false);
-    const [ colors, setColors ] = useState([]);
     const [ selectedColor, setSelectedColor ] = useState(props.colorCode);
     const [ selectedTextColor, setSelectedTextColor ] = useState('#FFFFFF');
+    const selectedColorElement = useRef();
 
     const handleOpen = () => {
         setOpen(true);
@@ -75,18 +76,17 @@ const ColorSelectorModal = (props) => {
     const handleSelectColor = (event) => {
         const selectedColor = event.target.dataset.colorCode;
 
-        const selectedColorIndex = colors.findIndex(color => {
+        const selectedColorIndex = colorLibrary.colors.findIndex(color => {
             return color.colorCode === selectedColor;
         });
 
-        colors.forEach(color => {
+        colorLibrary.colors.forEach(color => {
             color.selected = false;
         });
 
-        colors[selectedColorIndex].selected = true
-        setColors(colors);
+        colorLibrary.colors[selectedColorIndex].selected = true
         setSelectedColor(selectedColor);
-        setSelectedTextColor(colors[selectedColorIndex].textColorCode);
+        setSelectedTextColor(colorLibrary.colors[selectedColorIndex].textColorCode);
     };
 
     const handleSave = () => {
@@ -99,27 +99,6 @@ const ColorSelectorModal = (props) => {
             selectedColorElement.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }
     };
-
-    // This check for an empty color list prevents an endless series of fetches of the colors data file
-    if (colors.length === 0) {
-        fetch('/data/colors.json')
-            .then(response => response.json())
-            .then(data => {
-                const selectedColorIndex = data.findIndex(color => {
-                    return color.colorCode === props.colorCode;
-                });
-
-                let textColorCode = '#FFFFFF';
-
-                if (selectedColorIndex > -1) {
-                    data[selectedColorIndex].selected = true;
-                    textColorCode = data[selectedColorIndex].textColorCode;
-                }
-
-                setColors(data);
-                setSelectedTextColor(textColorCode);
-            });
-    }
 
     return (
         <div>
@@ -144,7 +123,7 @@ const ColorSelectorModal = (props) => {
 
                 <DialogContent className={classes.content + ' ' + classes.colorList}>
                     {
-                        colors.map((color, index) => {
+                        colorLibrary.colors.map((color, index) => {
                             return (
                                 <div
                                     key={index}

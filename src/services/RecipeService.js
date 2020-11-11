@@ -1,6 +1,8 @@
 import Recipe from '../models/Recipe';
 import Ingredient from '../models/Ingredient';
 
+const imageLibrary = require('../data/images.json');
+
 class RecipeService {
     static getRecipes = () => {
         const recipeJSON = localStorage.getItem('ck.recipes');
@@ -10,7 +12,7 @@ class RecipeService {
         if (recipeJSON) {
             recipeData = JSON.parse(recipeJSON);
 
-            recipes = recipeData.recipes.map(item => {
+            recipes = recipeData.recipes.map((item) => {
                 return this.buildRecipe(item);
             });
         }
@@ -34,6 +36,10 @@ class RecipeService {
                 recipes: []
             };
         }
+
+        // We don't need to store the drink image file name since we're storing the name of the image itself. The idea is not to store any file
+        // names since they could change at some point (e.g. a new format could be chosen).
+        delete recipe.drinkImageFileName;
 
         if (recipeIndex > -1) {
             recipeData.recipes[recipeIndex] = recipe;
@@ -59,7 +65,7 @@ class RecipeService {
             });
 
             if (recipeIndex > -1) {
-                recipe = this.buildRecipe(recipeData.recipes[recipeIndex]);
+                recipe = RecipeService.buildRecipe(recipeData.recipes[recipeIndex]);
             }
         }
 
@@ -120,6 +126,8 @@ class RecipeService {
         recipe.backgroundColor = data.backgroundColor;
         recipe.textColor = data.textColor;
 
+        recipe.drinkImageFileName = RecipeService.getDrinkImageFileName(data.drinkImage);
+
         recipe.ingredients = data.ingredients.map(item => {
             ingredient = new Ingredient();
             ingredient.id = item.id;
@@ -134,6 +142,20 @@ class RecipeService {
 
         return recipe;
     };
+
+    static getDrinkImageFileName = (drinkImage) => {
+        let imageFileName = '';
+
+        if (drinkImage) {
+            const imageIndex = imageLibrary.images.findIndex(image => image.name === drinkImage);
+
+            if (imageIndex > -1) {
+                imageFileName = imageLibrary.images[imageIndex].file;
+            }
+        }
+
+        return imageFileName
+    }
 }
 
 export default RecipeService;

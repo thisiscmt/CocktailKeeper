@@ -26,8 +26,8 @@ function App() {
 
                     <Switch>
                         <Route exact path='/' component={Home} />
-                        <Route exact path='/recipe/:recipeName' component={ViewRecipe} />
-                        <Route exact path={['/recipe', '/recipe/:recipeName/edit']} component={EditRecipe} />
+                        <Route exact path='/recipe/:recipeName' component={ () => <ViewRecipe />} />
+                        <Route exact path={['/recipe', '/recipe/:recipeName/edit']} component={() => <EditRecipe />} />
                         <Route exact path='/settings' component={Settings} />
                         <Route component={ErrorPage} />
                     </Switch>
