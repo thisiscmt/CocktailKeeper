@@ -327,7 +327,7 @@ class EditRecipe extends React.Component {
                                         name='description'
                                         fullWidth= {true}
                                         multiline={true}
-                                        rows={6}
+                                        rows={8}
                                         value={recipe.directions}
                                         size='small'
                                         inputProps={{ maxLength: 2000 }}
