@@ -330,7 +330,7 @@ class EditRecipe extends React.Component {
                                         rows={6}
                                         value={recipe.directions}
                                         size='small'
-                                        inputProps={{ maxLength: 250 }}
+                                        inputProps={{ maxLength: 2000 }}
                                         onChange={this.handleChangeDirections}
                                     />
                                 </div>

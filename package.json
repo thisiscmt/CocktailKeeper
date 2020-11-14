@@ -28,6 +28,7 @@
         "react-helmet": "^5.2.1",
         "react-router-dom": "^5.1.2",
         "react-sortable-hoc": "^1.11.0",
+        "react-swipeable": "^6.0.0",
         "resolve": "1.12.0",
         "semver": "6.3.0",
         "ts-pnp": "1.1.4",
