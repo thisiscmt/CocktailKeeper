@@ -26,7 +26,7 @@ const styles = makeStyles({
 const RecipeItem = SortableElement(({recipe, classes}) => {
     return (
         <div>
-            <div key={recipe.name} className={classes.recipe} style={recipe.lastInList ? {marginBottom: 0} : null}>
+            <div key={recipe.name} className={classes.recipe} style={recipe.lastInList ? {marginBottom: 0} : {marginBottom: '8px'}}>
                 <Button
                     component={Link}
                     to={`/recipe/${encodeURIComponent(recipe.name)}`}
@@ -49,11 +49,7 @@ const RecipeList = SortableContainer(({recipes, classes}) => {
         <div className={classes.recipeList}>
             {
                 recipes.map((recipe, index) => {
-                    const curRecipe = recipe;
-
-                    if (index === recipes.length - 1) {
-                        curRecipe.lastInList = true;
-                    }
+                    const curRecipe = { ...recipe, lastInList: (index === recipes.length - 1) };
 
                     return (
                         <RecipeItem
