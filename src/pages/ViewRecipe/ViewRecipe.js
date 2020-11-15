@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 import { withRouter, useHistory, Link } from 'react-router-dom'
+import { useSwipeable } from 'react-swipeable';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
@@ -11,7 +12,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core';
 import clone from 'lodash/clone';
 import * as UUID from 'uuid';
-import {useSwipeable} from 'react-swipeable';
 
 import RecipeService from '../../services/RecipeService';
 import SharedService from '../../services/SharedService';
@@ -63,89 +63,44 @@ const styles = makeStyles({
 
 const ViewRecipe = (props) => {
     const classes = styles(props);
-    // const history = useHistory();
-    const theme = SharedService.buildThemeConfig(RecipeService.getRecipe(props.match.params.recipeName));
+    const history = useHistory();
 
-    const [ recipe, ] = useState(RecipeService.getRecipe(props.match.params.recipeName));
+    const [ recipe, setRecipe ] = useState(RecipeService.getRecipe(props.match.params.recipeName));
+    const [ theme, setTheme ] = useState(SharedService.buildThemeConfig(RecipeService.getRecipe(props.match.params.recipeName)));
 
     const swipeHandlers = useSwipeable({
-        // onSwipedLeft: (eventData) => handleSwipeLeft(eventData),
-        // onSwipedRight: (eventData) => handleSwipeRight(eventData)
+        onSwipedLeft: (eventData) => handleSwipeLeft(eventData),
+        onSwipedRight: (eventData) => handleSwipeRight(eventData)
     });
 
-    // useEffect(() => {
-    //     return history.listen(location => {
-    //         if (history.action === 'PUSH') {
-    //             if (location.state && location.state.recipeName) {
-    //                 const recipes = RecipeService.getRecipes();
-    //                 const recipeIndex = recipes.findIndex(recipe => recipe.name === location.state.recipeName);
-    //
-    //                 if (recipeIndex > -1 && recipeIndex !== recipes.length) {
-    //                     setRecipe(recipes[recipeIndex + 1]);
-    //                 }
-    //             }
-    //
-    //             // if (location.state) {
-    //             //     alert(location.state.recipeName);
-    //             // }
-    //         }
-    //
-    //         if (history.action === 'POP') {
-    //             if (location.state && location.state.recipeName) {
-    //                 const recipes = RecipeService.getRecipes();
-    //                 const recipeIndex = recipes.findIndex(recipe => recipe.name === location.state.recipeName);
-    //
-    //                 if (recipeIndex > 0) {
-    //                     setRecipe(recipes[recipeIndex - 1]);
-    //                 }
-    //             } else {
-    //
-    //             }
-    //
-    //             // alert(pathname);
-    //
-    //             // if (location.state) {
-    //             //     alert(location.state.recipeName);
-    //             // }
-    //
-    //             // console.log('location.state: %o', location.state);
-    //             // console.log('location.key: %o', location.key);
-    //             // console.log('location.pathname: %o', location.pathname);
-    //
-    //             // if (locationKeys[1] === location.key) {
-    //             //     setLocationKeys(([ _, ...keys ]) => keys)
-    //             //
-    //             //     // Handle forward event
-    //             //
-    //             // } else {
-    //             //     setLocationKeys((keys) => [ location.key, ...keys ])
-    //             //
-    //             //     // Handle back event
-    //             //
-    //             // }
-    //         }
-    //     })
-    // });
 
-    // const handleSwipeLeft = (eventData) => {
-    //     const recipes = RecipeService.getRecipes();
-    //     const recipeIndex = recipes.findIndex(recipe => recipe.name === props.match.params.recipeName);
-    //
-    //     if (recipeIndex > -1 && recipeIndex !== recipes.length) {
-    //         history.push('/recipe/' +  encodeURIComponent(recipes[recipeIndex + 1].name), { recipeName: recipes[recipeIndex + 1].name });
-    //         // setRecipe(recipes[recipeIndex + 1]);
-    //     }
-    // };
-    //
-    // const handleSwipeRight = (eventData) => {
-    //     const recipes = RecipeService.getRecipes();
-    //     const recipeIndex = recipes.findIndex(recipe => recipe.name === props.match.params.recipeName);
-    //
-    //     if (recipeIndex > 0) {
-    //         history.push('/recipe/' + encodeURIComponent(recipes[recipeIndex - 1].name), { recipeName: recipes[recipeIndex + 1].name });
-    //         // setRecipe(recipes[recipeIndex - 1]);
-    //     }
-    // };
+    const handleSwipeLeft = (eventData) => {
+        const recipes = RecipeService.getRecipes();
+        const recipeIndex = recipes.findIndex(item => item.name === recipe.name);
+        let newRecipe;
+
+        if (recipeIndex < recipes.length - 1) {
+            newRecipe = recipes[recipeIndex + 1];
+            setRecipe(newRecipe);
+            setTheme(SharedService.buildThemeConfig(newRecipe));
+
+            history.replace({ pathname: '/recipe/' +  encodeURIComponent(newRecipe.name) });
+        }
+    };
+
+    const handleSwipeRight = (eventData) => {
+        const recipes = RecipeService.getRecipes();
+        const recipeIndex = recipes.findIndex(item => item.name === recipe.name);
+        let newRecipe;
+
+        if (recipeIndex > 0) {
+            newRecipe = recipes[recipeIndex - 1];
+            setRecipe(newRecipe);
+            setTheme(SharedService.buildThemeConfig(newRecipe));
+
+            history.replace({ pathname: '/recipe/' +  encodeURIComponent(newRecipe.name) });
+        }
+    };
 
     const handleCopy = () => {
         const newRecipe = clone(recipe);

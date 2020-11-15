@@ -13,11 +13,8 @@ const styles = makeStyles({
     },
 
     recipeList: {
-        backgroundColor: '#f1f1f1',
-        padding: '8px',
-        '&:last-child': {
-            paddingBottom: 0
-        }
+        backgroundColor: '#f0f0f0',
+        padding: '8px'
     },
 
     recipeLink: {
@@ -29,14 +26,11 @@ const styles = makeStyles({
 const RecipeItem = SortableElement(({recipe, classes}) => {
     return (
         <div>
-            <div key={recipe.name} className={classes.recipe}>
+            <div key={recipe.name} className={classes.recipe} style={recipe.lastInList ? {marginBottom: 0} : null}>
                 <Button
                     component={Link}
                     to={`/recipe/${encodeURIComponent(recipe.name)}`}
-                    style={
-                        recipe.backgroundColor ?
-                            {backgroundColor: recipe.backgroundColor, color: recipe.textColor} :
-                            null}
+                    style={recipe.backgroundColor ? {backgroundColor: recipe.backgroundColor, color: recipe.textColor} : null}
                     className={classes.recipeLink}
                     variant='outlined'
                     color='default'
@@ -55,8 +49,19 @@ const RecipeList = SortableContainer(({recipes, classes}) => {
         <div className={classes.recipeList}>
             {
                 recipes.map((recipe, index) => {
+                    const curRecipe = recipe;
+
+                    if (index === recipes.length - 1) {
+                        curRecipe.lastInList = true;
+                    }
+
                     return (
-                        <RecipeItem key={`${recipe.name}` + index} index={index} recipe={ recipe } classes={ classes } />
+                        <RecipeItem
+                            key={`${recipe.name}` + index}
+                            index={index}
+                            recipe={curRecipe}
+                            classes={ classes }
+                        />
                     )
                 })
             }
