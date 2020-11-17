@@ -185,13 +185,16 @@ const ViewRecipe = (props) => {
                                 </CardContent>
                             </Card>
 
-                            <div className={'drink-image-container'}>
-                                <img
-                                    src={window.location.protocol + '//' + window.location.host + '/images/' + recipe.drinkImageFileName}
-                                    alt={'Drink vessel'}
-                                    className={'drink-image'}
-                                />
-                            </div>
+                            {
+                                recipe.drinkImageFileName &&
+                                <div className={'drink-image-container'}>
+                                    <img
+                                        src={window.location.protocol + '//' + window.location.host + '/images/' + recipe.drinkImageFileName}
+                                        alt={'Drink vessel'}
+                                        className={'drink-image'}
+                                    />
+                                </div>
+                            }
                         </div> :
                         <div>
                             <p>

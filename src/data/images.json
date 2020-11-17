@@ -3,62 +3,62 @@
         {
             "name": "Rocks",
             "file": "rocks.png",
-            "alt": "Rocks glass",
-            "selected": false
+            "alt": "Rocks glass"
         },
         {
             "name": "Cocktail",
             "file": "cocktail.png",
-            "alt": "Cocktail glass",
-            "selected": false
+            "alt": "Cocktail glass"
         },
         {
             "name": "Coupe",
             "file": "coupe.png",
-            "alt": "Coupe glass",
-            "selected": false
+            "alt": "Coupe glass"
         },
         {
             "name": "Highball",
             "file": "highball.png",
-            "alt": "Highball glass",
-            "selected": false
+            "alt": "Highball glass"
         },
         {
             "name": "Collins",
             "file": "collins.png",
-            "alt": "Collins glass",
-            "selected": false
+            "alt": "Collins glass"
         },
         {
             "name": "Flute",
             "file": "flute.png",
-            "alt": "Champagne flute",
-            "selected": false
+            "alt": "Champagne flute"
         },
         {
             "name": "Hurricane",
             "file": "hurricane.png",
-            "alt": "Hurricane glass",
-            "selected": false
+            "alt": "Hurricane glass"
         },
         {
             "name": "Nick and Nora",
             "file": "nick_and_nora.png",
-            "alt": "Nick and Nora glass",
-            "selected": false
+            "alt": "Nick and Nora glass"
         },
         {
-            "name": "Snifter",
-            "file": "snifter.png",
-            "alt": "Snifter glass",
-            "selected": false
+            "name": "Copper",
+            "file": "copper_mug.png",
+            "alt": "Copper mug"
         },
         {
             "name": "Irish",
             "file": "irish_coffee.png",
-            "alt": "Irish coffee mug",
-            "selected": false
+            "alt": "Irish coffee mug"
+        },
+        {
+            "name": "Julep",
+            "file": "julep.png",
+            "alt": "Julep cup"
+        },
+        {
+            "name": "Snifter",
+            "file": "snifter.png",
+            "alt": "Snifter glass"
         }
     ]
 }

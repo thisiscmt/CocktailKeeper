@@ -5,7 +5,7 @@
     "scripts": {
         "start": "node scripts/start.js",
         "build": "node scripts/build.js",
-        "test": "node scripts/test.js"
+        "test": "node scripts/test.js --watchAll=false"
     },
     "dependencies": {
         "@babel/core": "7.6.0",
@@ -43,6 +43,8 @@
         "babel-preset-react-app": "^9.0.2",
         "case-sensitive-paths-webpack-plugin": "2.2.0",
         "css-loader": "2.1.1",
+        "enzyme": "^3.11.0",
+        "enzyme-adapter-react-16": "^1.15.5",
         "eslint": "^6.1.0",
         "eslint-config-react-app": "^5.0.2",
         "eslint-loader": "3.0.2",
@@ -99,7 +101,9 @@
         "setupFiles": [
             "react-app-polyfill/jsdom"
         ],
-        "setupFilesAfterEnv": [],
+        "setupFilesAfterEnv": [
+            "./src/setupTests.js"
+        ],
         "testMatch": [
             "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
             "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"

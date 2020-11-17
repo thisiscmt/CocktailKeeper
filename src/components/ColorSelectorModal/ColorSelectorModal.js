@@ -80,11 +80,6 @@ const ColorSelectorModal = (props) => {
             return color.colorCode === selectedColor;
         });
 
-        colorLibrary.colors.forEach(color => {
-            color.selected = false;
-        });
-
-        colorLibrary.colors[selectedColorIndex].selected = true
         setSelectedColor(selectedColor);
         setSelectedTextColor(colorLibrary.colors[selectedColorIndex].textColorCode);
     };
