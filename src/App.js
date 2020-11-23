@@ -10,7 +10,7 @@ import Settings from './pages/Settings/Settings';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import './App.css';
+import './App.less';
 
 function App() {
     return (

@@ -68,9 +68,14 @@ const ViewRecipe = (props) => {
     const [ recipe, setRecipe ] = useState(RecipeService.getRecipe(props.match.params.recipeName));
     const [ theme, setTheme ] = useState(SharedService.buildThemeConfig(RecipeService.getRecipe(props.match.params.recipeName)));
 
+    const swipeConfig = {
+        preventDefaultTouchmoveEvent: true
+    };
+
     const swipeHandlers = useSwipeable({
         onSwipedLeft: (eventData) => handleSwipeLeft(eventData),
-        onSwipedRight: (eventData) => handleSwipeRight(eventData)
+        onSwipedRight: (eventData) => handleSwipeRight(eventData),
+        ...swipeConfig
     });
 
 

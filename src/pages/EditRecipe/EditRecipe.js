@@ -17,7 +17,6 @@ import ImageSelectorModal from '../../components/ImageSelectorModal/ImageSelecto
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 import RecipeService from '../../services/RecipeService';
 import SharedService from '../../services/SharedService';
-import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
 
 const styles = makeStyles({
