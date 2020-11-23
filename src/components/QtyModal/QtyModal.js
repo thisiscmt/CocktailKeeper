@@ -78,7 +78,7 @@ const QtyModal = (props) => {
     };
 
     const handleDelete = () => {
-        props.onDelete(ingredient);
+        props.onDelete(ingredient.id);
 
         setOpen(false);
     };

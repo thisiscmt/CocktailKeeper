@@ -78,12 +78,7 @@ const ImageSelectorModal = (props) => {
     };
 
     const handleSave = () => {
-        const imageData = {
-            drinkImage: selectedImage,
-            drinkImageFileName: selectedImageFileName
-        };
-
-        props.onSave(imageData);
+        props.onSave({ drinkImage: selectedImage, drinkImageFileName: selectedImageFileName });
         setOpen(false);
     };
 
