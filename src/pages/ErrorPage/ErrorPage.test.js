@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 
-import Home from './Home';
+import ErrorPage from './ErrorPage';
 
-describe('Home page', () => {
+describe('Error page', () => {
     it('renders without crashing', () => {
-        mount(<Home />);
+        mount(<ErrorPage />);
     })
 })

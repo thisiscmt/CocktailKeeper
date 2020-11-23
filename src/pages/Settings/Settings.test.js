@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 
-import Home from './Home';
+import Settings from './Settings';
 
-describe('Home page', () => {
+describe('Settings page', () => {
     it('renders without crashing', () => {
-        mount(<Home />);
+        mount(<Settings />);
     })
 })

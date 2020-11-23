@@ -52,7 +52,7 @@ class RecipeService {
 
     static getRecipe = (name) => {
         const recipeJSON = localStorage.getItem('ck.recipes');
-        const nameForCompare = name.toLowerCase();
+        const nameForCompare = name ? name.toLowerCase() : '';
         let recipeIndex = -1;
         let recipeData;
         let recipe;
