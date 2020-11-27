@@ -3,13 +3,13 @@
         {
             "name": "Rocks",
             "view": "rocks.png",
-            "selection": "rocks.png",
+            "selection": "rocks_select.png",
             "alt": "Rocks glass"
         },
         {
             "name": "Cocktail",
             "view": "cocktail.png",
-            "selection": "cocktail.png",
+            "selection": "cocktail_select.png",
             "alt": "Cocktail glass"
         },
         {
@@ -21,31 +21,31 @@
         {
             "name": "Highball",
             "view": "highball.png",
-            "selection": "highball.png",
+            "selection": "highball_select.png",
             "alt": "Highball glass"
         },
         {
             "name": "Collins",
             "view": "collins.png",
-            "selection": "collins.png",
+            "selection": "collins_select.png",
             "alt": "Collins glass"
         },
         {
             "name": "Flute",
             "view": "flute.png",
-            "selection": "flute.png",
+            "selection": "flute_select.png",
             "alt": "Champagne flute"
         },
         {
             "name": "Hurricane",
             "view": "hurricane.png",
-            "selection": "hurricane.png",
+            "selection": "hurricane_select.png",
             "alt": "Hurricane glass"
         },
         {
             "name": "Nick and Nora",
             "view": "nick_and_nora.png",
-            "selection": "nick_and_nora.png",
+            "selection": "nick_and_nora_select.png",
             "alt": "Nick and Nora glass"
         },
         {
@@ -57,19 +57,19 @@
         {
             "name": "Irish",
             "view": "irish_coffee.png",
-            "selection": "irish_coffee.png",
+            "selection": "irish_coffee_select.png",
             "alt": "Irish coffee mug"
         },
         {
             "name": "Julep",
             "view": "julep.png",
-            "selection": "julep.png",
+            "selection": "julep_select.png",
             "alt": "Julep cup"
         },
         {
             "name": "Snifter",
             "view": "snifter.png",
-            "selection": "snifter.png",
+            "selection": "snifter_select.png",
             "alt": "Snifter glass"
         }
     ]
