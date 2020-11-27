@@ -2,62 +2,74 @@
     "images":[
         {
             "name": "Rocks",
-            "file": "rocks.png",
+            "view": "rocks.png",
+            "selection": "rocks.png",
             "alt": "Rocks glass"
         },
         {
             "name": "Cocktail",
-            "file": "cocktail.png",
+            "view": "cocktail.png",
+            "selection": "cocktail.png",
             "alt": "Cocktail glass"
         },
         {
             "name": "Coupe",
-            "file": "coupe.png",
+            "view": "coupe.png",
+            "selection": "coupe_select.png",
             "alt": "Coupe glass"
         },
         {
             "name": "Highball",
-            "file": "highball.png",
+            "view": "highball.png",
+            "selection": "highball.png",
             "alt": "Highball glass"
         },
         {
             "name": "Collins",
-            "file": "collins.png",
+            "view": "collins.png",
+            "selection": "collins.png",
             "alt": "Collins glass"
         },
         {
             "name": "Flute",
-            "file": "flute.png",
+            "view": "flute.png",
+            "selection": "flute.png",
             "alt": "Champagne flute"
         },
         {
             "name": "Hurricane",
-            "file": "hurricane.png",
+            "view": "hurricane.png",
+            "selection": "hurricane.png",
             "alt": "Hurricane glass"
         },
         {
             "name": "Nick and Nora",
-            "file": "nick_and_nora.png",
+            "view": "nick_and_nora.png",
+            "selection": "nick_and_nora.png",
             "alt": "Nick and Nora glass"
         },
         {
             "name": "Copper",
-            "file": "copper_mug.png",
+            "view": "copper_mug.png",
+            "selection": "copper_mug_select.png",
             "alt": "Copper mug"
         },
         {
             "name": "Irish",
-            "file": "irish_coffee.png",
+            "view": "irish_coffee.png",
+            "selection": "irish_coffee.png",
             "alt": "Irish coffee mug"
         },
         {
             "name": "Julep",
-            "file": "julep.png",
+            "view": "julep.png",
+            "selection": "julep.png",
             "alt": "Julep cup"
         },
         {
             "name": "Snifter",
-            "file": "snifter.png",
+            "view": "snifter.png",
+            "selection": "snifter.png",
             "alt": "Snifter glass"
         }
     ]

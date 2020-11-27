@@ -193,7 +193,8 @@ const EditRecipe = (props) => {
         const newRecipe = cloneDeep(recipe);
 
         newRecipe.drinkImage = imageData.drinkImage;
-        newRecipe.drinkImageFileName = imageData.drinkImageFileName;
+        newRecipe.drinkImageViewFile = imageData.drinkImageViewFile;
+        newRecipe.drinkImageSelectionFile = imageData.drinkImageSelectionFile;
         setRecipe(newRecipe);
     }
 
@@ -325,7 +326,8 @@ const EditRecipe = (props) => {
                             <div className={classes.editImage}>
                                 <ImageSelectorModal
                                     drinkImage={recipe.drinkImage}
-                                    drinkImageFileName={recipe.drinkImageFileName}
+                                    drinkImageViewFile={recipe.drinkImageViewFile}
+                                    drinkImageSelectionFile={recipe.drinkImageSelectionFile}
                                     onSave={handleSaveImage}
                                 />
                             </div>

@@ -56,7 +56,8 @@ const ImageSelectorModal = (props) => {
     const imageBaseURL = window.location.protocol + '//' + window.location.host + '/images'
 
     const [ selectedImage, setSelectedImage ] = useState(props.drinkImage);
-    const [ selectedImageFileName, setSelectedImageFileName ] = useState(props.drinkImageFileName);
+    const [ selectedImageViewFile, setSelectedImageViewFile ] = useState(props.drinkImageViewFile);
+    const [ selectedImageSelectionFile, setSelectedImageSelectionFile ] = useState(props.drinkImageSelectionFile);
     const [ open, setOpen ] = useState(false);
     const selectedImageElement = useRef();
 
@@ -74,11 +75,17 @@ const ImageSelectorModal = (props) => {
 
     const handleSelectImage = (image) => {
         setSelectedImage(image.name);
-        setSelectedImageFileName(image.file);
+        setSelectedImageViewFile(image.view);
+        setSelectedImageSelectionFile(image.selection);
     };
 
     const handleSave = () => {
-        props.onSave({ drinkImage: selectedImage, drinkImageFileName: selectedImageFileName });
+        props.onSave({
+            drinkImage: selectedImage,
+            drinkImageViewFile: selectedImageViewFile,
+            drinkImageSelectionFile: selectedImageSelectionFile
+        });
+
         setOpen(false);
     };
 
@@ -92,8 +99,8 @@ const ImageSelectorModal = (props) => {
         <div>
             <div className={'drink-image-container'}>
                 {
-                    props.drinkImageFileName &&
-                    <img src={`${imageBaseURL}/${props.drinkImageFileName}`} alt={'Drink vessel'} className={'drink-image'} />
+                    props.drinkImageViewFile &&
+                    <img src={`${imageBaseURL}/${props.drinkImageViewFile}`} alt={'Drink vessel'} className={'drink-image'} />
                 }
             </div>
 
@@ -128,7 +135,7 @@ const ImageSelectorModal = (props) => {
                                         ref={image.name === selectedImage ? selectedImageElement : null}
                                     >
                                         <img
-                                            src={`${imageBaseURL}/${image.file}`}
+                                            src={`${imageBaseURL}/${image.selection}`}
                                             alt={image.alt}
                                             onClick={() => handleSelectImage(image)}
                                         />

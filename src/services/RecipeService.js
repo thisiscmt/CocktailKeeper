@@ -39,7 +39,7 @@ class RecipeService {
 
         // We don't need to store the drink image file name since we're storing the name of the image itself. The idea is not to store any file
         // names since they could change at some point (e.g. a new format could be chosen).
-        delete recipe.drinkImageFileName;
+        delete recipe.drinkImageViewFile;
 
         if (recipeIndex > -1) {
             recipeData.recipes[recipeIndex] = recipe;
@@ -117,6 +117,7 @@ class RecipeService {
 
     static buildRecipe = (data) => {
         const recipe = new Recipe();
+        const imageFileNames = RecipeService.getDrinkImageFileNames(data.drinkImage);
         let ingredient;
 
         recipe.id = data.id;
@@ -125,8 +126,8 @@ class RecipeService {
         recipe.drinkImage = data.drinkImage;
         recipe.backgroundColor = data.backgroundColor;
         recipe.textColor = data.textColor;
-
-        recipe.drinkImageFileName = RecipeService.getDrinkImageFileName(data.drinkImage);
+        recipe.drinkImageViewFile = imageFileNames.drinkImageViewFile;
+        recipe.drinkImageSelectionFile = imageFileNames.drinkImageSelectionFile;
 
         recipe.ingredients = data.ingredients.map(item => {
             ingredient = new Ingredient();
@@ -143,18 +144,19 @@ class RecipeService {
         return recipe;
     };
 
-    static getDrinkImageFileName = (drinkImage) => {
-        let imageFileName = '';
+    static getDrinkImageFileNames = (drinkImage) => {
+        let imageFileNames = {};
 
         if (drinkImage) {
             const imageIndex = imageLibrary.images.findIndex(image => image.name === drinkImage);
 
             if (imageIndex > -1) {
-                imageFileName = imageLibrary.images[imageIndex].file;
+                imageFileNames.drinkImageViewFile = imageLibrary.images[imageIndex].view;
+                imageFileNames.drinkImageSelectionFile = imageLibrary.images[imageIndex].selection;
             }
         }
 
-        return imageFileName
+        return imageFileNames
     }
 }
 
