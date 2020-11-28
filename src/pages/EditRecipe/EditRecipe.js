@@ -17,6 +17,7 @@ import ImageSelectorModal from '../../components/ImageSelectorModal/ImageSelecto
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 import RecipeService from '../../services/RecipeService';
 import SharedService from '../../services/SharedService';
+import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
 
 const styles = makeStyles({
@@ -73,6 +74,8 @@ const EditRecipe = (props) => {
 
         if (props.match.params.recipeName) {
             recipe = RecipeService.getRecipe(props.match.params.recipeName);
+        } else {
+            recipe = new Recipe();
         }
 
         return recipe;
@@ -81,7 +84,7 @@ const EditRecipe = (props) => {
     const initIngredientCount = (recipe) => {
         let ingredientCounter = 1;
 
-        if (recipe) {
+        if (recipe && recipe.name) {
             ingredientCounter = recipe.ingredients.length + 1;
         }
 
@@ -91,7 +94,7 @@ const EditRecipe = (props) => {
     const initMode = (recipe) => {
         let mode = 'Add';
 
-        if (recipe) {
+        if (recipe && recipe.name) {
             mode = 'Edit';
         }
 
@@ -202,6 +205,7 @@ const EditRecipe = (props) => {
         if (recipe.name === '') {
             setValidationMsg('Name is required');
             setValidationError(true);
+            event.preventDefault();
             return;
         }
 
@@ -210,6 +214,7 @@ const EditRecipe = (props) => {
         if (existingRecipe && existingRecipe.id !== recipe.id) {
             setValidationMsg('Name is already in use');
             setValidationError(true);
+            event.preventDefault();
             return;
         }
 
