@@ -15,6 +15,9 @@ steps:
 - script: |
     npm run build
   displayName: 'Build the project'
+- script: |
+    npm run test
+  displayName: 'Run unit tests'
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: build
