@@ -68,12 +68,13 @@ const styles = makeStyles({
 const EditRecipe = (props) => {
     const classes = styles(props);
     const history = useHistory();
+    const recipeName = decodeURIComponent(props.match.params.recipeName);
 
     const initRecipe = () => {
         let recipe;
 
-        if (props.match.params.recipeName) {
-            recipe = RecipeService.getRecipe(props.match.params.recipeName);
+        if (recipeName) {
+            recipe = RecipeService.getRecipe(recipeName);
         } else {
             recipe = new Recipe();
         }
@@ -237,7 +238,7 @@ const EditRecipe = (props) => {
             if (action === 'Save') {
                 history.push('/recipe/' +  encodeURIComponent(recipe.name));
             } else {
-                history.push('/recipe/' +  encodeURIComponent(props.match.params.recipeName));
+                history.push('/recipe/' +  encodeURIComponent(recipeName));
             }
         } else {
             history.push('/');

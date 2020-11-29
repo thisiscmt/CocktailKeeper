@@ -64,9 +64,10 @@ const styles = makeStyles({
 const ViewRecipe = (props) => {
     const classes = styles(props);
     const history = useHistory();
+    const recipeName = decodeURIComponent(props.match.params.recipeName);
 
-    const [ recipe, setRecipe ] = useState(RecipeService.getRecipe(props.match.params.recipeName));
-    const [ theme, setTheme ] = useState(SharedService.buildThemeConfig(RecipeService.getRecipe(props.match.params.recipeName)));
+    const [ recipe, setRecipe ] = useState(RecipeService.getRecipe(recipeName));
+    const [ theme, setTheme ] = useState(SharedService.buildThemeConfig(recipe));
 
     const swipeConfig = {
         preventDefaultTouchmoveEvent: true
