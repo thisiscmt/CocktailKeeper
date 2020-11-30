@@ -1,6 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { DndProvider } from 'react-dnd';
+import { TouchBackend } from 'react-dnd-touch-backend';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import Paper from '@material-ui/core/Paper';
 
 import Home from './pages/Home/Home';
@@ -13,6 +16,8 @@ import Footer from './components/Footer/Footer';
 import './App.less';
 
 function App() {
+    const hasTouchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
     return (
         <div className='main-content'>
             <Helmet>
@@ -24,13 +29,15 @@ function App() {
                 <Paper elevation={5}>
                     <Header/>
 
-                    <Switch>
-                        <Route exact path='/' component={Home} />
-                        <Route exact path='/recipe/:recipeName' component={ () => <ViewRecipe />} />
-                        <Route exact path={['/recipe', '/recipe/:recipeName/edit']} component={() => <EditRecipe />} />
-                        <Route exact path='/settings' component={Settings} />
-                        <Route component={ErrorPage} />
-                    </Switch>
+                    <DndProvider backend={hasTouchSupport ? TouchBackend : HTML5Backend}>
+                        <Switch>
+                            <Route exact path='/' component={Home} />
+                            <Route exact path='/recipe/:recipeName' component={ () => <ViewRecipe />} />
+                            <Route exact path={['/recipe', '/recipe/:recipeName/edit']} component={() => <EditRecipe />} />
+                            <Route exact path='/settings' component={Settings} />
+                            <Route component={ErrorPage} />
+                        </Switch>
+                    </DndProvider>
 
                     <Footer/>
                 </Paper>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -68,9 +68,9 @@ const styles = makeStyles({
 const EditRecipe = (props) => {
     const classes = styles(props);
     const history = useHistory();
-    const recipeName = decodeURIComponent(props.match.params.recipeName);
+    const recipeName = props.match.params.recipeName ? decodeURIComponent(props.match.params.recipeName) : '';
 
-    const initRecipe = () => {
+    const initRecipe = (recipeName) => {
         let recipe;
 
         if (recipeName) {
@@ -102,12 +102,29 @@ const EditRecipe = (props) => {
         return mode;
     }
 
-    const [ recipe, setRecipe ] = useState(initRecipe());
+    const initTheme = (recipe) => {
+        return SharedService.buildThemeConfig(recipe);
+    }
+
+    const [ recipe, setRecipe ] = useState(initRecipe(recipeName));
     const [ ingredientCounter, setIngredientCounter ] = useState(initIngredientCount(recipe));
-    const [ mode, ] = useState(initMode(recipe));
-    const [ theme, setTheme ] = useState(SharedService.buildThemeConfig(recipe));
+    const [ mode, setMode] = useState(initMode(recipe));
+    const [ theme, setTheme ] = useState(initTheme(recipe));
+
     const [ validationError, setValidationError ] = useState(false);
     const [ validationMsg, setValidationMsg ] = useState('');
+
+    // We need to perform a final render in case the user clicked the Add Recipe button while on the edit page for another recipe, in order to
+    // properly initialize the new state
+    useEffect(() => {
+        const newRecipe = initRecipe(recipeName);
+
+        setRecipe(newRecipe);
+        setIngredientCounter(initIngredientCount(newRecipe));
+        setMode(initMode(newRecipe));
+        setTheme(initTheme(newRecipe));
+
+    }, [recipeName]);
 
     const handleChangeName = (event) => {
         const newRecipe = cloneDeep(recipe);
