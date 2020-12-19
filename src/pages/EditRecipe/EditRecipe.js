@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import { useHistory, withRouter } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
@@ -68,7 +68,8 @@ const styles = makeStyles({
 const EditRecipe = (props) => {
     const classes = styles(props);
     const history = useHistory();
-    const recipeName = props.match.params.recipeName ? decodeURIComponent(props.match.params.recipeName) : '';
+    const params = useParams();
+    const recipeName = params.recipeName ? decodeURIComponent(params.recipeName) : '';
 
     const initRecipe = (recipeName) => {
         let recipe;
@@ -110,7 +111,6 @@ const EditRecipe = (props) => {
     const [ ingredientCounter, setIngredientCounter ] = useState(initIngredientCount(recipe));
     const [ mode, setMode] = useState(initMode(recipe));
     const [ theme, setTheme ] = useState(initTheme(recipe));
-
     const [ validationError, setValidationError ] = useState(false);
     const [ validationMsg, setValidationMsg ] = useState('');
 
@@ -383,4 +383,4 @@ const EditRecipe = (props) => {
     )
 }
 
-export default withRouter(EditRecipe);
+export default EditRecipe;

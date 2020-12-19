@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withRouter, useHistory, Link } from 'react-router-dom'
+import { useHistory, useParams, Link } from 'react-router-dom'
 import { useSwipeable } from 'react-swipeable';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -10,7 +10,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core';
-import clone from 'lodash/clone';
+import cloneDeep from 'lodash/cloneDeep';
 import * as UUID from 'uuid';
 
 import RecipeService from '../../services/RecipeService';
@@ -64,7 +64,8 @@ const styles = makeStyles({
 const ViewRecipe = (props) => {
     const classes = styles(props);
     const history = useHistory();
-    const recipeName = decodeURIComponent(props.match.params.recipeName);
+    const params = useParams();
+    const recipeName = decodeURIComponent(params.recipeName);
 
     const [ recipe, setRecipe ] = useState(RecipeService.getRecipe(recipeName));
     const [ theme, setTheme ] = useState(SharedService.buildThemeConfig(recipe));
@@ -109,7 +110,7 @@ const ViewRecipe = (props) => {
     };
 
     const handleCopy = () => {
-        const newRecipe = clone(recipe);
+        const newRecipe = cloneDeep(recipe);
         let newName = newRecipe.name + ' - Copy';
         let done = false;
         let nameId = 2;
@@ -213,4 +214,4 @@ const ViewRecipe = (props) => {
     )
 }
 
-export default withRouter(ViewRecipe);
+export default ViewRecipe;

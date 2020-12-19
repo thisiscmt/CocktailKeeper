@@ -169,10 +169,9 @@ const QtyModal = (props) => {
                                 <MenuItem value={'0'}>- Select fraction -</MenuItem>
                                 <MenuItem value={'1/8'}>1/8</MenuItem>
                                 <MenuItem value={'1/4'}>1/4</MenuItem>
-                                <MenuItem value={'1/3'}>1/3</MenuItem>
                                 <MenuItem value={'3/8'}>3/8</MenuItem>
                                 <MenuItem value={'1/2'}>1/2</MenuItem>
-                                <MenuItem value={'2/3'}>2/3</MenuItem>
+                                <MenuItem value={'5/8'}>5/8</MenuItem>
                                 <MenuItem value={'3/4'}>3/4</MenuItem>
                             </Select>
                         </FormControl>
