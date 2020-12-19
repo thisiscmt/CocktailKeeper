@@ -77,16 +77,16 @@ const SettingsPage = (props) => {
     const [ message, setMessage ] = useState('');
 
     const handleDefaultUnitChange = (event) => {
-        setDefaultUnit(event.target.value);
-    };
+        if (event.target.value !== defaultUnit) {
+            setDefaultUnit(event.target.value);
 
-    const handleSave = () => {
-        const settings = {
-            defaultUnit
-        };
+            const settings = {
+                defaultUnit: event.target.value
+            };
 
-        localStorage.setItem('ck.settings', JSON.stringify(settings));
-        setMessage('Settings saved')
+            localStorage.setItem('ck.settings', JSON.stringify(settings));
+            setMessage('Settings saved')
+        }
     };
 
     const handleDownload = (fileName, data) => {
@@ -145,11 +145,8 @@ const SettingsPage = (props) => {
 
                 <section className={classes.section}>
                         <label className={classes.defaultUnitLabel}>Default unit:</label>
-                        <Select
-                            value={defaultUnit}
-                            onChange={handleDefaultUnitChange}
-                            className={classes.defaultUnitSelector}
-                        >
+
+                        <Select value={defaultUnit} onChange={handleDefaultUnitChange} className={classes.defaultUnitSelector}>
                             <MenuItem value={'0'}>Select unit</MenuItem>
                             <MenuItem value={'oz'}>oz</MenuItem>
                             <MenuItem value={'ml'}>ml</MenuItem>
@@ -157,17 +154,6 @@ const SettingsPage = (props) => {
                             <MenuItem value={'tsp'}>tsp</MenuItem>
                             <MenuItem value={'tbsp'}>tbsp</MenuItem>
                         </Select>
-
-                    <div className={classes.action}>
-                        <Button
-                            variant='outlined'
-                            color='default'
-                            size='small'
-                            onClick={handleSave}
-                        >
-                            Save
-                        </Button>
-                    </div>
                 </section>
 
                 <section className={classes.section}>
@@ -190,7 +176,8 @@ const SettingsPage = (props) => {
                                 className={classes.fileUploadInput}
                                 ref={fileInput}
                                 onChange={handleSelectFile}
-                                accept='.json'/>
+                                accept='.json'
+                            />
                         </label>
 
                         {

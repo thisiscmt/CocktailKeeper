@@ -58,7 +58,7 @@ const ColorSelectorModal = (props) => {
 
     const [ open, setOpen ] = useState(false);
     const [ selectedColor, setSelectedColor ] = useState(props.colorCode);
-    const [ selectedTextColor, setSelectedTextColor ] = useState('#FFFFFF');
+    const [ selectedTextColor, setSelectedTextColor ] = useState(props.colorCode === '#FFFFFF' ? '#000000' : '#FFFFFF');
     const selectedColorElement = useRef();
 
     const handleOpen = () => {
