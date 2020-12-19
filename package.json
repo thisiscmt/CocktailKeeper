@@ -2,6 +2,7 @@
     "name": "cocktail-keeper",
     "version": "1.0.0",
     "private": true,
+    "license": "MIT",
     "scripts": {
         "start": "node scripts/start.js",
         "build": "node scripts/build.js",
@@ -77,7 +78,9 @@
         "workbox-webpack-plugin": "4.3.1"
     },
     "eslintConfig": {
-        "extends": "react-app"
+        "extends": [
+            "react-app"
+        ]
     },
     "browserslist": {
         "production": [
