@@ -4,6 +4,7 @@ class Recipe {
     constructor() {
         this.id = UUID.v4();
         this.name = '';
+        this.index = -1;
         this.ingredients = [];
         this.directions = '';
         this.drinkImage = '';

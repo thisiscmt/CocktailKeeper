@@ -20,7 +20,7 @@ class RecipeService {
         return recipes;
     };
 
-    static saveRecipe = (recipe) => {
+    static saveRecipe = (recipe, copied) => {
         const recipeJSON = localStorage.getItem('ck.recipes');
         let recipeIndex = -1;
         let recipeData;
@@ -40,11 +40,16 @@ class RecipeService {
         // We don't need to store the drink image file name since we're storing the name of the image itself. The idea is not to store any file
         // names since they could change at some point (e.g. a new format could be chosen).
         delete recipe.drinkImageViewFile;
+        delete recipe.drinkImageSelectionFile;
 
         if (recipeIndex > -1) {
             recipeData.recipes[recipeIndex] = recipe;
         } else {
-            recipeData.recipes.push(recipe);
+            if (copied) {
+                recipeData.recipes.splice(recipe.index + 1, 0, recipe)
+            } else {
+                recipeData.recipes.push(recipe);
+            }
         }
 
         localStorage.setItem('ck.recipes', JSON.stringify(recipeData));
@@ -65,7 +70,7 @@ class RecipeService {
             });
 
             if (recipeIndex > -1) {
-                recipe = RecipeService.buildRecipe(recipeData.recipes[recipeIndex]);
+                recipe = RecipeService.buildRecipe(recipeData.recipes[recipeIndex], recipeIndex);
             }
         }
 
@@ -115,13 +120,14 @@ class RecipeService {
         localStorage.setItem('ck.recipes', data);
     };
 
-    static buildRecipe = (data) => {
+    static buildRecipe = (data, recipeIndex) => {
         const recipe = new Recipe();
         const imageFileNames = RecipeService.getDrinkImageFileNames(data.drinkImage);
         let ingredient;
 
         recipe.id = data.id;
         recipe.name = data.name;
+        recipe.index = recipeIndex;
         recipe.directions = data.directions;
         recipe.drinkImage = data.drinkImage;
         recipe.backgroundColor = data.backgroundColor;

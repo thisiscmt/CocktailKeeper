@@ -110,7 +110,7 @@ const ViewRecipe = (props) => {
     };
 
     const handleCopy = () => {
-        const newRecipe = cloneDeep(recipe);
+        let newRecipe = cloneDeep(recipe);
         let newName = newRecipe.name + ' - Copy';
         let done = false;
         let nameId = 2;
@@ -130,7 +130,12 @@ const ViewRecipe = (props) => {
         }
 
         newRecipe.name = newName;
-        RecipeService.saveRecipe(newRecipe);
+        RecipeService.saveRecipe(newRecipe, true);
+        newRecipe = RecipeService.getRecipe(newName);
+
+        setRecipe(newRecipe);
+        setTheme(SharedService.buildThemeConfig(newRecipe));
+        history.replace({ pathname: '/recipe/' +  encodeURIComponent(newRecipe.name) });
     };
 
     return (

@@ -71,6 +71,12 @@
             "view": "snifter.png",
             "selection": "snifter_select.png",
             "alt": "Snifter glass"
+        },
+        {
+            "name": "Shot",
+            "view": "shot.png",
+            "selection": "shot_select.png",
+            "alt": "Shot glass"
         }
     ]
 }
