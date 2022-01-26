@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import ArrayMove from 'array-move';
+import { arrayMoveImmutable } from 'array-move';
 
 import RecipeService from '../../services/RecipeService';
 import Button from '@material-ui/core/Button';
@@ -24,7 +24,7 @@ const Home = (props) => {
 
     const handleDragEnd = (result) => {
         if (result && result.destination && result.destination.index > -1) {
-            const recipesToUpdate = ArrayMove(recipes, result.source.index, result.destination.index);
+            const recipesToUpdate = arrayMoveImmutable(recipes, result.source.index, result.destination.index);
 
             setRecipes(recipesToUpdate);
             RecipeService.saveRecipes(recipesToUpdate);
