@@ -66,8 +66,10 @@ const QtyModal = (props) => {
         setOpen(true);
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleClose = (event, reason) => {
+        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+            setOpen(false);
+        }
     };
 
     const handleSave = () => {
@@ -141,7 +143,6 @@ const QtyModal = (props) => {
                     onClose={handleClose}
                     maxWidth={'xs'}
                     fullWidth={true}
-                    disableBackdropClick={false}
                 >
                     <DialogTitle className={classes.title}>Quantity</DialogTitle>
 

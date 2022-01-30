@@ -37,8 +37,10 @@ const DeleteConfirmationModal = (props) => {
         setOpen(true);
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleClose = (event, reason) => {
+        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+            setOpen(false);
+        }
     };
 
     const handleDelete = (event) => {
@@ -56,7 +58,6 @@ const DeleteConfirmationModal = (props) => {
                 onClose={handleClose}
                 maxWidth={'xs'}
                 fullWidth={true}
-                disableBackdropClick={false}
                 classes={{ paper: classes.dialogPaper }}
             >
                 <DialogTitle className={classes.title}>Delete</DialogTitle>

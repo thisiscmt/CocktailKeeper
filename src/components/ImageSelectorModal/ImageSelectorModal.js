@@ -69,8 +69,10 @@ const ImageSelectorModal = (props) => {
         });
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleClose = (event, reason) => {
+        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+            setOpen(false);
+        }
     };
 
     const handleSelectImage = (image) => {
@@ -118,7 +120,6 @@ const ImageSelectorModal = (props) => {
                 onClose={handleClose}
                 maxWidth={'xs'}
                 fullWidth={true}
-                disableBackdropClick={false}
                 classes={{ paper: classes.dialogPaper }}
             >
                 <DialogTitle className={classes.title}>Select Drink Image</DialogTitle>

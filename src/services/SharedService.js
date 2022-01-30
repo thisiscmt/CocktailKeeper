@@ -1,4 +1,4 @@
-import {createMuiTheme} from '@material-ui/core';
+import {createTheme} from '@material-ui/core/styles';
 
 class SharedService {
     static getSettings = () => {
@@ -16,7 +16,7 @@ class SharedService {
 
     static buildThemeConfig = (overrides) => {
         if (overrides) {
-            return createMuiTheme({
+            return createTheme({
                 palette: {
                     primary: {
                         main: overrides.textColor
@@ -70,7 +70,7 @@ class SharedService {
                 }
             });
         } else {
-            return createMuiTheme({
+            return createTheme({
                 palette: {
                     type: 'light'
                 }
