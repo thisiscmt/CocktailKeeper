@@ -1,10 +1,9 @@
-import * as React from 'react';
-import { mount } from 'enzyme';
+import {render, screen} from '@testing-library/react';
 
 import Home from './Home';
 
-describe('Home page', () => {
-    it('renders without crashing', () => {
-        mount(<Home />);
-    })
-})
+test('Home page', () => {
+    render(<Home />);
+
+    expect(screen.getByTestId('HomeMainContainer')).toBeInTheDocument();
+});

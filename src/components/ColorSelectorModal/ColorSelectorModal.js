@@ -141,7 +141,7 @@ const ColorSelectorModal = (props) => {
                 </DialogContent>
 
                 <DialogActions className={classes.dialogActions}>
-                    <Button onClick={handleSave} className={classes.defaultButtonColor} variant='outlined' size={'small'}>
+                    <Button onClick={handleSave} className={classes.defaultButtonColor} variant='outlined' size='small'>
                         Save
                     </Button>
                     <Button onClick={handleClose} className={classes.defaultButtonColor} variant='outlined' color='default' size='small'>

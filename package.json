@@ -7,7 +7,7 @@
         "build": "react-scripts build",
         "eject": "react-scripts eject",
         "start": "react-scripts start",
-        "test": "react-scripts test"
+        "test": "react-scripts test --watchAll=false"
     },
     "dependencies": {
         "@material-ui/core": "^4.12.3",
@@ -15,7 +15,7 @@
         "@testing-library/jest-dom": "^5.16.1",
         "@testing-library/react": "^12.1.2",
         "@testing-library/user-event": "^13.5.0",
-        "array-move": "^4.0.0",
+        "array-move": "^3.0.1",
         "query-string": "^7.1.0",
         "react": "^17.0.2",
         "react-beautiful-dnd": "^13.1.0",

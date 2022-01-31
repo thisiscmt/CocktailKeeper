@@ -21,7 +21,7 @@ function App() {
             </Helmet>
 
             <BrowserRouter>
-                <Paper elevation={5}>
+                <Paper elevation={5} data-testid='AppMainPaper'>
                     <Header/>
 
                     <Switch>

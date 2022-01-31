@@ -140,7 +140,7 @@ const ViewRecipe = (props) => {
 
     return (
         <MuiThemeProvider theme={theme}>
-            <Container maxWidth='sm'>
+            <Container maxWidth='sm' data-testid='ViewRecipeMainContainer'>
                 {
                     recipe ?
                         <div {...swipeHandlers}>
@@ -165,7 +165,7 @@ const ViewRecipe = (props) => {
                                 </Button>
                             </div>
 
-                            <Divider variant='fullWidth' className={'divider'} />
+                            <Divider variant='fullWidth' className='divider' />
 
                             <Card className={classes.recipeName}>
                                 <CardContent>

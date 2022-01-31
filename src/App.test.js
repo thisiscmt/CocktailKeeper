@@ -1,11 +1,11 @@
-import React from 'react';
-import { mount } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 
 import App from './App';
 
 describe('Main app', () => {
-    it('renders', () => {
-        mount(<App />);
-    });
-});
+    test('Render the component', () => {
+        render(<App />);
 
+        expect(screen.getByTestId('AppMainPaper')).toBeInTheDocument();
+    });
+})

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { arrayMoveImmutable } from 'array-move';
+import arrayMove from 'array-move';
 
 import RecipeService from '../../services/RecipeService';
 import Button from '@material-ui/core/Button';
@@ -24,7 +24,7 @@ const Home = (props) => {
 
     const handleDragEnd = (result) => {
         if (result && result.destination && result.destination.index > -1) {
-            const recipesToUpdate = arrayMoveImmutable(recipes, result.source.index, result.destination.index);
+            const recipesToUpdate = arrayMove(recipes, result.source.index, result.destination.index);
 
             setRecipes(recipesToUpdate);
             RecipeService.saveRecipes(recipesToUpdate);
@@ -32,14 +32,14 @@ const Home = (props) => {
     }
 
     return(
-        <div>
+        <main data-testid='HomeMainContainer'>
             {
                 recipes.length === 0 ?
-                <div>
+                <section>
                     <p>Welcome to the cocktail keeper.</p>
                     <p>Select the add recipe button in the upper-right to get started.</p>
-                </div> :
-                <div className={classes.recipeList}>
+                </section> :
+                <section className={classes.recipeList}>
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <Droppable droppableId="droppable">
                             {(provided, snapshot) => (
@@ -85,7 +85,6 @@ const Home = (props) => {
                                                                     variant='outlined'
                                                                     color='default'
                                                                     fullWidth={true}
-                                                                    disableRipple={true}
                                                                 >
                                                                     {recipe.name}
                                                                 </Button>
@@ -96,13 +95,15 @@ const Home = (props) => {
                                             )
                                         })
                                     }
+
+                                    { provided.placeholder }
                                 </div>
                             )}
                         </Droppable>
                     </DragDropContext>
-                </div>
+                </section>
             }
-        </div>
+        </main>
     );
 }
 

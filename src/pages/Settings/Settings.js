@@ -132,7 +132,7 @@ const SettingsPage = (props) => {
     };
 
     return (
-        <div className={classes.root}>
+        <main className={classes.root}>
             <Container maxWidth='sm'>
                 <section>
                     {
@@ -146,7 +146,12 @@ const SettingsPage = (props) => {
                 <section className={classes.section}>
                         <label className={classes.defaultUnitLabel}>Default unit:</label>
 
-                        <Select value={defaultUnit} onChange={handleDefaultUnitChange} className={classes.defaultUnitSelector}>
+                        <Select
+                            value={defaultUnit}
+                            onChange={handleDefaultUnitChange}
+                            className={classes.defaultUnitSelector}
+                            data-testid='SettingsDefaultUnit'
+                        >
                             <MenuItem value={'0'}>Select unit</MenuItem>
                             <MenuItem value={'oz'}>oz</MenuItem>
                             <MenuItem value={'ml'}>ml</MenuItem>
@@ -199,7 +204,7 @@ const SettingsPage = (props) => {
                     </div>
                 </section>
             </Container>
-        </div>
+        </main>
     );
 }
 

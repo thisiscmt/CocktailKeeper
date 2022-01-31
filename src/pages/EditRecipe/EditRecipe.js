@@ -264,7 +264,7 @@ const EditRecipe = (props) => {
 
     return (
         <MuiThemeProvider theme={theme}>
-            <Container maxWidth='sm'>
+            <Container maxWidth='sm' data-testid='EditRecipeMainContainer'>
                 {
                     recipe ?
                         <form onSubmit={handleSubmit} autoComplete={'on'}>
@@ -292,6 +292,7 @@ const EditRecipe = (props) => {
                                 helperText={validationError === true ? validationMsg : ''}
                                 inputProps={{ maxLength: 50 }}
                                 onChange={handleChangeName}
+                                data-testid='EditRecipeDrinkNameInput'
                             />
 
                             <List disablePadding={true}>

@@ -22,6 +22,11 @@ class SharedService {
                         main: overrides.textColor
                     }
                 },
+                props: {
+                    MuiButtonBase: {
+                        disableRipple: true
+                    }
+                },
                 overrides: {
                     MuiContainer: {
                         root: {
@@ -73,6 +78,11 @@ class SharedService {
             return createTheme({
                 palette: {
                     type: 'light'
+                },
+                props: {
+                    MuiButtonBase: {
+                        disableRipple: true
+                    }
                 }
             });
         }
