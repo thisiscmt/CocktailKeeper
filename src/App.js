@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 import Paper from '@material-ui/core/Paper';
 
 import Home from './pages/Home/Home';
@@ -15,11 +14,6 @@ import './App.scss';
 function App() {
     return (
         <div className='main-content'>
-            <Helmet>
-                <meta charSet='utf-8' />
-                <title>Cocktail Keeper</title>
-            </Helmet>
-
             <BrowserRouter>
                 <Paper elevation={5} data-testid='AppMainPaper'>
                     <Header/>
