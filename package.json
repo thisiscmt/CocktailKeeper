@@ -1,6 +1,8 @@
 {
     "name": "cocktail-keeper",
     "version": "1.5.0",
+    "description": "Cocktail Keeper",
+    "author": "Chris Tybur",
     "private": true,
     "license": "MIT",
     "scripts": {
