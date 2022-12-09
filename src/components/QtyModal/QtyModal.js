@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import {Button, Dialog, DialogTitle, DialogContent, FormControl, Select, MenuItem, MuiThemeProvider, DialogActions} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { MuiThemeProvider } from '@material-ui/core';
 
 import Ingredient from '../../models/Ingredient';
 import SharedService from '../../services/SharedService';

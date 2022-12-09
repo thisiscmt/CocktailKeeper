@@ -1,8 +1,5 @@
 import React, {useRef, useState} from 'react';
-import Container from '@material-ui/core/Container';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
+import {Box, Button, Container, MenuItem, Select} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import RecipeService from '../../services/RecipeService';
@@ -132,7 +129,7 @@ const SettingsPage = (props) => {
     };
 
     return (
-        <main className={classes.root}>
+        <Box className={classes.root}>
             <Container maxWidth='sm'>
                 <section>
                     {
@@ -144,21 +141,21 @@ const SettingsPage = (props) => {
                 </section>
 
                 <section className={classes.section}>
-                        <label className={classes.defaultUnitLabel}>Default unit:</label>
+                    <label className={classes.defaultUnitLabel}>Default unit:</label>
 
-                        <Select
-                            value={defaultUnit}
-                            onChange={handleDefaultUnitChange}
-                            className={classes.defaultUnitSelector}
-                            data-testid='SettingsDefaultUnit'
-                        >
-                            <MenuItem value={'0'}>Select unit</MenuItem>
-                            <MenuItem value={'oz'}>oz</MenuItem>
-                            <MenuItem value={'ml'}>ml</MenuItem>
-                            <MenuItem value={'dash'}>dash</MenuItem>
-                            <MenuItem value={'tsp'}>tsp</MenuItem>
-                            <MenuItem value={'tbsp'}>tbsp</MenuItem>
-                        </Select>
+                    <Select
+                        value={defaultUnit}
+                        onChange={handleDefaultUnitChange}
+                        className={classes.defaultUnitSelector}
+                        data-testid='SettingsDefaultUnit'
+                    >
+                        <MenuItem value={'0'}>Select unit</MenuItem>
+                        <MenuItem value={'oz'}>oz</MenuItem>
+                        <MenuItem value={'ml'}>ml</MenuItem>
+                        <MenuItem value={'dash'}>dash</MenuItem>
+                        <MenuItem value={'tsp'}>tsp</MenuItem>
+                        <MenuItem value={'tbsp'}>tbsp</MenuItem>
+                    </Select>
                 </section>
 
                 <section className={classes.section}>
@@ -204,7 +201,7 @@ const SettingsPage = (props) => {
                     </div>
                 </section>
             </Container>
-        </main>
+        </Box>
     );
 }
 

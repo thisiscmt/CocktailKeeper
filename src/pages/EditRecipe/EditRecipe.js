@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import {Button, Container, Divider, List, ListItem, MuiThemeProvider, TextField} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
-import Divider from '@material-ui/core/Divider';
-import Container from '@material-ui/core/Container';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import { makeStyles } from '@material-ui/core/styles';
-import { MuiThemeProvider } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
 
 import QtyModal from '../../components/QtyModal/QtyModal';

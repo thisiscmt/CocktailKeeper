@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import { Box, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import arrayMove from 'array-move';
 
 import RecipeService from '../../services/RecipeService';
-import Button from '@material-ui/core/Button';
 import {Link} from 'react-router-dom';
 
 const styles = makeStyles({
@@ -32,7 +32,7 @@ const Home = (props) => {
     }
 
     return(
-        <main data-testid='HomeMainContainer'>
+        <Box data-testid='HomeMainContainer'>
             {
                 recipes.length === 0 ?
                 <section>
@@ -103,7 +103,7 @@ const Home = (props) => {
                     </DragDropContext>
                 </section>
             }
-        </main>
+        </Box>
     );
 }
 

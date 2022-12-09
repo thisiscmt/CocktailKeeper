@@ -13,7 +13,7 @@ import './App.scss';
 
 function App() {
     return (
-        <div className='main-content'>
+        <main className='main-content'>
             <BrowserRouter>
                 <Paper elevation={5} data-testid='AppMainPaper'>
                     <Header/>
@@ -29,7 +29,7 @@ function App() {
                     <Footer/>
                 </Paper>
             </BrowserRouter>
-        </div>
+        </main>
     );
 }
 

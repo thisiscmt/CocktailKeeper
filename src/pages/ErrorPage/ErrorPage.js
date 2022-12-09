@@ -1,10 +1,11 @@
 import React from 'react';
+import {Box} from '@material-ui/core';
 
 const ErrorPage = () => {
     return (
-        <main data-testid='ErrorMainContainer'>
+        <Box data-testid='ErrorMainContainer'>
             <p>The page you are trying to reach can't be found</p>
-        </main>
+        </Box>
     )
 }
 
