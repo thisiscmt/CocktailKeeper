@@ -29,15 +29,15 @@ const Header = (props) => {
     return (
         <header className={classes.header}>
             <div className={classes.headerTitle}>
-                <Link to={'/'} className={'nav-link'}>
-                    <span className={'fancy-nav'}>Cocktail Keeper</span>
+                <Link to='/' className='nav-link'>
+                    <span className='fancy-nav'>Cocktail Keeper</span>
                 </Link>
             </div>
 
             <div className={classes.headerControls}>
                 <div>
-                    <Link to={'/recipe'} className={'nav-link'} title={'Add a new recipe'}>
-                        <AddBoxOutlinedIcon fontSize={'large'} />
+                    <Link to='/recipe' className='nav-link' title='Add a new recipe'>
+                        <AddBoxOutlinedIcon fontSize='large' />
                     </Link>
                 </div>
             </div>
