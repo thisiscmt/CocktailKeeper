@@ -6,8 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import cloneDeep from 'lodash/cloneDeep';
 import * as UUID from 'uuid';
 
-import RecipeService from '../../services/RecipeService';
-import SharedService from '../../services/SharedService';
+import RecipeService from '../../services/recipeService';
+import SharedService from '../../services/sharedService';
 
 const styles = makeStyles({
     mainContainer: {

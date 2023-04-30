@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import arrayMove from 'array-move';
 
-import RecipeService from '../../services/RecipeService';
+import RecipeService from '../../services/recipeService';
 import {Link} from 'react-router-dom';
 
 const styles = makeStyles({

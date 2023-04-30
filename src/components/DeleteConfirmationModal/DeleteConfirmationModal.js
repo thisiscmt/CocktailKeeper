@@ -8,7 +8,7 @@ import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import {MuiThemeProvider} from '@material-ui/core';
 
-import SharedService from '../../services/SharedService';
+import SharedService from '../../services/sharedService';
 
 const styles = makeStyles({
     root: {

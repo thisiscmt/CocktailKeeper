@@ -3,7 +3,7 @@ import {Button, Dialog, DialogTitle, DialogContent, FormControl, Select, MenuIte
 import { makeStyles } from '@material-ui/core/styles';
 
 import Ingredient from '../../models/Ingredient';
-import SharedService from '../../services/SharedService';
+import SharedService from '../../services/sharedService';
 
 const styles = makeStyles({
     title: {

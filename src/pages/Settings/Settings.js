@@ -2,10 +2,10 @@ import React, {useRef, useState} from 'react';
 import {Box, Button, Container, MenuItem, Select} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import RecipeService from '../../services/RecipeService';
-import SharedService from '../../services/SharedService';
+import RecipeService from '../../services/recipeService';
+import SharedService from '../../services/sharedService';
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     root: {
         paddingTop: '5px',
         paddingBottom: '5px',
@@ -64,7 +64,7 @@ const styles = makeStyles({
 });
 
 const SettingsPage = (props) => {
-    const classes = styles(props);
+    const classes = useStyles(props);
     const theme = SharedService.buildThemeConfig();
     const fileInput = useRef();
     let reader;
@@ -86,28 +86,9 @@ const SettingsPage = (props) => {
         }
     };
 
-    const handleDownload = (fileName, data) => {
-        const element = document.createElement('a');
-        element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(data));
-        element.setAttribute('download', fileName);
-        element.style.display = 'none';
-        document.body.appendChild(element);
-
-        element.click();
-        document.body.removeChild(element);
-    };
-
     const handleSelectFile = (event) => {
         if (event.target.files.length > 0) {
             setSelectedFile(event.target.files[0]);
-        }
-    };
-
-    const handleReaderLoadEnd = () => {
-        if (reader.result) {
-            RecipeService.setRecipeData(reader.result);
-            setSelectedFile(null);
-            setMessage('Data restored successfully');
         }
     };
 
@@ -118,14 +99,18 @@ const SettingsPage = (props) => {
             const recipeJSON = JSON.parse(recipeData);
             recipeJSON.savedOn = new Date().getTime();
 
-            handleDownload('Cocktail Keeper recipes.json', JSON.stringify(recipeJSON));
+
+
         }
     };
 
     const handleRestore = () => {
-        reader = new FileReader();
-        reader.onloadend = handleReaderLoadEnd;
-        reader.readAsText(selectedFile);
+
+
+
+        RecipeService.setRecipeData(reader.result);
+        setSelectedFile(null);
+        setMessage('Data restored successfully');
     };
 
     return (

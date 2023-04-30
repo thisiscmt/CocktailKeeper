@@ -9,8 +9,8 @@ import QtyModal from '../../components/QtyModal/QtyModal';
 import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
 import ImageSelectorModal from '../../components/ImageSelectorModal/ImageSelectorModal';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
-import RecipeService from '../../services/RecipeService';
-import SharedService from '../../services/SharedService';
+import RecipeService from '../../services/recipeService';
+import SharedService from '../../services/sharedService';
 import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
 
