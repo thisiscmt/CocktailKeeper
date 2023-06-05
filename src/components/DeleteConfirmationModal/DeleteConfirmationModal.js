@@ -1,16 +1,11 @@
-import React, {useState} from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
+import React, { useState } from 'react';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, MuiThemeProvider } from '@material-ui/core';
 import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 import { makeStyles } from '@material-ui/core/styles';
-import {MuiThemeProvider} from '@material-ui/core';
 
-import SharedService from '../../services/sharedService';
+import * as ThemeService from '../../services/themeService';
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     root: {
         padding: 0
     },
@@ -29,9 +24,9 @@ const styles = makeStyles({
 });
 
 const DeleteConfirmationModal = (props) => {
-    const classes = styles(props);
+    const classes = useStyles(props);
     const [ open, setOpen ] = useState(false);
-    const theme = SharedService.buildThemeConfig(null);
+    const theme = ThemeService.buildThemeConfig(null);
 
     const handleOpen = () => {
         setOpen(true);
@@ -56,7 +51,7 @@ const DeleteConfirmationModal = (props) => {
             <Dialog
                 open={open}
                 onClose={handleClose}
-                maxWidth={'xs'}
+                maxWidth='xs'
                 fullWidth={true}
                 classes={{ paper: classes.dialogPaper }}
             >
@@ -73,8 +68,8 @@ const DeleteConfirmationModal = (props) => {
                 </DialogContent>
 
                 <DialogActions className={classes.content}>
-                    <Button onClick={handleDelete} className={classes.modalAction} variant='outlined' size={'small'}>Yes</Button>
-                    <Button onClick={handleClose} className={classes.modalAction} variant='outlined' size={'small'}>No</Button>
+                    <Button onClick={handleDelete} className={classes.modalAction} variant='outlined' size='small'>Yes</Button>
+                    <Button onClick={handleClose} className={classes.modalAction} variant='outlined' size='small'>No</Button>
                 </DialogActions>
             </Dialog>
         </div>

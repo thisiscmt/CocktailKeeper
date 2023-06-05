@@ -1,92 +1,38 @@
-import {createTheme} from '@material-ui/core/styles';
+import {STORAGE_PREFERENCES} from '../constants/constants';
 
-class SharedService {
-    static getSettings = () => {
-        const settingsJSON = localStorage.getItem('ck.settings');
-        let settings = {};
+export const getPreferences = () => {
+    const preferencesJSON = localStorage.getItem(STORAGE_PREFERENCES);
+    let preferences = {};
 
-        if (settingsJSON) {
-            settings = JSON.parse(settingsJSON);
-        } else {
-            settings.defaultUnit = '0';
-        }
-
-        return settings;
+    if (preferencesJSON) {
+        preferences = JSON.parse(preferencesJSON);
+    } else {
+        preferences.defaultUnit = '0';
     }
 
-    static buildThemeConfig = (overrides) => {
-        if (overrides) {
-            return createTheme({
-                palette: {
-                    primary: {
-                        main: overrides.textColor
-                    }
-                },
-                props: {
-                    MuiButtonBase: {
-                        disableRipple: true
-                    }
-                },
-                overrides: {
-                    MuiContainer: {
-                        root: {
-                            backgroundColor: overrides.backgroundColor,
-                            paddingTop: '5px',
-                            paddingBottom: '6px'
-                        }
-                    },
-                    MuiButton: {
-                        root: {
-                            color: overrides.textColor
-                        }
-                    },
-                    MuiCard: {
-                        root: {
-                            backgroundColor: overrides.backgroundColor,
-                            border: 'none',
-                            boxShadow: 'none',
-                            color: overrides.textColor
-                        }
-                    },
-                    MuiCardContent: {
-                        root: {
-                            padding: '4px 0 4px 0',
-                            '&:last-child': {
-                                paddingBottom: '4px'
-                            }
-                        }
-                    },
-                    MuiList: {
-                        root: {
-                            color: overrides.textColor
-                        }
-                    },
-                    MuiInputBase: {
-                        root: {
-                            color: overrides.textColor
-                        }
-                    },
-                    MuiDivider: {
-                        root: {
-                            marginTop: '10px',
-                            marginBottom: '10px'
-                        }
-                    }
-                }
-            });
-        } else {
-            return createTheme({
-                palette: {
-                    type: 'light'
-                },
-                props: {
-                    MuiButtonBase: {
-                        disableRipple: true
-                    }
-                }
-            });
-        }
-    }
+    return preferences;
 }
 
-export default SharedService;
+export const getErrorMessage = (error) => {
+    let msg = '';
+
+    if (error) {
+        if (error.response && typeof error.response.data && typeof error.response.data === 'string') {
+            msg = error.response.data;
+        } else if (error.response && error.response.statusText) {
+            msg = error.response.statusText;
+        } else {
+            if (error.message) {
+                msg = error.message;
+            }
+            else if (typeof error === 'string') {
+                msg = error;
+            }
+            else {
+                msg = 'An unexpected error occurred';
+            }
+        }
+    }
+
+    return msg;
+};

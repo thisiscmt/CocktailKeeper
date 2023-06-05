@@ -6,10 +6,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import cloneDeep from 'lodash/cloneDeep';
 import * as UUID from 'uuid';
 
-import RecipeService from '../../services/recipeService';
-import SharedService from '../../services/sharedService';
+import * as RecipeService from '../../services/recipeService';
+import * as ThemeService from '../../services/themeService';
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     mainContainer: {
         display: 'flex',
         justifyContent: 'space-between'
@@ -55,13 +55,13 @@ const styles = makeStyles({
 });
 
 const ViewRecipe = (props) => {
-    const classes = styles(props);
+    const classes = useStyles(props);
     const history = useHistory();
     const params = useParams();
     const recipeName = decodeURIComponent(params.recipeName);
 
     const [ recipe, setRecipe ] = useState(RecipeService.getRecipe(recipeName));
-    const [ theme, setTheme ] = useState(SharedService.buildThemeConfig(recipe));
+    const [ theme, setTheme ] = useState(ThemeService.buildThemeConfig(recipe));
 
     const swipeConfig = {
         preventDefaultTouchmoveEvent: true
@@ -82,7 +82,7 @@ const ViewRecipe = (props) => {
         if (recipeIndex < recipes.length - 1) {
             newRecipe = recipes[recipeIndex + 1];
             setRecipe(newRecipe);
-            setTheme(SharedService.buildThemeConfig(newRecipe));
+            setTheme(ThemeService.buildThemeConfig(newRecipe));
 
             history.replace({ pathname: '/recipe/' +  encodeURIComponent(newRecipe.name) });
         }
@@ -96,7 +96,7 @@ const ViewRecipe = (props) => {
         if (recipeIndex > 0) {
             newRecipe = recipes[recipeIndex - 1];
             setRecipe(newRecipe);
-            setTheme(SharedService.buildThemeConfig(newRecipe));
+            setTheme(ThemeService.buildThemeConfig(newRecipe));
 
             history.replace({ pathname: '/recipe/' +  encodeURIComponent(newRecipe.name) });
         }
@@ -127,7 +127,7 @@ const ViewRecipe = (props) => {
         newRecipe = RecipeService.getRecipe(newName);
 
         setRecipe(newRecipe);
-        setTheme(SharedService.buildThemeConfig(newRecipe));
+        setTheme(ThemeService.buildThemeConfig(newRecipe));
         history.replace({ pathname: '/recipe/' +  encodeURIComponent(newRecipe.name) });
     };
 
@@ -192,11 +192,11 @@ const ViewRecipe = (props) => {
 
                             {
                                 recipe.drinkImageViewFile &&
-                                <div className={'drink-image-container'}>
+                                <div className='drink-image-container'>
                                     <img
                                         src={window.location.protocol + '//' + window.location.host + '/images/' + recipe.drinkImageViewFile}
-                                        alt={'Drink vessel'}
-                                        className={'drink-image'}
+                                        alt='Drink vessel'
+                                        className='drink-image'
                                     />
                                 </div>
                             }

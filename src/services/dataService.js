@@ -1,8 +1,6 @@
-import {Axios} from 'axios';
+import Axios from 'axios';
 
-import RecipeService from './recipeService';
-
-export const backupToServer = (authHeader) => {
+export const backupCocktailData = (authHeader, cocktailData) => {
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -11,13 +9,21 @@ export const backupToServer = (authHeader) => {
     };
 
     const data = {
-        data: RecipeService.getRecipeData(),
+        data: cocktailData,
         timestamp: new Date().getTime()
-    }
+    };
 
-    return Axios.put(process.env.REACT_APP_API_URL + '/bookmark/backup', data, config)
+    return Axios.post(process.env.REACT_APP_API_URL + '/cocktail/backup', data, config);
 };
 
-export const restoreFromServer = () => {
+export const restoreCocktailData = async (authHeader) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': authHeader
+        }
+    };
 
+    const cocktailData = await Axios.get(process.env.REACT_APP_API_URL + '/cocktail/backup?backupType=server', config);
+    return cocktailData.data;
 };

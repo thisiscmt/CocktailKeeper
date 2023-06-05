@@ -3,9 +3,9 @@ import {Button, Dialog, DialogTitle, DialogContent, FormControl, Select, MenuIte
 import { makeStyles } from '@material-ui/core/styles';
 
 import Ingredient from '../../models/Ingredient';
-import SharedService from '../../services/sharedService';
+import * as ThemeService from '../../services/themeService';
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     title: {
         paddingBottom: '8px',
         textAlign: 'center'
@@ -48,8 +48,8 @@ const styles = makeStyles({
 });
 
 const QtyModal = (props) => {
-    const classes = styles(props);
-    const theme = SharedService.buildThemeConfig();
+    const classes = useStyles(props);
+    const theme = ThemeService.buildThemeConfig();
     const [ open, setOpen ] = useState(false);
     const [ ingredient, setIngredient ] = useState(props.ingredient);
     const [ qtyDesc, setQtyDesc ] = useState(props.ingredient.qtyDesc);
@@ -133,7 +133,7 @@ const QtyModal = (props) => {
                 <Dialog
                     open={open}
                     onClose={handleClose}
-                    maxWidth={'xs'}
+                    maxWidth='xs'
                     fullWidth={true}
                 >
                     <DialogTitle className={classes.title}>Quantity</DialogTitle>
@@ -142,16 +142,16 @@ const QtyModal = (props) => {
                         <FormControl>
                             <Select value={ingredient.amount} onChange={handleAmountChange} className={classes.selector}>
                                 <MenuItem value='0'>- Select amount -</MenuItem>
-                                <MenuItem value={'1'}>1</MenuItem>
-                                <MenuItem value={'2'}>2</MenuItem>
-                                <MenuItem value={'3'}>3</MenuItem>
-                                <MenuItem value={'4'}>4</MenuItem>
-                                <MenuItem value={'5'}>5</MenuItem>
-                                <MenuItem value={'6'}>6</MenuItem>
-                                <MenuItem value={'7'}>7</MenuItem>
-                                <MenuItem value={'8'}>8</MenuItem>
-                                <MenuItem value={'9'}>9</MenuItem>
-                                <MenuItem value={'10'}>10</MenuItem>
+                                <MenuItem value='1'>1</MenuItem>
+                                <MenuItem value='2'>2</MenuItem>
+                                <MenuItem value='3'>3</MenuItem>
+                                <MenuItem value='4'>4</MenuItem>
+                                <MenuItem value='5'>5</MenuItem>
+                                <MenuItem value='6'>6</MenuItem>
+                                <MenuItem value='7'>7</MenuItem>
+                                <MenuItem value='8'>8</MenuItem>
+                                <MenuItem value='9'>9</MenuItem>
+                                <MenuItem value='10'>10</MenuItem>
                             </Select>
                         </FormControl>
                     </DialogContent>
@@ -159,13 +159,13 @@ const QtyModal = (props) => {
                     <DialogContent className={classes.content}>
                         <FormControl>
                             <Select value={ingredient.fractionalAmount} onChange={handleFractionalAmountChange} className={classes.selector}>
-                                <MenuItem value={'0'}>- Select fraction -</MenuItem>
-                                <MenuItem value={'1/8'}>1/8</MenuItem>
-                                <MenuItem value={'1/4'}>1/4</MenuItem>
-                                <MenuItem value={'3/8'}>3/8</MenuItem>
-                                <MenuItem value={'1/2'}>1/2</MenuItem>
-                                <MenuItem value={'5/8'}>5/8</MenuItem>
-                                <MenuItem value={'3/4'}>3/4</MenuItem>
+                                <MenuItem value='0'>- Select fraction -</MenuItem>
+                                <MenuItem value='1/8'>1/8</MenuItem>
+                                <MenuItem value='1/4'>1/4</MenuItem>
+                                <MenuItem value='3/8'>3/8</MenuItem>
+                                <MenuItem value='1/2'>1/2</MenuItem>
+                                <MenuItem value='5/8'>5/8</MenuItem>
+                                <MenuItem value='3/4'>3/4</MenuItem>
                             </Select>
                         </FormControl>
                     </DialogContent>
@@ -173,12 +173,12 @@ const QtyModal = (props) => {
                     <DialogContent className={classes.content}>
                         <FormControl>
                             <Select value={ingredient.unit} onChange={handleUnitChange} className={classes.selector}>
-                                <MenuItem value={'0'}>- Select unit -</MenuItem>
-                                <MenuItem value={'oz'}>oz</MenuItem>
-                                <MenuItem value={'ml'}>ml</MenuItem>
-                                <MenuItem value={'dash'}>dash</MenuItem>
-                                <MenuItem value={'tsp'}>tsp</MenuItem>
-                                <MenuItem value={'tbsp'}>tbsp</MenuItem>
+                                <MenuItem value='0'>- Select unit -</MenuItem>
+                                <MenuItem value='oz'>oz</MenuItem>
+                                <MenuItem value='ml'>ml</MenuItem>
+                                <MenuItem value='dash'>dash</MenuItem>
+                                <MenuItem value='tsp'>tsp</MenuItem>
+                                <MenuItem value='tbsp'>tbsp</MenuItem>
                             </Select>
                         </FormControl>
                     </DialogContent>
@@ -188,14 +188,14 @@ const QtyModal = (props) => {
                             onClick={handleSave}
                             className={classes.defaultButtonColor}
                             variant='outlined'
-                            size={'small'}
+                            size='small'
                         >
                             Save
                         </Button>
 
                         <Button
                             onClick={handleDelete}
-                            variant={'text'}
+                            variant='text'
                             className={classes.deleteButton}
                             size='small'
                         >

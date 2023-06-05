@@ -1,169 +1,166 @@
 import Recipe from '../models/Recipe';
 import Ingredient from '../models/Ingredient';
+import {STORAGE_RECIPES} from '../constants/constants';
 
 const imageLibrary = require('../data/images.json');
 
-class RecipeService {
-    static getRecipes = () => {
-        const recipeJSON = localStorage.getItem('ck.recipes');
-        let recipeData;
-        let recipes = [];
+export const buildRecipe = (data, recipeIndex) => {
+    const recipe = new Recipe();
+    const imageFileNames = getDrinkImageFileNames(data.drinkImage);
+    let ingredient;
 
-        if (recipeJSON) {
-            recipeData = JSON.parse(recipeJSON);
+    recipe.id = data.id;
+    recipe.name = data.name;
+    recipe.index = recipeIndex;
+    recipe.directions = data.directions;
+    recipe.drinkImage = data.drinkImage;
+    recipe.backgroundColor = data.backgroundColor;
+    recipe.textColor = data.textColor;
+    recipe.drinkImageViewFile = imageFileNames.drinkImageViewFile;
+    recipe.drinkImageSelectionFile = imageFileNames.drinkImageSelectionFile;
 
-            recipes = recipeData.recipes.map((item) => {
-                return this.buildRecipe(item);
-            });
-        }
+    recipe.ingredients = data.ingredients.map(item => {
+        ingredient = new Ingredient();
+        ingredient.id = item.id;
+        ingredient.name = item.name;
+        ingredient.amount = item.amount;
+        ingredient.fractionalAmount = item.fractionalAmount;
+        ingredient.unit = item.unit;
+        ingredient.qtyDesc = item.qtyDesc;
 
-        return recipes;
-    };
+        return ingredient;
+    });
 
-    static saveRecipe = (recipe, copied) => {
-        const recipeJSON = localStorage.getItem('ck.recipes');
-        let recipeIndex = -1;
-        let recipeData;
+    return recipe;
+};
 
-        if (recipeJSON) {
-            recipeData = JSON.parse(recipeJSON);
+export const getRecipes = () => {
+    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    let recipeData;
+    let recipes = [];
 
-            recipeIndex = recipeData.recipes.findIndex((item) => {
-                return item.id === recipe.id;
-            });
+    if (recipeJSON) {
+        recipeData = JSON.parse(recipeJSON);
+
+        recipes = recipeData.recipes.map((item) => {
+            return buildRecipe(item);
+        });
+    }
+
+    return recipes;
+};
+
+export const saveRecipe = (recipe, copied) => {
+    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    let recipeIndex = -1;
+    let recipeData;
+
+    if (recipeJSON) {
+        recipeData = JSON.parse(recipeJSON);
+
+        recipeIndex = recipeData.recipes.findIndex((item) => {
+            return item.id === recipe.id;
+        });
+    } else {
+        recipeData = {
+            recipes: []
+        };
+    }
+
+    // We don't need to store the drink image file name since we're storing the name of the image itself. The idea is not to store any file
+    // names since they could change at some point (e.g. a new format could be chosen).
+    delete recipe.drinkImageViewFile;
+    delete recipe.drinkImageSelectionFile;
+
+    if (recipeIndex > -1) {
+        recipeData.recipes[recipeIndex] = recipe;
+    } else {
+        if (copied) {
+            recipeData.recipes.splice(recipe.index + 1, 0, recipe)
         } else {
-            recipeData = {
-                recipes: []
-            };
+            recipeData.recipes.push(recipe);
         }
+    }
 
-        // We don't need to store the drink image file name since we're storing the name of the image itself. The idea is not to store any file
-        // names since they could change at some point (e.g. a new format could be chosen).
-        delete recipe.drinkImageViewFile;
-        delete recipe.drinkImageSelectionFile;
+    localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
+};
 
-        if (recipeIndex > -1) {
-            recipeData.recipes[recipeIndex] = recipe;
-        } else {
-            if (copied) {
-                recipeData.recipes.splice(recipe.index + 1, 0, recipe)
-            } else {
-                recipeData.recipes.push(recipe);
-            }
-        }
+export const getRecipe = (name) => {
+    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    const nameForCompare = name ? name.toLowerCase() : '';
+    let recipeIndex = -1;
+    let recipeData;
+    let recipe;
 
-        localStorage.setItem('ck.recipes', JSON.stringify(recipeData));
-    };
+    if (recipeJSON) {
+        recipeData = JSON.parse(recipeJSON);
 
-    static getRecipe = (name) => {
-        const recipeJSON = localStorage.getItem('ck.recipes');
-        const nameForCompare = name ? name.toLowerCase() : '';
-        let recipeIndex = -1;
-        let recipeData;
-        let recipe;
-
-        if (recipeJSON) {
-            recipeData = JSON.parse(recipeJSON);
-
-            recipeIndex = recipeData.recipes.findIndex((item) => {
-                return item.name.toLowerCase() === nameForCompare;
-            });
-
-            if (recipeIndex > -1) {
-                recipe = RecipeService.buildRecipe(recipeData.recipes[recipeIndex], recipeIndex);
-            }
-        }
-
-        return recipe;
-    };
-
-    static deleteRecipe = (id) => {
-        const recipeJSON = localStorage.getItem('ck.recipes');
-        let recipeIndex = -1;
-        let recipeData;
-
-        if (recipeJSON) {
-            recipeData = JSON.parse(recipeJSON);
-
-            recipeIndex = recipeData.recipes.findIndex((item) => {
-                return item.id === id;
-            });
-
-            if (recipeIndex > -1) {
-                recipeData.recipes.splice(recipeIndex, 1);
-            }
-
-            localStorage.setItem('ck.recipes', JSON.stringify(recipeData));
-        }
-    };
-
-    static saveRecipes = (recipes) => {
-        const recipeJSON = localStorage.getItem('ck.recipes');
-        let recipeData;
-
-        if (recipeJSON) {
-            recipeData = JSON.parse(recipeJSON);
-
-        } else {
-            recipeData = {};
-        }
-
-        recipeData.recipes = recipes;
-        localStorage.setItem('ck.recipes', JSON.stringify(recipeData));
-    };
-
-    static getRecipeData = () => {
-        return localStorage.getItem('ck.recipes');
-    };
-
-    static setRecipeData = (data) => {
-        localStorage.setItem('ck.recipes', data);
-    };
-
-    static buildRecipe = (data, recipeIndex) => {
-        const recipe = new Recipe();
-        const imageFileNames = RecipeService.getDrinkImageFileNames(data.drinkImage);
-        let ingredient;
-
-        recipe.id = data.id;
-        recipe.name = data.name;
-        recipe.index = recipeIndex;
-        recipe.directions = data.directions;
-        recipe.drinkImage = data.drinkImage;
-        recipe.backgroundColor = data.backgroundColor;
-        recipe.textColor = data.textColor;
-        recipe.drinkImageViewFile = imageFileNames.drinkImageViewFile;
-        recipe.drinkImageSelectionFile = imageFileNames.drinkImageSelectionFile;
-
-        recipe.ingredients = data.ingredients.map(item => {
-            ingredient = new Ingredient();
-            ingredient.id = item.id;
-            ingredient.name = item.name;
-            ingredient.amount = item.amount;
-            ingredient.fractionalAmount = item.fractionalAmount;
-            ingredient.unit = item.unit;
-            ingredient.qtyDesc = item.qtyDesc;
-
-            return ingredient;
+        recipeIndex = recipeData.recipes.findIndex((item) => {
+            return item.name.toLowerCase() === nameForCompare;
         });
 
-        return recipe;
-    };
+        if (recipeIndex > -1) {
+            recipe = buildRecipe(recipeData.recipes[recipeIndex], recipeIndex);
+        }
+    }
 
-    static getDrinkImageFileNames = (drinkImage) => {
-        let imageFileNames = {};
+    return recipe;
+};
 
-        if (drinkImage) {
-            const imageIndex = imageLibrary.images.findIndex(image => image.name === drinkImage);
+export const deleteRecipe = (id) => {
+    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    let recipeIndex = -1;
+    let recipeData;
 
-            if (imageIndex > -1) {
-                imageFileNames.drinkImageViewFile = imageLibrary.images[imageIndex].view;
-                imageFileNames.drinkImageSelectionFile = imageLibrary.images[imageIndex].selection;
-            }
+    if (recipeJSON) {
+        recipeData = JSON.parse(recipeJSON);
+
+        recipeIndex = recipeData.recipes.findIndex((item) => {
+            return item.id === id;
+        });
+
+        if (recipeIndex > -1) {
+            recipeData.recipes.splice(recipeIndex, 1);
         }
 
-        return imageFileNames
+        localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
     }
-}
+};
 
-export default RecipeService;
+export const saveRecipes = (recipes) => {
+    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    let recipeData;
+
+    if (recipeJSON) {
+        recipeData = JSON.parse(recipeJSON);
+
+    } else {
+        recipeData = {};
+    }
+
+    recipeData.recipes = recipes;
+    localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
+};
+
+export const getRecipeData = () => {
+    return localStorage.getItem(STORAGE_RECIPES);
+};
+
+export const setRecipeData = (recipeData) => {
+    localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
+};
+
+export const getDrinkImageFileNames = (drinkImage) => {
+    let imageFileNames = {};
+
+    if (drinkImage) {
+        const imageIndex = imageLibrary.images.findIndex(image => image.name === drinkImage);
+
+        if (imageIndex > -1) {
+            imageFileNames.drinkImageViewFile = imageLibrary.images[imageIndex].view;
+            imageFileNames.drinkImageSelectionFile = imageLibrary.images[imageIndex].selection;
+        }
+    }
+
+    return imageFileNames
+};

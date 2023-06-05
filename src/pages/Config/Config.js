@@ -1,23 +1,34 @@
-import { useContext, useEffect, useState } from 'react';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
+import React, { useContext, useEffect, useState } from 'react';
+import { FormControl, FormControlLabel, TextField, Button, Box, Radio, RadioGroup } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import {DateTime} from 'luxon';
 
 import LoadingOverlay from '../../components/LoadingOverlay/LoadingOverlay';
 import { Context } from '../../stores/mainStore';
-import SharedService from '../../services/SharedService';
-import BookmarkService from '../../services/BookmarkService';
-import { DataSources } from '../../enums/DataSources';
 import {AlertSeverity} from '../../enums/AlertSeverity';
+import * as DataService from '../../services/dataService';
+import * as RecipeService from '../../services/recipeService';
+import * as SharedService from '../../services/sharedService';
+import {STORAGE_PASSWORD, STORAGE_USER_NAME} from '../../constants/constants';
 
 const useStyles = makeStyles({
+    mainContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        paddingBottom: '16px',
+        paddingTop: '16px'
+    },
+
     section: {
         marginTop: '16px'
+    },
+
+    buttonSection: {
+        marginTop: '8px'
+    },
+
+    sectionText : {
+        marginTop: 0,
+        marginBottom: '10px'
     },
 
     textFieldLabelRoot: {
@@ -25,8 +36,7 @@ const useStyles = makeStyles({
     },
 
     textFieldLabel: {
-        fontSize: '0.875rem',
-        fontWeight: 'bold',
+        fontSize: '14px',
         marginRight: '8px',
         minWidth: '90px',
         textAlign: 'left'
@@ -34,27 +44,6 @@ const useStyles = makeStyles({
 
     dataSourceLabel: {
         marginRight: '16px'
-    },
-
-    statsLabel: {
-        fontSize: '0.875rem',
-        fontWeight: 'bold',
-        marginRight: '12px'
-    },
-
-    fileUploadLabel: {
-        cursor: 'pointer',
-        marginRight: '8px',
-        textDecoration: 'underline'
-    },
-
-    fileUploadInput: {
-        display: 'none'
-    },
-
-    selectedFile: {
-        fontStyle: 'italic',
-        marginBottom: '12px'
     },
 
     dataSourceOptions: {
@@ -69,28 +58,15 @@ const useStyles = makeStyles({
 
 const Config = (props) => {
     const classes = useStyles(props);
-    const [state, dispatch] = useContext(Context);
-    const [ userName, setUserName ] = useState(state.dataService.getApplicationData('UserName') ?
-        state.dataService.getApplicationData('UserName') :
-        ''
-    );
-    const [ password, setPassword ] = useState(state.dataService.getApplicationData('Password') ? '********' : '');
+    const [ , dispatch ] = useContext(Context);
+    const [ userName, setUserName ] = useState(localStorage.getItem(STORAGE_USER_NAME) ? localStorage.getItem(STORAGE_USER_NAME) : '');
+    const [ password, setPassword ] = useState(localStorage.getItem(STORAGE_PASSWORD) ? '********' : '');
     const [ passwordChanged, setPasswordChanged ] = useState(false);
-    const [ dataSource, setDataSource ] = useState(DataSources.Sync);
-    const [ selectedFile, setSelectedFile ] = useState(null);
-    const [ hasBookmarkData, setHasBookmarkData ] = useState(!!state.dataService.getApplicationData('BookmarkData'));
-    const [ bookmarkCount, setBookmarkCount ] = useState(state.dataService.getApplicationData('BookmarkCount') ?
-        state.dataService.getApplicationData('BookmarkCount') :
-        0
-    );
-    const [ bookmarkTimestamp, setBookmarkTimestamp ] = useState(state.dataService.getApplicationData('BookmarkTimestamp') ?
-        state.dataService.getApplicationData('BookmarkTimestamp') :
-        0
-    );
+    const [ dataSource, setDataSource ] = useState('Server');
     const [ loading, setLoading ] = useState(false);
 
     useEffect(() => {
-        document.title = 'Config - Bookmark Browser';
+        document.title = 'Config - Cocktail Keeper';
     });
 
     const handleChangeUserName = (event) => {
@@ -102,77 +78,51 @@ const Config = (props) => {
         setPasswordChanged(true);
     }
 
-    const handleSelectFile = (event) => {
-        if (event.target.files.length > 0) {
-            setSelectedFile(event.target.files[0]);
-        }
-    };
-
-    const handleUploadBookmarkData = () =>{
+    const handleBackupCocktailData = async () => {
         if (userName && password) {
-            const reader = new FileReader();
             dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: ''} });
+            const passwordToUse = passwordChanged ? password : localStorage.getItem(STORAGE_PASSWORD);
+            const authHeader = 'Basic ' + window.btoa(userName + ':' + passwordToUse);
 
-            reader.onload = async (event) => {
-                const passwordToUse = passwordChanged ? password : state.dataService.getApplicationData('Password');
-                const authHeader = 'Basic ' + window.btoa(userName + ':' + passwordToUse);
+            try {
+                setLoading(true);
+                await DataService.backupCocktailData(authHeader, RecipeService.getRecipeData());
+                localStorage.setItem(STORAGE_USER_NAME, userName);
 
-                try {
-                    setLoading(true);
-                    await BookmarkService.uploadBookmarkData(event.target.result, authHeader);
-                    state.dataService.setApplicationData('UserName', userName);
-
-                    if (passwordChanged) {
-                        state.dataService.setApplicationData('Password', password);
-                    }
-
-                    setSelectedFile(null);
-                    dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: 'Bookmark data uploaded successfully', severity: AlertSeverity.Success} });
-                } catch (error) {
-                    dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: SharedService.getErrorMessage(error), severity: AlertSeverity.Error} });
-                } finally {
-                    setLoading(false);
+                if (passwordChanged) {
+                    localStorage.setItem(STORAGE_PASSWORD, password);
                 }
-            };
 
-            reader.readAsText(selectedFile);
+                dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: 'Cocktail data backed up successfully', severity: AlertSeverity.Success} });
+            } catch (error) {
+                dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: SharedService.getErrorMessage(error), severity: AlertSeverity.Error} });
+            } finally {
+                setLoading(false);
+            }
         }
         else {
             dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: 'You must provide a user name and password', severity: AlertSeverity.Warning} });
         }
     };
 
-    const handleRefreshData = async () =>{
+    const handleRestoreCocktailData = async () => {
         if (userName && password) {
             dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: ''} });
-            const passwordToUse = passwordChanged ? password : state.dataService.getApplicationData('Password');
+            const passwordToUse = passwordChanged ? password : localStorage.getItem(STORAGE_PASSWORD);
             const authHeader = 'Basic ' + window.btoa(userName + ':' + passwordToUse);
-            let response;
 
             try {
                 setLoading(true);
 
-                if (dataSource === DataSources.Sync) {
-                    response = await BookmarkService.getBookmarks(authHeader);
-                } else if (dataSource === DataSources.Backup) {
-                    response = await BookmarkService.downloadBookmarkData(authHeader);
-                }
-
-                const timestamp = Number(response.data.timestamp);
-                state.dataService.setApplicationData('UserName', userName);
+                const recipeData = await DataService.restoreCocktailData(authHeader);
+                localStorage.setItem(STORAGE_USER_NAME, userName);
 
                 if (passwordChanged) {
-                    state.dataService.setApplicationData('Password', password);
+                    localStorage.setItem(STORAGE_PASSWORD, password);
                 }
 
-                state.dataService.setApplicationData('BookmarkData', response.data.bookmarkData);
-                state.dataService.setApplicationData('BookmarkCount', response.data.count);
-                state.dataService.setApplicationData('BookmarkTimestamp', timestamp);
-
-                setHasBookmarkData(true);
-                setBookmarkCount(response.data.count);
-                setBookmarkTimestamp(timestamp);
-                dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: 'Bookmark data refreshed successfully', severity: AlertSeverity.Success} });
+                RecipeService.setRecipeData(recipeData);
+                dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: 'Cocktail data restored successfully', severity: AlertSeverity.Success} });
             } catch (error) {
                 if (error.response.status === 403) {
                     dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: 'Please verify the current login', severity: AlertSeverity.Info} });
@@ -189,15 +139,15 @@ const Config = (props) => {
     };
 
     return (
-        <main className='content-container loadable-container'>
+        <Box className={`loadable-container ${classes.mainContainer}`}>
             <LoadingOverlay open={loading} />
 
-            <div className={classes.section}>
-                <FormControl fullWidth={SharedService.isMobile()}>
+            <Box>
+                <FormControl>
                     <FormControlLabel
                         classes={{ root: classes.textFieldLabelRoot, label: classes.textFieldLabel }}
                         labelPlacement='start'
-                        label='User name:'
+                        label='User name *'
                         control={
                             <TextField
                                 id='UserName'
@@ -216,14 +166,14 @@ const Config = (props) => {
                         }
                     />
                 </FormControl>
-            </div>
+            </Box>
 
-            <div className={classes.section}>
-                <FormControl fullWidth={SharedService.isMobile()}>
+            <Box className={classes.section}>
+                <FormControl>
                     <FormControlLabel
                         classes={{ root: classes.textFieldLabelRoot, label: classes.textFieldLabel }}
                         labelPlacement='start'
-                        label='Password:'
+                        label='Password *'
                         control={
                             <TextField
                                 id='UserName'
@@ -242,95 +192,47 @@ const Config = (props) => {
                         }
                     />
                 </FormControl>
-            </div>
+            </Box>
 
-            <div className={classes.section}>
-                <FormControl fullWidth={SharedService.isMobile()}>
+            <Box className={classes.section}>
+                <Box className={classes.sectionText}>Back up cocktail data</Box>
+            </Box>
+
+            <Box>
+                <FormControl>
                     <FormControlLabel
                         classes={{ root: classes.textFieldLabelRoot, label: `${classes.textFieldLabel} ${classes.dataSourceLabel}` }}
                         labelPlacement='start'
-                        label='Data source:'
+                        label='Data source'
                         control={
                             <RadioGroup row={true} name="DataSource" value={dataSource} onChange={event => setDataSource(event.target.value)}>
                                 <FormControlLabel
-                                    value={DataSources.Sync}
-                                    label="Sync"
-                                    control={<Radio color='primary' className={classes.dataSourceOptions} />}
-                                />
-                                <FormControlLabel
-                                    value={DataSources.Backup}
-                                    label="Bookmark backup"
+                                    value="Server"
+                                    label="Server"
                                     control={<Radio color='primary' className={classes.dataSourceOptions} />}
                                 />
                             </RadioGroup>
                         }
                     />
                 </FormControl>
-            </div>
+            </Box>
 
-            {
-                hasBookmarkData &&
-                <div className={classes.section}>
-                    <div>
-                        <span className={classes.statsLabel}>Bookmarks:</span>
-                        <span>{bookmarkCount.toLocaleString('en')}</span>
-                    </div>
-
-                    <div>
-                        <span className={classes.statsLabel}>Timestamp:</span>
-                        <span>
-                            {
-                                DateTime.fromMillis(bookmarkTimestamp).toLocaleString({
-                                    ...DateTime.DATE_MED,
-                                    ...DateTime.TIME_SIMPLE,
-                                    month: 'long'
-                                })
-                            }
-                        </span>
-                    </div>
-                </div>
-            }
-
-            {
-                dataSource === DataSources.Backup && !SharedService.isMobile() &&
-                <div className={classes.section}>
-                    {
-                        selectedFile &&
-                        <div className={classes.selectedFile}>{ selectedFile.name }</div>
-                    }
-
-                    <label htmlFor='FileUpload' className={classes.fileUploadLabel}>Browse
-                        <input
-                            type='file'
-                            id='FileUpload'
-                            name='file'
-                            className={classes.fileUploadInput}
-                            onChange={handleSelectFile}
-                            accept='.json'
-                        />
-                    </label>
-                    <Button
-                        variant='outlined'
-                        color='default'
-                        size='small'
-                        disabled={!selectedFile}
-                        onClick={handleUploadBookmarkData}
-                    >
-                        Upload
-                    </Button>
-                </div>
-            }
-
-            <div className={classes.section}>
-                <Button
-                    className={classes.actionButton}
-                    variant='contained'
-                    color='primary'
-                    size='small'
-                    onClick={handleRefreshData}>Refresh
+            <Box className={classes.buttonSection}>
+                <Button variant='outlined' color='default' size='small' onClick={handleBackupCocktailData}>
+                    Backup
                 </Button>
-            </div>
-        </main>
+            </Box>
+
+            <Box className={classes.section}>
+                <Box>Restore cocktail data</Box>
+            </Box>
+
+            <Box className={classes.buttonSection}>
+                <Button variant='outlined' color='default' size='small' onClick={handleRestoreCocktailData}>
+                    Restore
+                </Button>
+            </Box>
+        </Box>
     );
 }
 

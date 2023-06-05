@@ -1,15 +1,11 @@
 import React, {useRef, useState} from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 
 const colorLibrary = require('../../data/colors.json');
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     root: {
         padding: 0
     },
@@ -54,8 +50,7 @@ const styles = makeStyles({
 });
 
 const ColorSelectorModal = (props) => {
-    const classes = styles(props);
-
+    const classes = useStyles(props);
     const [ open, setOpen ] = useState(false);
     const [ selectedColor, setSelectedColor ] = useState(props.colorCode);
     const [ selectedTextColor, setSelectedTextColor ] = useState(props.colorCode === '#FFFFFF' ? '#000000' : '#FFFFFF');
@@ -111,7 +106,7 @@ const ColorSelectorModal = (props) => {
             <Dialog
                 open={open}
                 onClose={handleClose}
-                maxWidth={'xs'}
+                maxWidth='xs'
                 fullWidth={true}
                 classes={{ paper: classes.dialogPaper }}
             >

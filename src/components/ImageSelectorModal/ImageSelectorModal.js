@@ -1,14 +1,10 @@
 import React, { useRef, useState } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const imageLibrary = require('../../data/images.json');
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     root: {
         padding: 0
     },
@@ -52,7 +48,7 @@ const styles = makeStyles({
 });
 
 const ImageSelectorModal = (props) => {
-    const classes = styles(props);
+    const classes = useStyles(props);
     const imageBaseURL = window.location.protocol + '//' + window.location.host + '/images'
 
     const [ selectedImage, setSelectedImage ] = useState(props.drinkImage);
@@ -99,10 +95,10 @@ const ImageSelectorModal = (props) => {
 
     return (
         <div>
-            <div className={'drink-image-container'}>
+            <div className='drink-image-container'>
                 {
                     props.drinkImageViewFile &&
-                    <img src={`${imageBaseURL}/${props.drinkImageViewFile}`} alt={'Drink vessel'} className={'drink-image'} />
+                    <img src={`${imageBaseURL}/${props.drinkImageViewFile}`} alt='Drink vessel' className='drink-image' />
                 }
             </div>
 
@@ -118,7 +114,7 @@ const ImageSelectorModal = (props) => {
             <Dialog
                 open={open}
                 onClose={handleClose}
-                maxWidth={'xs'}
+                maxWidth='xs'
                 fullWidth={true}
                 classes={{ paper: classes.dialogPaper }}
             >
@@ -149,10 +145,10 @@ const ImageSelectorModal = (props) => {
                 </DialogContent>
 
                 <DialogActions className={classes.dialogActions}>
-                    <Button onClick={handleSave} className={classes.defaultButtonColor} variant='outlined' size={'small'}>
+                    <Button onClick={handleSave} className={classes.defaultButtonColor} variant='outlined' size='small'>
                         Save
                     </Button>
-                    <Button onClick={handleClose} className={classes.defaultButtonColor} variant='outlined' color='default' size='small'>
+                    <Button onClick={() => handleClose({}, 'cancel')} className={classes.defaultButtonColor} variant='outlined' color='default' size='small'>
                         Cancel
                     </Button>
                 </DialogActions>

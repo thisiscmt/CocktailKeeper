@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 import { Box, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import arrayMove from 'array-move';
 
-import RecipeService from '../../services/recipeService';
-import {Link} from 'react-router-dom';
+import * as RecipeService from '../../services/recipeService';
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     recipeList: {
         backgroundColor: '#f0f0f0',
         padding: '8px'
@@ -19,8 +19,12 @@ const styles = makeStyles({
 });
 
 const Home = (props) => {
-    const classes = styles(props);
+    const classes = useStyles(props);
     const [ recipes, setRecipes] = useState(RecipeService.getRecipes());
+
+    useEffect(() => {
+        document.title = 'Cocktail Keeper';
+    });
 
     const handleDragEnd = (result) => {
         if (result && result.destination && result.destination.index > -1) {

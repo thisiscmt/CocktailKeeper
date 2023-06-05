@@ -9,12 +9,13 @@ import QtyModal from '../../components/QtyModal/QtyModal';
 import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
 import ImageSelectorModal from '../../components/ImageSelectorModal/ImageSelectorModal';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
-import RecipeService from '../../services/recipeService';
-import SharedService from '../../services/sharedService';
+import * as RecipeService from '../../services/recipeService';
+import * as SharedService from '../../services/sharedService';
+import * as ThemeService from '../../services/themeService';
 import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
 
-const styles = makeStyles({
+const useStyles = makeStyles({
     topControls: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -60,7 +61,7 @@ const styles = makeStyles({
 });
 
 const EditRecipe = (props) => {
-    const classes = styles(props);
+    const classes = useStyles(props);
     const history = useHistory();
     const params = useParams();
     const recipeName = params.recipeName ? decodeURIComponent(params.recipeName) : '';
@@ -98,7 +99,7 @@ const EditRecipe = (props) => {
     }
 
     const initTheme = (recipe) => {
-        return SharedService.buildThemeConfig(recipe);
+        return ThemeService.buildThemeConfig(recipe);
     }
 
     const [ recipe, setRecipe ] = useState(initRecipe(recipeName));
@@ -131,7 +132,7 @@ const EditRecipe = (props) => {
     const handleAddIngredient = (event) => {
         const newRecipe = cloneDeep(recipe);
         const ingredient = new Ingredient();
-        const settings = SharedService.getSettings();
+        const settings = SharedService.getPreferences();
 
         ingredient.id = ingredientCounter;
         ingredient.unit = settings.defaultUnit;
@@ -198,7 +199,7 @@ const EditRecipe = (props) => {
         newRecipe.backgroundColor = colorData.colorCode;
         newRecipe.textColor = colorData.textColorCode;
 
-        const newTheme = SharedService.buildThemeConfig(newRecipe);
+        const newTheme = ThemeService.buildThemeConfig(newRecipe);
 
         setRecipe(newRecipe);
         setTheme(newTheme);
@@ -261,7 +262,7 @@ const EditRecipe = (props) => {
             <Container maxWidth='sm' data-testid='EditRecipeMainContainer'>
                 {
                     recipe ?
-                        <form onSubmit={handleSubmit} autoComplete={'on'}>
+                        <form onSubmit={handleSubmit} autoComplete='on'>
                             <div className={classes.topControls}>
                                 <Button type='submit' variant='outlined' color='primary' size='small'>
                                     Save
@@ -271,10 +272,10 @@ const EditRecipe = (props) => {
                                 </Button>
                             </div>
 
-                            <Divider variant='fullWidth' className={'divider'} />
+                            <Divider variant='fullWidth' className='divider' />
 
                             <TextField
-                                autoComplete={'recipeName'}
+                                autoComplete='recipeName'
                                 placeholder='Drink name'
                                 margin='dense'
                                 variant='outlined'
@@ -350,7 +351,7 @@ const EditRecipe = (props) => {
                                 />
                             </div>
 
-                            <Divider variant='fullWidth' className={'divider'} />
+                            <Divider variant='fullWidth' className='divider' />
 
                             <div className={classes.changeBackgroundColor}>
                                 <ColorSelectorModal colorCode={recipe.backgroundColor} onSave={handleSaveBackgroundColor} />
@@ -359,7 +360,7 @@ const EditRecipe = (props) => {
                             {
                                 mode === 'Edit' &&
                                 <div>
-                                    <Divider variant='fullWidth' className={'divider'} />
+                                    <Divider variant='fullWidth' className='divider' />
 
                                     <div className={classes.bottomControls}>
                                         <DeleteConfirmationModal onDelete={handleDelete} />
