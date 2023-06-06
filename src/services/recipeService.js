@@ -34,6 +34,14 @@ export const buildRecipe = (data, recipeIndex) => {
     return recipe;
 };
 
+export const getRecipeData = () => {
+    return localStorage.getItem(STORAGE_RECIPES);
+};
+
+export const setRecipeData = (recipeData) => {
+    localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
+};
+
 export const getRecipes = () => {
     const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
     let recipeData;
@@ -133,20 +141,11 @@ export const saveRecipes = (recipes) => {
 
     if (recipeJSON) {
         recipeData = JSON.parse(recipeJSON);
-
     } else {
         recipeData = {};
     }
 
     recipeData.recipes = recipes;
-    localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
-};
-
-export const getRecipeData = () => {
-    return localStorage.getItem(STORAGE_RECIPES);
-};
-
-export const setRecipeData = (recipeData) => {
     localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
 };
 
@@ -163,4 +162,17 @@ export const getDrinkImageFileNames = (drinkImage) => {
     }
 
     return imageFileNames
+};
+
+export const getRecipeCount = () => {
+    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    let recipeData;
+    let count = 0;
+
+    if (recipeJSON) {
+        recipeData = JSON.parse(recipeJSON);
+        count = recipeData.recipes.length;
+    }
+
+    return count;
 };

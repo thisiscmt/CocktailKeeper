@@ -24,6 +24,7 @@ const useStyles = makeStyles({
 
     defaultUnitLabel: {
         display: 'inline-flex',
+        fontWeight: 500,
         marginRight: '15px'
     },
 

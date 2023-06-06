@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FormControl, FormControlLabel, TextField, Button, Box, Radio, RadioGroup } from '@material-ui/core';
+import {FormControl, FormControlLabel, TextField, Button, Box, Radio, RadioGroup, Typography} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
 import LoadingOverlay from '../../components/LoadingOverlay/LoadingOverlay';
@@ -22,8 +22,8 @@ const useStyles = makeStyles({
         marginTop: '16px'
     },
 
-    buttonSection: {
-        marginTop: '8px'
+    radioButtonSection: {
+        marginTop: '10px'
     },
 
     sectionText : {
@@ -37,9 +37,10 @@ const useStyles = makeStyles({
 
     textFieldLabel: {
         fontSize: '14px',
-        marginRight: '8px',
+        fontWeight: 500,
+        marginRight: '12px',
         minWidth: '90px',
-        textAlign: 'left'
+        textAlign: 'right'
     },
 
     dataSourceLabel: {
@@ -138,6 +139,8 @@ const Config = (props) => {
         }
     };
 
+    const recipeCount = RecipeService.getRecipeCount();
+
     return (
         <Box className={`loadable-container ${classes.mainContainer}`}>
             <LoadingOverlay open={loading} />
@@ -147,7 +150,7 @@ const Config = (props) => {
                     <FormControlLabel
                         classes={{ root: classes.textFieldLabelRoot, label: classes.textFieldLabel }}
                         labelPlacement='start'
-                        label='User name *'
+                        label='User name:'
                         control={
                             <TextField
                                 id='UserName'
@@ -173,7 +176,7 @@ const Config = (props) => {
                     <FormControlLabel
                         classes={{ root: classes.textFieldLabelRoot, label: classes.textFieldLabel }}
                         labelPlacement='start'
-                        label='Password *'
+                        label='Password:'
                         control={
                             <TextField
                                 id='UserName'
@@ -195,15 +198,15 @@ const Config = (props) => {
             </Box>
 
             <Box className={classes.section}>
-                <Box className={classes.sectionText}>Back up cocktail data</Box>
+                <Typography variant="body2" className>Recipes: {recipeCount}</Typography>
             </Box>
 
-            <Box>
+            <Box className={classes.radioButtonSection}>
                 <FormControl>
                     <FormControlLabel
                         classes={{ root: classes.textFieldLabelRoot, label: `${classes.textFieldLabel} ${classes.dataSourceLabel}` }}
                         labelPlacement='start'
-                        label='Data source'
+                        label='Data source:'
                         control={
                             <RadioGroup row={true} name="DataSource" value={dataSource} onChange={event => setDataSource(event.target.value)}>
                                 <FormControlLabel
@@ -217,17 +220,13 @@ const Config = (props) => {
                 </FormControl>
             </Box>
 
-            <Box className={classes.buttonSection}>
+            <Box className={classes.section}>
                 <Button variant='outlined' color='default' size='small' onClick={handleBackupCocktailData}>
                     Backup
                 </Button>
             </Box>
 
             <Box className={classes.section}>
-                <Box>Restore cocktail data</Box>
-            </Box>
-
-            <Box className={classes.buttonSection}>
                 <Button variant='outlined' color='default' size='small' onClick={handleRestoreCocktailData}>
                     Restore
                 </Button>
