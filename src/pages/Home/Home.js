@@ -39,11 +39,12 @@ const Home = (props) => {
         <Box data-testid='HomeMainContainer'>
             {
                 recipes.length === 0 ?
-                <section>
+                <Box>
                     <p>Welcome to the cocktail keeper.</p>
                     <p>Select the add recipe button in the upper-right to get started.</p>
-                </section> :
-                <section className={classes.recipeList}>
+                </Box> :
+
+                <Box className={classes.recipeList}>
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <Droppable droppableId="droppable">
                             {(provided, snapshot) => (
@@ -73,26 +74,29 @@ const Home = (props) => {
                                                         };
 
                                                         return (
-                                                            <div key={recipe.name}
-                                                                 ref={provided.innerRef}
-                                                                 {...otherProps}
-                                                            >
-                                                                <Button
-                                                                    component={Link}
-                                                                    to={`/recipe/${encodeURIComponent(recipe.name)}`}
-                                                                    style={
-                                                                        recipe.backgroundColor ?
-                                                                        {backgroundColor: recipe.backgroundColor, color: recipe.textColor} :
-                                                                        null
-                                                                    }
-                                                                    className={classes.recipeLink}
-                                                                    variant='outlined'
-                                                                    color='default'
-                                                                    fullWidth={true}
+                                                            <>
+                                                                <div key={recipe.name}
+                                                                     ref={provided.innerRef}
+                                                                     {...otherProps}
                                                                 >
-                                                                    {recipe.name}
-                                                                </Button>
-                                                            </div>
+                                                                    <Button
+                                                                        component={Link}
+                                                                        to={`/recipe/${encodeURIComponent(recipe.name)}`}
+                                                                        style={
+                                                                            recipe.backgroundColor ?
+                                                                                {backgroundColor: recipe.backgroundColor, color: recipe.textColor} :
+                                                                                null
+                                                                        }
+                                                                        className={classes.recipeLink}
+                                                                        variant='outlined'
+                                                                        color='default'
+                                                                        fullWidth={true}
+                                                                    >
+                                                                        {recipe.name}
+                                                                    </Button>
+                                                                </div>
+                                                                {provided.placeholder}
+                                                            </>
                                                         );
                                                     }}
                                                 </Draggable>
@@ -105,7 +109,7 @@ const Home = (props) => {
                             )}
                         </Droppable>
                     </DragDropContext>
-                </section>
+                </Box>
             }
         </Box>
     );

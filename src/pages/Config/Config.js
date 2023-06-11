@@ -26,11 +26,6 @@ const useStyles = makeStyles({
         marginTop: '10px'
     },
 
-    sectionText : {
-        marginTop: 0,
-        marginBottom: '10px'
-    },
-
     textFieldLabelRoot: {
         marginRight: '16px'
     },
@@ -43,17 +38,13 @@ const useStyles = makeStyles({
         textAlign: 'right'
     },
 
-    dataSourceLabel: {
+    providerLabel: {
         marginRight: '16px'
     },
 
-    dataSourceOptions: {
+    providerOptions: {
         paddingBottom: '2px',
         paddingTop: '2px'
-    },
-
-    actionButton: {
-        backgroundColor: '#396B9E'
     }
 });
 
@@ -63,7 +54,7 @@ const Config = (props) => {
     const [ userName, setUserName ] = useState(localStorage.getItem(STORAGE_USER_NAME) ? localStorage.getItem(STORAGE_USER_NAME) : '');
     const [ password, setPassword ] = useState(localStorage.getItem(STORAGE_PASSWORD) ? '********' : '');
     const [ passwordChanged, setPasswordChanged ] = useState(false);
-    const [ dataSource, setDataSource ] = useState('Server');
+    const [ provider, setProvider ] = useState('Server');
     const [ loading, setLoading ] = useState(false);
 
     useEffect(() => {
@@ -198,21 +189,21 @@ const Config = (props) => {
             </Box>
 
             <Box className={classes.section}>
-                <Typography variant="body2" className>Recipes: {recipeCount}</Typography>
+                <Typography variant="body2">Recipes: {recipeCount}</Typography>
             </Box>
 
             <Box className={classes.radioButtonSection}>
                 <FormControl>
                     <FormControlLabel
-                        classes={{ root: classes.textFieldLabelRoot, label: `${classes.textFieldLabel} ${classes.dataSourceLabel}` }}
+                        classes={{ root: classes.textFieldLabelRoot, label: `${classes.textFieldLabel} ${classes.providerLabel}` }}
                         labelPlacement='start'
-                        label='Data source:'
+                        label='Provider:'
                         control={
-                            <RadioGroup row={true} name="DataSource" value={dataSource} onChange={event => setDataSource(event.target.value)}>
+                            <RadioGroup row={true} name="Provider" value={provider} onChange={event => setProvider(event.target.value)}>
                                 <FormControlLabel
                                     value="Server"
                                     label="Server"
-                                    control={<Radio color='primary' className={classes.dataSourceOptions} />}
+                                    control={<Radio color='primary' className={classes.providerOptions} />}
                                 />
                             </RadioGroup>
                         }

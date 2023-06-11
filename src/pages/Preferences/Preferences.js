@@ -17,11 +17,6 @@ const useStyles = makeStyles({
         marginTop: '16px'
     },
 
-    sectionText : {
-        marginTop: 0,
-        marginBottom: '14px'
-    },
-
     defaultUnitLabel: {
         display: 'inline-flex',
         fontWeight: 500,
@@ -32,13 +27,6 @@ const useStyles = makeStyles({
         color: 'black',
         fontSize: '14px',
         width: '100px'
-    },
-
-    messageContainer: {
-        color: '#DC143C',
-        fontSize: '14px',
-        marginBottom: '8px',
-        marginTop: '8px'
     }
 });
 
