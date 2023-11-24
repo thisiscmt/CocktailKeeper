@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 
 const imageLibrary = require('../../data/images.json');
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()(() => ({
     root: {
         padding: 0
     },
@@ -45,10 +45,10 @@ const useStyles = makeStyles({
     defaultButtonColor: {
         color: 'black'
     }
-});
+}));
 
 const ImageSelectorModal = (props) => {
-    const classes = useStyles(props);
+    const { classes, cx } = useStyles(props);
     const imageBaseURL = window.location.protocol + '//' + window.location.host + '/images'
 
     const [ selectedImage, setSelectedImage ] = useState(props.drinkImage);
@@ -105,7 +105,7 @@ const ImageSelectorModal = (props) => {
             <Button
                 onClick={handleOpen}
                 variant='outlined'
-                color='default'
+                color='secondary'
                 size='small'
             >
                 EDIT IMAGE
@@ -116,18 +116,18 @@ const ImageSelectorModal = (props) => {
                 onClose={handleClose}
                 maxWidth='xs'
                 fullWidth={true}
-                classes={{ paper: classes.dialogPaper }}
+                classes={{ paper: cx(classes.dialogPaper) }}
             >
-                <DialogTitle className={classes.title}>Select Drink Image</DialogTitle>
+                <DialogTitle className={cx(classes.title)}>Select Drink Image</DialogTitle>
 
                 <DialogContent>
-                    <div className={classes.content + ' ' + classes.imageList}>
+                    <div className={`${cx(classes.content)} ${cx(classes.imageList)}`}>
                         {
                             imageLibrary.images.map(image => {
                                 return (
                                     <div
                                         key={image.name}
-                                        className={classes.imageListItem + (image.name === selectedImage ? ' ' + classes.selectedImage : '')}
+                                        className={cx(classes.imageListItem) + (image.name === selectedImage ? ' ' + cx(classes.selectedImage) : '')}
                                         onClick={() => handleSelectImage(image)}
                                         ref={image.name === selectedImage ? selectedImageElement : null}
                                     >
@@ -136,7 +136,7 @@ const ImageSelectorModal = (props) => {
                                             alt={image.alt}
                                             onClick={() => handleSelectImage(image)}
                                         />
-                                        <span className={classes.imageLabel} onClick={() => handleSelectImage(image)}>{ image.name }</span>
+                                        <span className={cx(classes.imageLabel)} onClick={() => handleSelectImage(image)}>{ image.name }</span>
                                     </div>
                                 )
                             })
@@ -144,11 +144,11 @@ const ImageSelectorModal = (props) => {
                     </div>
                 </DialogContent>
 
-                <DialogActions className={classes.dialogActions}>
-                    <Button onClick={handleSave} className={classes.defaultButtonColor} variant='outlined' size='small'>
+                <DialogActions className={cx(classes.dialogActions)}>
+                    <Button onClick={handleSave} className={cx(classes.defaultButtonColor)} variant='outlined' size='small'>
                         Save
                     </Button>
-                    <Button onClick={() => handleClose({}, 'cancel')} className={classes.defaultButtonColor} variant='outlined' color='default' size='small'>
+                    <Button onClick={() => handleClose({}, 'cancel')} className={cx(classes.defaultButtonColor)} variant='outlined' color='secondary' size='small'>
                         Cancel
                     </Button>
                 </DialogActions>

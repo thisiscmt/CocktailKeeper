@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()(() => ({
     footer: {
         alignItems: 'center',
         backgroundColor: 'darkcyan',
@@ -11,13 +11,13 @@ const useStyles = makeStyles({
         gap: '20px',
         justifyContent: 'center'
     }
-});
+}));
 
 const Footer = (props) => {
-    const classes = useStyles(props);
+    const { classes, cx } = useStyles(props);
 
     return (
-        <footer className={classes.footer}>
+        <footer className={cx(classes.footer)}>
             <Link to='/config' className='nav-link'>
                 <span className='fancy-nav'>Config</span>
             </Link>

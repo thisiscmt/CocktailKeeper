@@ -1,13 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Fade } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
-import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
+import { makeStyles } from 'tss-react/mui';
+import { AddBoxOutlined } from '@mui/icons-material';
 
 import { Context } from '../../stores/mainStore';
+import {Alert, Fade} from '@mui/material';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()(() => ({
     header: {
         alignItems: 'center',
         backgroundColor: 'darkcyan',
@@ -25,22 +24,22 @@ const useStyles = makeStyles({
     headerControls: {
         marginRight: '10px'
     }
-});
+}));
 
 const Header = (props) => {
-    const classes = useStyles(props);
+    const { classes, cx } = useStyles(props);
     const [state, dispatch] = useContext(Context);
     const location = useLocation();
 
-    // We update various pieces of the UI and clear any previous banner message upon each route change
+    // We clear any previous banner message upon each route change
     useEffect(() => {
         dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: ''} })
     }, [location, dispatch]);
 
     return (
         <>
-            <header className={classes.header}>
-                <div className={classes.headerTitle}>
+            <header className={cx(classes.header)}>
+                <div className={cx(classes.headerTitle)}>
                     <Link to='/' className='nav-link'>
                         <span className='fancy-nav'>Cocktail Keeper</span>
                     </Link>
@@ -49,7 +48,7 @@ const Header = (props) => {
                 <div className={classes.headerControls}>
                     <div>
                         <Link to='/recipe' className='nav-link' title='Add a new recipe'>
-                            <AddBoxOutlinedIcon fontSize='large' />
+                            <AddBoxOutlined fontSize='large' />
                         </Link>
                     </div>
                 </div>
@@ -58,7 +57,7 @@ const Header = (props) => {
             {
                 state.bannerMessage &&
                 <>
-                    <Fade in={!!state.bannerMessage}>
+                    <Fade in={!!state.bannerMessage} timeout={600}>
                         <Alert severity={state.bannerSeverity}>{state.bannerMessage}</Alert>
                     </Fade>
                 </>

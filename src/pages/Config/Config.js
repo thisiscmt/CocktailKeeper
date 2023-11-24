@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {FormControl, FormControlLabel, TextField, Button, Box, Radio, RadioGroup, Typography} from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import {FormControl, FormControlLabel, TextField, Button, Box, Radio, RadioGroup, Typography} from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 
 import LoadingOverlay from '../../components/LoadingOverlay/LoadingOverlay';
 import { Context } from '../../stores/mainStore';
@@ -10,7 +10,7 @@ import * as RecipeService from '../../services/recipeService';
 import * as SharedService from '../../services/sharedService';
 import {STORAGE_PASSWORD, STORAGE_USER_NAME} from '../../constants/constants';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()(() => ({
     mainContainer: {
         display: 'flex',
         flexDirection: 'column',
@@ -46,10 +46,10 @@ const useStyles = makeStyles({
         paddingBottom: '2px',
         paddingTop: '2px'
     }
-});
+}));
 
 const Config = (props) => {
-    const classes = useStyles(props);
+    const { classes, cx } = useStyles(props);
     const [ , dispatch ] = useContext(Context);
     const [ userName, setUserName ] = useState(localStorage.getItem(STORAGE_USER_NAME) ? localStorage.getItem(STORAGE_USER_NAME) : '');
     const [ password, setPassword ] = useState(localStorage.getItem(STORAGE_PASSWORD) ? '********' : '');
@@ -133,13 +133,13 @@ const Config = (props) => {
     const recipeCount = RecipeService.getRecipeCount();
 
     return (
-        <Box className={`loadable-container ${classes.mainContainer}`}>
+        <Box className={`loadable-container ${cx(classes.mainContainer)}`}>
             <LoadingOverlay open={loading} />
 
             <Box>
                 <FormControl>
                     <FormControlLabel
-                        classes={{ root: classes.textFieldLabelRoot, label: classes.textFieldLabel }}
+                        classes={{ root: cx(classes.textFieldLabelRoot), label: cx(classes.textFieldLabel) }}
                         labelPlacement='start'
                         label='User name:'
                         control={
@@ -162,10 +162,10 @@ const Config = (props) => {
                 </FormControl>
             </Box>
 
-            <Box className={classes.section}>
+            <Box className={cx(classes.section)}>
                 <FormControl>
                     <FormControlLabel
-                        classes={{ root: classes.textFieldLabelRoot, label: classes.textFieldLabel }}
+                        classes={{ root: cx(classes.textFieldLabelRoot), label: cx(classes.textFieldLabel) }}
                         labelPlacement='start'
                         label='Password:'
                         control={
@@ -188,14 +188,14 @@ const Config = (props) => {
                 </FormControl>
             </Box>
 
-            <Box className={classes.section}>
+            <Box className={cx(classes.section)}>
                 <Typography variant="body2">Recipes: {recipeCount}</Typography>
             </Box>
 
-            <Box className={classes.radioButtonSection}>
+            <Box className={cx(classes.radioButtonSection)}>
                 <FormControl>
                     <FormControlLabel
-                        classes={{ root: classes.textFieldLabelRoot, label: `${classes.textFieldLabel} ${classes.providerLabel}` }}
+                        classes={{ root: cx(classes.textFieldLabelRoot), label: `${cx(classes.textFieldLabel)} ${cx(classes.providerLabel)}` }}
                         labelPlacement='start'
                         label='Provider:'
                         control={
@@ -203,7 +203,7 @@ const Config = (props) => {
                                 <FormControlLabel
                                     value="Server"
                                     label="Server"
-                                    control={<Radio color='primary' className={classes.providerOptions} />}
+                                    control={<Radio color='primary' className={cx(classes.providerOptions)} />}
                                 />
                             </RadioGroup>
                         }
@@ -211,14 +211,14 @@ const Config = (props) => {
                 </FormControl>
             </Box>
 
-            <Box className={classes.section}>
-                <Button variant='outlined' color='default' size='small' onClick={handleBackupCocktailData}>
+            <Box className={cx(classes.section)}>
+                <Button variant='outlined' color='secondary' size='small' onClick={handleBackupCocktailData}>
                     Backup
                 </Button>
             </Box>
 
-            <Box className={classes.section}>
-                <Button variant='outlined' color='default' size='small' onClick={handleRestoreCocktailData}>
+            <Box className={cx(classes.section)}>
+                <Button variant='outlined' color='secondary' size='small' onClick={handleRestoreCocktailData}>
                     Restore
                 </Button>
             </Box>

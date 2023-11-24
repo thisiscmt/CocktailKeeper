@@ -1,13 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { Box, MenuItem, Select } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, MenuItem, Select } from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 
 import * as SharedService from '../../services/sharedService';
 import {Context} from '../../stores/mainStore';
 import {AlertSeverity} from '../../enums/AlertSeverity';
 import {STORAGE_PREFERENCES} from '../../constants/constants';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()(() => ({
     mainContainer: {
         textAlign: 'center'
     },
@@ -28,10 +28,10 @@ const useStyles = makeStyles({
         fontSize: '14px',
         width: '100px'
     }
-});
+}));
 
 const Preferences = (props) => {
-    const classes = useStyles(props);
+    const { classes, cx } = useStyles(props);
     const [ defaultUnit, setDefaultUnit ] = useState(SharedService.getPreferences().defaultUnit);
     const [, dispatch] = useContext(Context);
 
@@ -53,15 +53,16 @@ const Preferences = (props) => {
     };
 
     return (
-        <Box className={classes.mainContainer}>
-            <Box className={classes.section}>
-                <label className={classes.defaultUnitLabel}>Default unit:</label>
+        <Box className={cx(classes.mainContainer)}>
+            <Box className={cx(classes.section)}>
+                <label className={cx(classes.defaultUnitLabel)}>Default unit:</label>
 
                 <Select
                     value={defaultUnit}
                     onChange={handleDefaultUnitChange}
                     className={classes.defaultUnitSelector}
                     data-testid='SettingsDefaultUnit'
+                    size='small'
                 >
                     <MenuItem value='0'>Select unit</MenuItem>
                     <MenuItem value='oz'>oz</MenuItem>

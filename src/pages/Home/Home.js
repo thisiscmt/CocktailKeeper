@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import { Box, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import {Box, Button} from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import arrayMove from 'array-move';
 
 import * as RecipeService from '../../services/recipeService';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()(() => ({
     recipeList: {
         backgroundColor: '#f0f0f0',
         padding: '8px'
@@ -16,10 +16,10 @@ const useStyles = makeStyles({
     recipeLink: {
         padding: '10px'
     }
-});
+}));
 
 const Home = (props) => {
-    const classes = useStyles(props);
+    const { classes, cx } = useStyles(props);
     const [ recipes, setRecipes] = useState(RecipeService.getRecipes());
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const Home = (props) => {
                     <p>Select the add recipe button in the upper-right to get started.</p>
                 </Box> :
 
-                <Box className={classes.recipeList}>
+                <Box className={cx(classes.recipeList)}>
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <Droppable droppableId="droppable">
                             {(provided, snapshot) => (
@@ -87,9 +87,9 @@ const Home = (props) => {
                                                                                 {backgroundColor: recipe.backgroundColor, color: recipe.textColor} :
                                                                                 null
                                                                         }
-                                                                        className={classes.recipeLink}
+                                                                        className={cx(classes.recipeLink)}
                                                                         variant='outlined'
-                                                                        color='default'
+                                                                        color='secondary'
                                                                         fullWidth={true}
                                                                     >
                                                                         {recipe.name}

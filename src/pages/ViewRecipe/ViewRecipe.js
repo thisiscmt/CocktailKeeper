@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useHistory, useParams, Link } from 'react-router-dom'
+import {useParams, Link, useNavigate} from 'react-router-dom'
 import { useSwipeable } from 'react-swipeable';
-import {Button, Card, CardContent, Container, Divider, List, ListItem, MuiThemeProvider} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {Button, Card, CardContent, Container, Divider, List, ListItem, ThemeProvider} from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 import cloneDeep from 'lodash/cloneDeep';
 import * as UUID from 'uuid';
 
@@ -55,8 +55,8 @@ const useStyles = makeStyles({
 });
 
 const ViewRecipe = (props) => {
-    const classes = useStyles(props);
-    const history = useHistory();
+    const { classes, cx } = useStyles(props);
+    const navigate = useNavigate();
     const params = useParams();
     const recipeName = decodeURIComponent(params.recipeName);
 
@@ -74,7 +74,7 @@ const ViewRecipe = (props) => {
     });
 
 
-    const handleSwipeLeft = (eventData) => {
+    const handleSwipeLeft = () => {
         const recipes = RecipeService.getRecipes();
         const recipeIndex = recipes.findIndex(item => item.name === recipe.name);
         let newRecipe;
@@ -84,11 +84,11 @@ const ViewRecipe = (props) => {
             setRecipe(newRecipe);
             setTheme(ThemeService.buildThemeConfig(newRecipe));
 
-            history.replace({ pathname: '/recipe/' +  encodeURIComponent(newRecipe.name) });
+            navigate('/recipe/' +  encodeURIComponent(newRecipe.name), { replace: true });
         }
     };
 
-    const handleSwipeRight = (eventData) => {
+    const handleSwipeRight = () => {
         const recipes = RecipeService.getRecipes();
         const recipeIndex = recipes.findIndex(item => item.name === recipe.name);
         let newRecipe;
@@ -98,7 +98,7 @@ const ViewRecipe = (props) => {
             setRecipe(newRecipe);
             setTheme(ThemeService.buildThemeConfig(newRecipe));
 
-            history.replace({ pathname: '/recipe/' +  encodeURIComponent(newRecipe.name) });
+            navigate('/recipe/' +  encodeURIComponent(newRecipe.name), { replace: true });
         }
     };
 
@@ -128,16 +128,16 @@ const ViewRecipe = (props) => {
 
         setRecipe(newRecipe);
         setTheme(ThemeService.buildThemeConfig(newRecipe));
-        history.replace({ pathname: '/recipe/' +  encodeURIComponent(newRecipe.name) });
+        navigate('/recipe/' +  encodeURIComponent(newRecipe.name), { replace: true });
     };
 
     return (
-        <MuiThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
             <Container maxWidth='sm' data-testid='ViewRecipeMainContainer'>
                 {
                     recipe ?
                         <div {...swipeHandlers}>
-                            <div className={classes.topControls}>
+                            <div className={cx(classes.topControls)}>
                                 <Button
                                     component={ Link }
                                     to={`/recipe/${encodeURIComponent(recipe.name)}/edit`}
@@ -160,7 +160,7 @@ const ViewRecipe = (props) => {
 
                             <Divider variant='fullWidth' className='divider' />
 
-                            <Card className={classes.recipeName}>
+                            <Card className={cx(classes.recipeName)}>
                                 <CardContent>
                                     { recipe.name }
                                 </CardContent>
@@ -170,10 +170,10 @@ const ViewRecipe = (props) => {
                                 {
                                     recipe.ingredients.map(ingredient => {
                                         return (
-                                            <ListItem key={ingredient.id} className={classes.ingredient}>
+                                            <ListItem key={ingredient.id} className={cx(classes.ingredient)}>
                                                 {
                                                     ingredient.qtyDesc ?
-                                                        <span className={classes.qtyDesc}>{ ingredient.qtyDesc }</span> :
+                                                        <span className={cx(classes.qtyDesc)}>{ ingredient.qtyDesc }</span> :
                                                         ''
                                                 }
 
@@ -184,7 +184,7 @@ const ViewRecipe = (props) => {
                                 }
                             </List>
 
-                            <Card className={classes.recipeDirections}>
+                            <Card className={cx(classes.recipeDirections)}>
                                 <CardContent>
                                     { recipe.directions }
                                 </CardContent>
@@ -208,7 +208,7 @@ const ViewRecipe = (props) => {
                         </div>
                 }
             </Container>
-        </MuiThemeProvider>
+        </ThemeProvider>
     )
 }
 

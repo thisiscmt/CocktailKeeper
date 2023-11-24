@@ -24,6 +24,6 @@ export const restoreCocktailData = async (authHeader) => {
         }
     };
 
-    const cocktailData = await Axios.get(process.env.REACT_APP_API_URL + '/cocktail/backup?backupType=server', config);
+    const cocktailData = await Axios.get(process.env.REACT_APP_API_URL + '/cocktail/backup?provider=server', config);
     return cocktailData.data;
 };

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import {Button, Container, Divider, List, ListItem, MuiThemeProvider, TextField} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
-import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
+import { useNavigate, useParams } from 'react-router-dom';
+import {Button, Container, Divider, List, ListItem, ThemeProvider, TextField} from '@mui/material';
+import { AddCircleOutlineRounded } from '@mui/icons-material';
+import { makeStyles } from 'tss-react/mui';
 import cloneDeep from 'lodash/cloneDeep';
 
 import QtyModal from '../../components/QtyModal/QtyModal';
@@ -15,7 +15,7 @@ import * as ThemeService from '../../services/themeService';
 import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()(() => ({
     topControls: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -58,11 +58,11 @@ const useStyles = makeStyles({
         marginTop: '10px',
         marginBottom: '10px'
     }
-});
+}));
 
 const EditRecipe = (props) => {
-    const classes = useStyles(props);
-    const history = useHistory();
+    const { classes, cx } = useStyles(props);
+    const navigate = useNavigate();
     const params = useParams();
     const recipeName = params.recipeName ? decodeURIComponent(params.recipeName) : '';
 
@@ -129,7 +129,7 @@ const EditRecipe = (props) => {
         setValidationError(event.target.value === '')
     };
 
-    const handleAddIngredient = (event) => {
+    const handleAddIngredient = () => {
         const newRecipe = cloneDeep(recipe);
         const ingredient = new Ingredient();
         const settings = SharedService.getPreferences();
@@ -236,34 +236,34 @@ const EditRecipe = (props) => {
         doNavigation('Save');
     };
 
-    const handleCancel = (event) => {
+    const handleCancel = () => {
         doNavigation('Cancel');
     };
 
-    const handleDelete = (event) => {
+    const handleDelete = () => {
         RecipeService.deleteRecipe(recipe.id);
-        history.push('/');
+        navigate('/');
     };
 
     const doNavigation = (action) => {
         if (mode === 'Edit') {
             if (action === 'Save') {
-                history.push('/recipe/' +  encodeURIComponent(recipe.name));
+                navigate('/recipe/' +  encodeURIComponent(recipe.name));
             } else {
-                history.push('/recipe/' +  encodeURIComponent(recipeName));
+                navigate('/recipe/' +  encodeURIComponent(recipeName));
             }
         } else {
-            history.push('/');
+            navigate('/');
         }
     };
 
     return (
-        <MuiThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
             <Container maxWidth='sm' data-testid='EditRecipeMainContainer'>
                 {
                     recipe ?
                         <form onSubmit={handleSubmit} autoComplete='on'>
-                            <div className={classes.topControls}>
+                            <div className={cx(classes.topControls)}>
                                 <Button type='submit' variant='outlined' color='primary' size='small'>
                                     Save
                                 </Button>
@@ -294,7 +294,7 @@ const EditRecipe = (props) => {
                                 {
                                     recipe.ingredients.map(ingredient => {
                                         return (
-                                            <ListItem key={ingredient.id} className={classes.ingredient}>
+                                            <ListItem key={ingredient.id} className={cx(classes.ingredient)}>
                                                 <QtyModal
                                                     ingredient={ingredient}
                                                     textColor={recipe.textColor}
@@ -303,7 +303,7 @@ const EditRecipe = (props) => {
                                                 />
 
                                                 <TextField
-                                                    className={classes.ingredientName}
+                                                    className={cx(classes.ingredientName)}
                                                     placeholder='Ingredient'
                                                     margin='dense'
                                                     variant='outlined'
@@ -318,10 +318,10 @@ const EditRecipe = (props) => {
                                     })
                                 }
 
-                                <ListItem className={classes.newIngredient}>
+                                <ListItem className={cx(classes.newIngredient)}>
                                     <Button className='app-link' onClick={handleAddIngredient}>
-                                        <AddCircleOutlineRoundedIcon color='primary' />
-                                        <span className={classes.addLabel}>Add Ingredient</span>
+                                        <AddCircleOutlineRounded color='primary' />
+                                        <span className={cx(classes.addLabel)}>Add Ingredient</span>
                                     </Button>
                                 </ListItem>
                             </List>
@@ -342,7 +342,7 @@ const EditRecipe = (props) => {
                                 />
                             </div>
 
-                            <div className={classes.editImage}>
+                            <div className={cx(classes.editImage)}>
                                 <ImageSelectorModal
                                     drinkImage={recipe.drinkImage}
                                     drinkImageViewFile={recipe.drinkImageViewFile}
@@ -351,9 +351,9 @@ const EditRecipe = (props) => {
                                 />
                             </div>
 
-                            <Divider variant='fullWidth' className='divider' />
+                            <Divider variant='fullWidth' />
 
-                            <div className={classes.changeBackgroundColor}>
+                            <div className={cx(classes.changeBackgroundColor)}>
                                 <ColorSelectorModal colorCode={recipe.backgroundColor} onSave={handleSaveBackgroundColor} />
                             </div>
 
@@ -362,7 +362,7 @@ const EditRecipe = (props) => {
                                 <div>
                                     <Divider variant='fullWidth' className='divider' />
 
-                                    <div className={classes.bottomControls}>
+                                    <div className={cx(classes.bottomControls)}>
                                         <DeleteConfirmationModal onDelete={handleDelete} />
                                     </div>
                                 </div>
@@ -375,7 +375,7 @@ const EditRecipe = (props) => {
                         </div>
                 }
             </Container>
-        </MuiThemeProvider>
+        </ThemeProvider>
     )
 }
 

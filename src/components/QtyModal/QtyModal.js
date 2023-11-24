@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import {Button, Dialog, DialogTitle, DialogContent, FormControl, Select, MenuItem, MuiThemeProvider, DialogActions} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {Button, Dialog, DialogTitle, DialogContent, FormControl, Select, MenuItem, ThemeProvider, DialogActions} from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 
 import Ingredient from '../../models/Ingredient';
 import * as ThemeService from '../../services/themeService';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()(() => ({
     title: {
         paddingBottom: '8px',
         textAlign: 'center'
@@ -45,10 +45,10 @@ const useStyles = makeStyles({
         color: '#DC143C',
         fontSize: '12px'
     }
-});
+}));
 
 const QtyModal = (props) => {
-    const classes = useStyles(props);
+    const { classes, cx } = useStyles(props);
     const theme = ThemeService.buildThemeConfig();
     const [ open, setOpen ] = useState(false);
     const [ ingredient, setIngredient ] = useState(props.ingredient);
@@ -117,14 +117,14 @@ const QtyModal = (props) => {
     };
 
     return (
-        <MuiThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
             <div>
                 <Button
                     onClick={handleOpen}
-                    className={ ingredient.qtyDesc ? classes.qtyDesc + ' ' + classes.qtyDescValue : classes.qtyDesc  }
+                    className={ ingredient.qtyDesc ? `${cx(classes.qtyDesc)} ${cx(classes.qtyDescValue)}` : cx(classes.qtyDesc) }
                     style={{ color: props.textColor }}
                     variant='outlined'
-                    color='default'
+                    color='secondary'
                     size='medium'
                 >
                     { qtyDesc ? qtyDesc : 'Qty' }
@@ -136,11 +136,11 @@ const QtyModal = (props) => {
                     maxWidth='xs'
                     fullWidth={true}
                 >
-                    <DialogTitle className={classes.title}>Quantity</DialogTitle>
+                    <DialogTitle className={cx(classes.title)}>Quantity</DialogTitle>
 
-                    <DialogContent className={classes.content}>
+                    <DialogContent className={cx(classes.content)}>
                         <FormControl>
-                            <Select value={ingredient.amount} onChange={handleAmountChange} className={classes.selector}>
+                            <Select value={ingredient.amount} onChange={handleAmountChange} className={cx(classes.selector)}>
                                 <MenuItem value='0'>- Select amount -</MenuItem>
                                 <MenuItem value='1'>1</MenuItem>
                                 <MenuItem value='2'>2</MenuItem>
@@ -156,9 +156,9 @@ const QtyModal = (props) => {
                         </FormControl>
                     </DialogContent>
 
-                    <DialogContent className={classes.content}>
+                    <DialogContent className={cx(classes.content)}>
                         <FormControl>
-                            <Select value={ingredient.fractionalAmount} onChange={handleFractionalAmountChange} className={classes.selector}>
+                            <Select value={ingredient.fractionalAmount} onChange={handleFractionalAmountChange} className={cx(classes.selector)}>
                                 <MenuItem value='0'>- Select fraction -</MenuItem>
                                 <MenuItem value='1/8'>1/8</MenuItem>
                                 <MenuItem value='1/4'>1/4</MenuItem>
@@ -170,9 +170,9 @@ const QtyModal = (props) => {
                         </FormControl>
                     </DialogContent>
 
-                    <DialogContent className={classes.content}>
+                    <DialogContent className={cx(classes.content)}>
                         <FormControl>
-                            <Select value={ingredient.unit} onChange={handleUnitChange} className={classes.selector}>
+                            <Select value={ingredient.unit} onChange={handleUnitChange} className={cx(classes.selector)}>
                                 <MenuItem value='0'>- Select unit -</MenuItem>
                                 <MenuItem value='oz'>oz</MenuItem>
                                 <MenuItem value='ml'>ml</MenuItem>
@@ -183,10 +183,10 @@ const QtyModal = (props) => {
                         </FormControl>
                     </DialogContent>
 
-                    <DialogActions className={classes.dialogActions}>
+                    <DialogActions className={cx(classes.dialogActions)}>
                         <Button
                             onClick={handleSave}
-                            className={classes.defaultButtonColor}
+                            className={cx(classes.defaultButtonColor)}
                             variant='outlined'
                             size='small'
                         >
@@ -196,15 +196,15 @@ const QtyModal = (props) => {
                         <Button
                             onClick={handleDelete}
                             variant='text'
-                            className={classes.deleteButton}
+                            className={cx(classes.deleteButton)}
                             size='small'
                         >
                             Delete
                         </Button>
 
                         <Button
-                            onClick={handleClose}
-                            className={classes.defaultButtonColor}
+                            onClick={() => handleClose({}, 'cancel')}
+                            className={cx(classes.defaultButtonColor)}
                             variant='outlined'
                             size='small'
                         >
@@ -213,7 +213,7 @@ const QtyModal = (props) => {
                     </DialogActions>
                 </Dialog>
             </div>
-        </MuiThemeProvider>
+        </ThemeProvider>
     );
 }
 

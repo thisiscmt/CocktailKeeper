@@ -1,11 +1,11 @@
 import React, {useRef, useState} from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
-import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
-import { makeStyles } from '@material-ui/core/styles';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { CheckCircleOutlineOutlined } from '@mui/icons-material';
+import { makeStyles } from 'tss-react/mui';
 
 const colorLibrary = require('../../data/colors.json');
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()(() => ({
     root: {
         padding: 0
     },
@@ -47,10 +47,10 @@ const useStyles = makeStyles({
     defaultButtonColor: {
         color: 'black'
     }
-});
+}));
 
 const ColorSelectorModal = (props) => {
-    const classes = useStyles(props);
+    const { classes, cx } = useStyles(props);
     const [ open, setOpen ] = useState(false);
     const [ selectedColor, setSelectedColor ] = useState(props.colorCode);
     const [ selectedTextColor, setSelectedTextColor ] = useState(props.colorCode === '#FFFFFF' ? '#000000' : '#FFFFFF');
@@ -97,7 +97,7 @@ const ColorSelectorModal = (props) => {
             <Button
                 onClick={handleOpen}
                 variant='outlined'
-                color='default'
+                color='secondary'
                 size='small'
             >
                 CHANGE BACKGROUND COLOR
@@ -108,17 +108,17 @@ const ColorSelectorModal = (props) => {
                 onClose={handleClose}
                 maxWidth='xs'
                 fullWidth={true}
-                classes={{ paper: classes.dialogPaper }}
+                classes={{ paper: cx(classes.dialogPaper) }}
             >
-                <DialogTitle className={classes.title}>Select Color</DialogTitle>
+                <DialogTitle className={cx(classes.title)}>Select Color</DialogTitle>
 
-                <DialogContent className={classes.content + ' ' + classes.colorList}>
+                <DialogContent className={`${cx(classes.content)} ${cx(classes.colorList)}`}>
                     {
                         colorLibrary.colors.map((color, index) => {
                             return (
                                 <div
                                     key={index}
-                                    className={classes.colorListItem}
+                                    className={cx(classes.colorListItem)}
                                     style={{backgroundColor: color.colorCode}}
                                     data-color-code={color.colorCode}
                                     data-text-color-code={color.textColorCode}
@@ -127,7 +127,7 @@ const ColorSelectorModal = (props) => {
                                 >
                                     {
                                         color.colorCode === selectedColor &&
-                                        <CheckCircleOutlineOutlinedIcon style={{ color: selectedTextColor }} className={classes.selectedColor} />
+                                        <CheckCircleOutlineOutlined style={{ color: selectedTextColor }} className={cx(classes.selectedColor)} />
                                     }
                                 </div>
                             )
@@ -135,11 +135,11 @@ const ColorSelectorModal = (props) => {
                     }
                 </DialogContent>
 
-                <DialogActions className={classes.dialogActions}>
-                    <Button onClick={handleSave} className={classes.defaultButtonColor} variant='outlined' size='small'>
+                <DialogActions className={cx(classes.dialogActions)}>
+                    <Button onClick={handleSave} className={cx(classes.defaultButtonColor)} variant='outlined' size='small'>
                         Save
                     </Button>
-                    <Button onClick={handleClose} className={classes.defaultButtonColor} variant='outlined' color='default' size='small'>
+                    <Button onClick={() => handleClose({}, 'cancel')} className={cx(classes.defaultButtonColor)} variant='outlined' color='secondary' size='small'>
                         Cancel
                     </Button>
                 </DialogActions>
