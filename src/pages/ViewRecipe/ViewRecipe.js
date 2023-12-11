@@ -9,7 +9,7 @@ import * as UUID from 'uuid';
 import * as RecipeService from '../../services/recipeService';
 import * as ThemeService from '../../services/themeService';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()(() => ({
     mainContainer: {
         display: 'flex',
         justifyContent: 'space-between'
@@ -52,7 +52,7 @@ const useStyles = makeStyles({
         fontStyle: 'italic',
         flex: '0 0 75px'
     }
-});
+}));
 
 const ViewRecipe = (props) => {
     const { classes, cx } = useStyles(props);

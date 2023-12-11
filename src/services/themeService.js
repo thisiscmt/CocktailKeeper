@@ -1,19 +1,16 @@
-import {createTheme} from '@mui/material';
+import { createTheme } from '@mui/material';
 
 export const buildThemeConfig = (overrides) => {
     if (overrides) {
+        console.log('overrides: %o', overrides);
+
         return createTheme({
             palette: {
                 primary: {
                     main: overrides.textColor
                 }
             },
-            props: {
-                MuiButtonBase: {
-                    disableRipple: true
-                }
-            },
-            overrides: {
+            components: {
                 MuiContainer: {
                     root: {
                         backgroundColor: overrides.backgroundColor,
@@ -24,6 +21,11 @@ export const buildThemeConfig = (overrides) => {
                 MuiButton: {
                     root: {
                         color: overrides.textColor
+                    }
+                },
+                MuiButtonBase: {
+                    defaultProps: {
+                        disableRipple: true
                     }
                 },
                 MuiCard: {
