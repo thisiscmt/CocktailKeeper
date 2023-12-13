@@ -8,19 +8,26 @@ export const buildThemeConfig = (overrides) => {
             palette: {
                 primary: {
                     main: overrides.textColor
-                }
+                },
+                // secondary: {
+                //     main: overrides.textColor
+                // }
             },
             components: {
                 MuiContainer: {
-                    root: {
-                        backgroundColor: overrides.backgroundColor,
-                        paddingTop: '5px',
-                        paddingBottom: '6px'
+                    styleOverrides: {
+                        root: {
+                            backgroundColor: overrides.backgroundColor,
+                            paddingTop: '5px',
+                            paddingBottom: '6px'
+                        }
                     }
                 },
                 MuiButton: {
-                    root: {
-                        color: overrides.textColor
+                    styleOverrides: {
+                        root: {
+                            color: overrides.textColor
+                        }
                     }
                 },
                 MuiButtonBase: {
@@ -29,35 +36,45 @@ export const buildThemeConfig = (overrides) => {
                     }
                 },
                 MuiCard: {
-                    root: {
-                        backgroundColor: overrides.backgroundColor,
-                        border: 'none',
-                        boxShadow: 'none',
-                        color: overrides.textColor
+                    styleOverrides: {
+                        root: {
+                            backgroundColor: overrides.backgroundColor,
+                            border: 'none',
+                            boxShadow: 'none',
+                            color: overrides.textColor
+                        }
                     }
                 },
                 MuiCardContent: {
-                    root: {
-                        padding: '4px 0 4px 0',
-                        '&:last-child': {
-                            paddingBottom: '4px'
+                    styleOverrides: {
+                        root: {
+                            padding: '4px 0 4px 0',
+                            '&:last-child': {
+                                paddingBottom: '4px'
+                            }
                         }
                     }
                 },
                 MuiList: {
-                    root: {
-                        color: overrides.textColor
+                    styleOverrides: {
+                        root: {
+                            color: overrides.textColor
+                        }
                     }
                 },
                 MuiInputBase: {
-                    root: {
-                        color: overrides.textColor
+                    styleOverrides: {
+                        root: {
+                            color: overrides.textColor
+                        }
                     }
                 },
                 MuiDivider: {
-                    root: {
-                        marginTop: '10px',
-                        marginBottom: '10px'
+                    styleOverrides: {
+                        root: {
+                            marginTop: '10px',
+                            marginBottom: '10px'
+                        }
                     }
                 }
             }
@@ -67,10 +84,12 @@ export const buildThemeConfig = (overrides) => {
             palette: {
                 type: 'light'
             },
-            props: {
+            components: {
                 MuiButtonBase: {
-                    disableRipple: true
-                }
+                    defaultProps: {
+                        disableRipple: true
+                    }
+                },
             }
         });
     }

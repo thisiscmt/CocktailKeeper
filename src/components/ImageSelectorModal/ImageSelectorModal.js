@@ -145,7 +145,7 @@ const ImageSelectorModal = (props) => {
                 </DialogContent>
 
                 <DialogActions className={cx(classes.dialogActions)}>
-                    <Button onClick={handleSave} className={cx(classes.defaultButtonColor)} variant='outlined' size='small'>
+                    <Button onClick={handleSave} className={cx(classes.defaultButtonColor)} color='primary' variant='outlined' size='small'>
                         Save
                     </Button>
                     <Button onClick={() => handleClose({}, 'cancel')} className={cx(classes.defaultButtonColor)} variant='outlined' color='secondary' size='small'>
