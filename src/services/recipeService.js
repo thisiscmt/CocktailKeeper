@@ -1,6 +1,6 @@
 import Recipe from '../models/Recipe';
 import Ingredient from '../models/Ingredient';
-import {STORAGE_RECIPES} from '../constants/constants';
+import { STORAGE_LAST_CHANGE_TIMESTAMP, STORAGE_RECIPES } from '../constants/constants';
 
 const imageLibrary = require('../data/images.json');
 
@@ -40,6 +40,7 @@ export const getRecipeData = () => {
 
 export const setRecipeData = (recipeData) => {
     localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
+    localStorage.setItem(STORAGE_LAST_CHANGE_TIMESTAMP, new Date().getTime().toString());
 };
 
 export const getRecipes = () => {
@@ -91,6 +92,7 @@ export const saveRecipe = (recipe, copied) => {
     }
 
     localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
+    localStorage.setItem(STORAGE_LAST_CHANGE_TIMESTAMP, new Date().getTime().toString());
 };
 
 export const getRecipe = (name) => {

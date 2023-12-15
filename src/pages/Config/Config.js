@@ -8,9 +8,9 @@ import {AlertSeverity} from '../../enums/AlertSeverity';
 import * as DataService from '../../services/dataService';
 import * as RecipeService from '../../services/recipeService';
 import * as SharedService from '../../services/sharedService';
-import {STORAGE_PASSWORD, STORAGE_USER_NAME} from '../../constants/constants';
+import {STORAGE_LAST_CHANGE_TIMESTAMP, STORAGE_PASSWORD, STORAGE_USER_NAME} from '../../constants/constants';
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     mainContainer: {
         display: 'flex',
         flexDirection: 'column',
@@ -20,6 +20,42 @@ const useStyles = makeStyles()(() => ({
 
     section: {
         marginTop: '16px'
+    },
+
+    recipeCountSection: {
+        fontSize: '12px',
+        marginTop: '16px'
+    },
+
+    recipeCount: {
+        '& span': {
+            marginLeft: '8px'
+        }
+    },
+
+    lastChangedSection: {
+        fontSize: '12px',
+        marginBottom: '6px',
+        marginTop: '4px',
+
+        '& p': {
+            display: 'inline-block',
+
+            [theme.breakpoints.down(450)]: {
+                display: 'block'
+            }
+        }
+    },
+
+    lastChanged: {
+        '& span': {
+            marginLeft: '8px'
+        },
+
+        [theme.breakpoints.down(450)]: {
+            marginLeft: 0,
+            marginTop: '4px'
+        }
     },
 
     radioButtonSection: {
@@ -131,6 +167,27 @@ const Config = (props) => {
     };
 
     const recipeCount = RecipeService.getRecipeCount();
+    const lastChangeTimestamp = localStorage.getItem(STORAGE_LAST_CHANGE_TIMESTAMP);
+    let lastChangeTimestampFormatted;
+
+    if (lastChangeTimestamp) {
+        const now = new Date(Number(lastChangeTimestamp));
+
+        const dateOptions = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        };
+
+        const timeOptions = {
+            timeZoneName: 'short',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        };
+
+        lastChangeTimestampFormatted = `${new Intl.DateTimeFormat(undefined, dateOptions).format(now)} at ${new Intl.DateTimeFormat(undefined, timeOptions).format(now)}`;
+    }
 
     return (
         <Box className={`loadable-container ${cx(classes.mainContainer)}`}>
@@ -188,9 +245,17 @@ const Config = (props) => {
                 </FormControl>
             </Box>
 
-            <Box className={cx(classes.section)}>
-                <Typography variant="body2">Recipes: {recipeCount}</Typography>
+            <Box className={cx(classes.recipeCountSection)}>
+                <Typography variant='body2' className={cx(classes.recipeCount)}>Recipes:<span>{recipeCount}</span></Typography>
             </Box>
+
+            {
+                lastChangeTimestampFormatted &&
+                <Box className={cx(classes.lastChangedSection)}>
+                    <Typography variant='body2'>Data last changed:</Typography>
+                    <Typography variant='body2' className={cx(classes.lastChanged)}><span>{lastChangeTimestampFormatted}</span></Typography>
+                </Box>
+            }
 
             <Box className={cx(classes.radioButtonSection)}>
                 <FormControl>
@@ -199,10 +264,10 @@ const Config = (props) => {
                         labelPlacement='start'
                         label='Provider:'
                         control={
-                            <RadioGroup row={true} name="Provider" value={provider} onChange={event => setProvider(event.target.value)}>
+                            <RadioGroup row={true} name='Provider' value={provider} onChange={event => setProvider(event.target.value)}>
                                 <FormControlLabel
-                                    value="Server"
-                                    label="Server"
+                                    value='Server'
+                                    label='Server'
                                     control={<Radio color='primary' className={cx(classes.providerOptions)} />}
                                 />
                             </RadioGroup>
