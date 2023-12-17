@@ -6,10 +6,7 @@ export const buildThemeConfig = (overrides) => {
             palette: {
                 primary: {
                     main: overrides.textColor
-                },
-                // secondary: {
-                //     main: overrides.textColor
-                // }
+                }
             },
             components: {
                 MuiContainer: {
