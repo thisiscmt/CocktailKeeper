@@ -2,8 +2,6 @@ import { createTheme } from '@mui/material';
 
 export const buildThemeConfig = (overrides) => {
     if (overrides) {
-        console.log('overrides: %o', overrides);
-
         return createTheme({
             palette: {
                 primary: {
