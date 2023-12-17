@@ -36,18 +36,18 @@ const useStyles = makeStyles()(() => ({
 
     ingredient: {
         alignItems: 'center',
+        gap: '10px',
         padding: 0
+    },
+
+    ingredientName: {
+        flexGrow: 2,
+        marginTop: '5px'
     },
 
     newIngredient: {
         padding: 0,
         paddingTop: '2px'
-    },
-
-    ingredientName: {
-        marginLeft: '10px',
-        marginTop: '5px',
-        width: '100%'
     },
 
     editImage: {
@@ -347,6 +347,7 @@ const EditRecipe = (props) => {
                                     drinkImage={recipe.drinkImage}
                                     drinkImageViewFile={recipe.drinkImageViewFile}
                                     drinkImageSelectionFile={recipe.drinkImageSelectionFile}
+                                    textColor={recipe.textColor}
                                     onSave={handleSaveImage}
                                 />
                             </div>
@@ -354,7 +355,7 @@ const EditRecipe = (props) => {
                             <Divider variant='fullWidth' />
 
                             <div className={cx(classes.changeBackgroundColor)}>
-                                <ColorSelectorModal colorCode={recipe.backgroundColor} onSave={handleSaveBackgroundColor} />
+                                <ColorSelectorModal colorCode={recipe.backgroundColor} onSave={handleSaveBackgroundColor} textColor={recipe.textColor} />
                             </div>
 
                             {
@@ -363,7 +364,7 @@ const EditRecipe = (props) => {
                                     <Divider variant='fullWidth' className='divider' />
 
                                     <div className={cx(classes.bottomControls)}>
-                                        <DeleteConfirmationModal onDelete={handleDelete} />
+                                        <DeleteConfirmationModal onDelete={handleDelete} textColor={recipe.textColor} />
                                     </div>
                                 </div>
                             }

@@ -1,7 +1,8 @@
 import React, {useRef, useState} from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import {Button, Dialog, DialogTitle, DialogContent, DialogActions, ThemeProvider} from '@mui/material';
 import { CheckCircleOutlineOutlined } from '@mui/icons-material';
 import { makeStyles } from 'tss-react/mui';
+import * as ThemeService from '../../services/themeService';
 
 const colorLibrary = require('../../data/colors.json');
 
@@ -51,6 +52,7 @@ const useStyles = makeStyles()(() => ({
 
 const ColorSelectorModal = (props) => {
     const { classes, cx } = useStyles(props);
+    const theme = ThemeService.buildThemeConfig();
     const [ open, setOpen ] = useState(false);
     const [ selectedColor, setSelectedColor ] = useState(props.colorCode);
     const [ selectedTextColor, setSelectedTextColor ] = useState(props.colorCode === '#FFFFFF' ? '#000000' : '#FFFFFF');
@@ -93,12 +95,19 @@ const ColorSelectorModal = (props) => {
     };
 
     return (
-        <div>
+        <ThemeProvider theme={theme}>
             <Button
                 onClick={handleOpen}
                 variant='outlined'
-                color='secondary'
                 size='small'
+                sx={{
+                    color: props.textColor,
+                    borderColor: `${props.textColor}7F`,
+
+                    '&:hover': {
+                        borderColor: props.textColor
+                    }
+                }}
             >
                 CHANGE BACKGROUND COLOR
             </Button>
@@ -144,7 +153,7 @@ const ColorSelectorModal = (props) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </ThemeProvider>
     );
 }
 

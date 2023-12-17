@@ -25,8 +25,8 @@ const useStyles = makeStyles()(() => ({
 
 const DeleteConfirmationModal = (props) => {
     const { classes, cx } = useStyles(props);
+    const theme = ThemeService.buildThemeConfig();
     const [ open, setOpen ] = useState(false);
-    const theme = ThemeService.buildThemeConfig(null);
 
     const handleOpen = () => {
         setOpen(true);
@@ -43,8 +43,20 @@ const DeleteConfirmationModal = (props) => {
     };
 
     return (
-        <div>
-            <Button variant='outlined' color='secondary' size='small' onClick={handleOpen}>
+        <ThemeProvider theme={theme}>
+            <Button
+                onClick={handleOpen}
+                variant='outlined'
+                size='small'
+                sx={{
+                    color: props.textColor,
+                    borderColor: `${props.textColor}7F`,
+
+                    '&:hover': {
+                        borderColor: props.textColor
+                    }
+                }}
+            >
                 Delete Recipe
             </Button>
 
@@ -69,10 +81,10 @@ const DeleteConfirmationModal = (props) => {
 
                 <DialogActions className={cx(classes.content)}>
                     <Button onClick={handleDelete} className={cx(classes.modalAction)} variant='outlined' size='small'>Yes</Button>
-                    <Button onClick={() => handleClose({}, 'cancel')} className={cx(classes.modalAction)} variant='outlined' size='small'>No</Button>
+                    <Button onClick={() => handleClose({}, 'cancel')} className={cx(classes.modalAction)} variant='outlined' color='secondary' size='small'>No</Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </ThemeProvider>
     );
 }
 

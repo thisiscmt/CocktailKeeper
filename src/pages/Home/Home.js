@@ -84,7 +84,7 @@ const Home = (props) => {
                                                                         to={`/recipe/${encodeURIComponent(recipe.name)}`}
                                                                         style={
                                                                             recipe.backgroundColor ?
-                                                                                {backgroundColor: recipe.backgroundColor, color: recipe.textColor} :
+                                                                                {backgroundColor: recipe.backgroundColor, color: recipe.textColor, borderColor: recipe.backgroundColor} :
                                                                                 null
                                                                         }
                                                                         className={cx(classes.recipeLink)}

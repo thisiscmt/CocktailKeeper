@@ -27,12 +27,11 @@ const useStyles = makeStyles()(() => ({
     qtyDesc: {
         fontSize: '14px',
         fontStyle: 'italic',
-        width: '75px'
+        width: '90px'
     },
 
     qtyDescValue: {
-        border: 0,
-        padding: '3px 2px 2px 2px',
+        padding: '2px 4px',
     },
 
     dialogActions: {
@@ -53,7 +52,7 @@ const useStyles = makeStyles()(() => ({
 
 const QtyModal = (props) => {
     const { classes, cx } = useStyles(props);
-    const theme = ThemeService.buildThemeConfig(props.recipe);
+    const theme = ThemeService.buildThemeConfig();
     const [ open, setOpen ] = useState(false);
     const [ ingredient, setIngredient ] = useState(props.ingredient);
     const [ qtyDesc, setQtyDesc ] = useState(props.ingredient.qtyDesc);
@@ -122,110 +121,108 @@ const QtyModal = (props) => {
 
     return (
         <ThemeProvider theme={theme}>
-            <div>
-                <Button
-                    onClick={handleOpen}
-                    className={ ingredient.qtyDesc ? `${cx(classes.qtyDesc)} ${cx(classes.qtyDescValue)}` : cx(classes.qtyDesc) }
-                    sx={{
-                        color: props.textColor,
-                        borderColor: props.textColor,
+            <Button
+                onClick={handleOpen}
+                className={ ingredient.qtyDesc ? `${cx(classes.qtyDesc)} ${cx(classes.qtyDescValue)}` : cx(classes.qtyDesc) }
+                sx={{
+                    color: props.textColor,
+                    borderColor: `${props.textColor}7F`,
 
-                        '&:hover': {
-                            borderColor: props.textColor
-                        }
-                    }}
-                    style={{  }}
-                    variant='outlined'
-                    size='medium'
-                >
-                    { qtyDesc ? qtyDesc : 'Qty' }
-                </Button>
+                    '&:hover': {
+                        borderColor: props.textColor
+                    }
+                }}
+                variant='outlined'
+                size='medium'
+            >
+                { qtyDesc ? qtyDesc : 'Qty' }
+            </Button>
 
-                <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    maxWidth='xs'
-                    fullWidth={true}
-                >
-                    <DialogTitle className={cx(classes.title)}>Quantity</DialogTitle>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                maxWidth='xs'
+                fullWidth={true}
+            >
+                <DialogTitle className={cx(classes.title)}>Quantity</DialogTitle>
 
-                    <DialogContent className={cx(classes.content)}>
-                        <Box className={cx(classes.contentRow)}>
-                            <FormControl>
-                                <Select value={ingredient.amount} variant='standard' onChange={handleAmountChange} className={cx(classes.selector)}>
-                                    <MenuItem value='0'>- Select amount -</MenuItem>
-                                    <MenuItem value='1'>1</MenuItem>
-                                    <MenuItem value='2'>2</MenuItem>
-                                    <MenuItem value='3'>3</MenuItem>
-                                    <MenuItem value='4'>4</MenuItem>
-                                    <MenuItem value='5'>5</MenuItem>
-                                    <MenuItem value='6'>6</MenuItem>
-                                    <MenuItem value='7'>7</MenuItem>
-                                    <MenuItem value='8'>8</MenuItem>
-                                    <MenuItem value='9'>9</MenuItem>
-                                    <MenuItem value='10'>10</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
+                <DialogContent className={cx(classes.content)}>
+                    <Box className={cx(classes.contentRow)}>
+                        <FormControl>
+                            <Select value={ingredient.amount} variant='standard' onChange={handleAmountChange} className={cx(classes.selector)}>
+                                <MenuItem value='0'>- Select amount -</MenuItem>
+                                <MenuItem value='1'>1</MenuItem>
+                                <MenuItem value='2'>2</MenuItem>
+                                <MenuItem value='3'>3</MenuItem>
+                                <MenuItem value='4'>4</MenuItem>
+                                <MenuItem value='5'>5</MenuItem>
+                                <MenuItem value='6'>6</MenuItem>
+                                <MenuItem value='7'>7</MenuItem>
+                                <MenuItem value='8'>8</MenuItem>
+                                <MenuItem value='9'>9</MenuItem>
+                                <MenuItem value='10'>10</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
 
-                        <Box className={cx(classes.contentRow)}>
-                            <FormControl>
-                                <Select value={ingredient.fractionalAmount} variant='standard' onChange={handleFractionalAmountChange} className={cx(classes.selector)}>
-                                    <MenuItem value='0'>- Select fraction -</MenuItem>
-                                    <MenuItem value='1/8'>1/8</MenuItem>
-                                    <MenuItem value='1/4'>1/4</MenuItem>
-                                    <MenuItem value='3/8'>3/8</MenuItem>
-                                    <MenuItem value='1/2'>1/2</MenuItem>
-                                    <MenuItem value='5/8'>5/8</MenuItem>
-                                    <MenuItem value='3/4'>3/4</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
+                    <Box className={cx(classes.contentRow)}>
+                        <FormControl>
+                            <Select value={ingredient.fractionalAmount} variant='standard' onChange={handleFractionalAmountChange} className={cx(classes.selector)}>
+                                <MenuItem value='0'>- Select fraction -</MenuItem>
+                                <MenuItem value='1/8'>1/8</MenuItem>
+                                <MenuItem value='1/4'>1/4</MenuItem>
+                                <MenuItem value='3/8'>3/8</MenuItem>
+                                <MenuItem value='1/2'>1/2</MenuItem>
+                                <MenuItem value='5/8'>5/8</MenuItem>
+                                <MenuItem value='3/4'>3/4</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
 
-                        <Box>
-                            <FormControl>
-                                <Select value={ingredient.unit} variant='standard' onChange={handleUnitChange} className={cx(classes.selector)}>
-                                    <MenuItem value='0'>- Select unit -</MenuItem>
-                                    <MenuItem value='oz'>oz</MenuItem>
-                                    <MenuItem value='ml'>ml</MenuItem>
-                                    <MenuItem value='dash'>dash</MenuItem>
-                                    <MenuItem value='tsp'>tsp</MenuItem>
-                                    <MenuItem value='tbsp'>tbsp</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </DialogContent>
+                    <Box>
+                        <FormControl>
+                            <Select value={ingredient.unit} variant='standard' onChange={handleUnitChange} className={cx(classes.selector)}>
+                                <MenuItem value='0'>- Select unit -</MenuItem>
+                                <MenuItem value='oz'>oz</MenuItem>
+                                <MenuItem value='ml'>ml</MenuItem>
+                                <MenuItem value='dash'>dash</MenuItem>
+                                <MenuItem value='tsp'>tsp</MenuItem>
+                                <MenuItem value='tbsp'>tbsp</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                </DialogContent>
 
-                    <DialogActions className={cx(classes.dialogActions)}>
-                        <Button
-                            onClick={handleSave}
-                            className={cx(classes.defaultButtonColor)}
-                            variant='outlined'
-                            size='small'
-                        >
-                            Save
-                        </Button>
+                <DialogActions className={cx(classes.dialogActions)}>
+                    <Button
+                        onClick={handleSave}
+                        className={cx(classes.defaultButtonColor)}
+                        variant='outlined'
+                        size='small'
+                    >
+                        Save
+                    </Button>
 
-                        <Button
-                            onClick={handleDelete}
-                            variant='text'
-                            className={cx(classes.deleteButton)}
-                            size='small'
-                        >
-                            Delete
-                        </Button>
+                    <Button
+                        onClick={handleDelete}
+                        variant='text'
+                        className={cx(classes.deleteButton)}
+                        size='small'
+                    >
+                        Delete
+                    </Button>
 
-                        <Button
-                            onClick={() => handleClose({}, 'cancel')}
-                            className={cx(classes.defaultButtonColor)}
-                            variant='outlined'
-                            size='small'
-                        >
-                            Cancel
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
+                    <Button
+                        onClick={() => handleClose({}, 'cancel')}
+                        className={cx(classes.defaultButtonColor)}
+                        variant='outlined'
+                        color='secondary'
+                        size='small'
+                    >
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </ThemeProvider>
     );
 }

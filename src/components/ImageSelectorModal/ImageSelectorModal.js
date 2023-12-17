@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import {Button, Dialog, DialogTitle, DialogContent, DialogActions, ThemeProvider} from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
+
+import * as ThemeService from '../../services/themeService';
 
 const imageLibrary = require('../../data/images.json');
 
@@ -49,6 +51,7 @@ const useStyles = makeStyles()(() => ({
 
 const ImageSelectorModal = (props) => {
     const { classes, cx } = useStyles(props);
+    const theme = ThemeService.buildThemeConfig();
     const imageBaseURL = window.location.protocol + '//' + window.location.host + '/images'
 
     const [ selectedImage, setSelectedImage ] = useState(props.drinkImage);
@@ -94,7 +97,7 @@ const ImageSelectorModal = (props) => {
     };
 
     return (
-        <div>
+        <ThemeProvider theme={theme}>
             <div className='drink-image-container'>
                 {
                     props.drinkImageViewFile &&
@@ -104,9 +107,17 @@ const ImageSelectorModal = (props) => {
 
             <Button
                 onClick={handleOpen}
+                sx={{
+                    color: props.textColor,
+                    borderColor: `${props.textColor}7F`,
+
+                    '&:hover': {
+                        borderColor: props.textColor
+                    }
+                }}
                 variant='outlined'
-                color='secondary'
                 size='small'
+
             >
                 EDIT IMAGE
             </Button>
@@ -116,7 +127,6 @@ const ImageSelectorModal = (props) => {
                 onClose={handleClose}
                 maxWidth='xs'
                 fullWidth={true}
-                classes={{ paper: cx(classes.dialogPaper) }}
             >
                 <DialogTitle className={cx(classes.title)}>Select Drink Image</DialogTitle>
 
@@ -145,7 +155,7 @@ const ImageSelectorModal = (props) => {
                 </DialogContent>
 
                 <DialogActions className={cx(classes.dialogActions)}>
-                    <Button onClick={handleSave} className={cx(classes.defaultButtonColor)} color='primary' variant='outlined' size='small'>
+                    <Button onClick={handleSave} className={cx(classes.defaultButtonColor)} variant='outlined' size='small'>
                         Save
                     </Button>
                     <Button onClick={() => handleClose({}, 'cancel')} className={cx(classes.defaultButtonColor)} variant='outlined' color='secondary' size='small'>
@@ -153,7 +163,7 @@ const ImageSelectorModal = (props) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </ThemeProvider>
     );
 }
 
