@@ -166,28 +166,34 @@ const Config = (props) => {
         }
     };
 
-    const recipeCount = RecipeService.getRecipeCount();
-    const lastChangeTimestamp = localStorage.getItem(STORAGE_LAST_CHANGE_TIMESTAMP);
-    let lastChangeTimestampFormatted;
+    const getLastChangeTimestamp = () => {
+        const lastChangeTimestamp = localStorage.getItem(STORAGE_LAST_CHANGE_TIMESTAMP);
+        let lastChangeTimestampFormatted;
 
-    if (lastChangeTimestamp) {
-        const now = new Date(Number(lastChangeTimestamp));
+        if (lastChangeTimestamp) {
+            const now = new Date(Number(lastChangeTimestamp));
 
-        const dateOptions = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        };
+            const dateOptions = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            };
 
-        const timeOptions = {
-            timeZoneName: 'short',
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true
-        };
+            const timeOptions = {
+                timeZoneName: 'short',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true
+            };
 
-        lastChangeTimestampFormatted = `${new Intl.DateTimeFormat(undefined, dateOptions).format(now)} at ${new Intl.DateTimeFormat(undefined, timeOptions).format(now)}`;
+            lastChangeTimestampFormatted = `${new Intl.DateTimeFormat(undefined, dateOptions).format(now)} at ${new Intl.DateTimeFormat(undefined, timeOptions).format(now)}`;
+        }
+
+        return lastChangeTimestampFormatted;
     }
+
+    const recipeCount = RecipeService.getRecipeCount();
+    const lastChangeTimestamp = getLastChangeTimestamp();
 
     return (
         <Box className={`loadable-container ${cx(classes.mainContainer)}`}>
@@ -250,10 +256,10 @@ const Config = (props) => {
             </Box>
 
             {
-                lastChangeTimestampFormatted &&
+                lastChangeTimestamp &&
                 <Box className={cx(classes.lastChangedSection)}>
                     <Typography variant='body2'>Data last changed:</Typography>
-                    <Typography variant='body2' className={cx(classes.lastChanged)}><span>{lastChangeTimestampFormatted}</span></Typography>
+                    <Typography variant='body2' className={cx(classes.lastChanged)}><span>{lastChangeTimestamp}</span></Typography>
                 </Box>
             }
 
