@@ -309,6 +309,7 @@ const EditRecipe = (props) => {
                                                     variant='outlined'
                                                     name='description'
                                                     value={ingredient.name}
+                                                    size='small'
                                                     onChange={(event) => {
                                                         handleChangeIngredientName(ingredient.id, event.target.value);}
                                                     }
