@@ -1,12 +1,11 @@
 import Recipe from '../models/Recipe';
 import Ingredient from '../models/Ingredient';
-import { STORAGE_LAST_CHANGE_TIMESTAMP, STORAGE_RECIPES } from '../constants/constants';
+import * as Constants from '../constants/constants';
 
 const imageLibrary = require('../data/images.json');
 
 export const buildRecipe = (data, recipeIndex) => {
     const recipe = new Recipe();
-    const imageFileNames = getDrinkImageFileNames(data.drinkImage);
     let ingredient;
 
     recipe.id = data.id;
@@ -16,8 +15,6 @@ export const buildRecipe = (data, recipeIndex) => {
     recipe.drinkImage = data.drinkImage;
     recipe.backgroundColor = data.backgroundColor;
     recipe.textColor = data.textColor;
-    recipe.drinkImageViewFile = imageFileNames.drinkImageViewFile;
-    recipe.drinkImageSelectionFile = imageFileNames.drinkImageSelectionFile;
 
     recipe.ingredients = data.ingredients.map(item => {
         ingredient = new Ingredient();
@@ -35,16 +32,16 @@ export const buildRecipe = (data, recipeIndex) => {
 };
 
 export const getRecipeData = () => {
-    return localStorage.getItem(STORAGE_RECIPES);
+    return localStorage.getItem(Constants.STORAGE_RECIPES);
 };
 
 export const setRecipeData = (recipeData) => {
-    localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
-    localStorage.setItem(STORAGE_LAST_CHANGE_TIMESTAMP, new Date().getTime().toString());
+    localStorage.setItem(Constants.STORAGE_RECIPES, JSON.stringify(recipeData));
+    localStorage.setItem(Constants.STORAGE_LAST_CHANGE_TIMESTAMP, new Date().getTime().toString());
 };
 
 export const getRecipes = () => {
-    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    const recipeJSON = localStorage.getItem(Constants.STORAGE_RECIPES);
     let recipeData;
     let recipes = [];
 
@@ -60,7 +57,7 @@ export const getRecipes = () => {
 };
 
 export const saveRecipe = (recipe, copied) => {
-    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    const recipeJSON = localStorage.getItem(Constants.STORAGE_RECIPES);
     let recipeIndex = -1;
     let recipeData;
 
@@ -76,11 +73,6 @@ export const saveRecipe = (recipe, copied) => {
         };
     }
 
-    // We don't need to store the drink image file name since we're storing the name of the image itself. The idea is not to store any file
-    // names since they could change at some point (e.g. a new format could be chosen).
-    delete recipe.drinkImageViewFile;
-    delete recipe.drinkImageSelectionFile;
-
     if (recipeIndex > -1) {
         recipeData.recipes[recipeIndex] = recipe;
     } else {
@@ -91,12 +83,12 @@ export const saveRecipe = (recipe, copied) => {
         }
     }
 
-    localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
-    localStorage.setItem(STORAGE_LAST_CHANGE_TIMESTAMP, new Date().getTime().toString());
+    localStorage.setItem(Constants.STORAGE_RECIPES, JSON.stringify(recipeData));
+    localStorage.setItem(Constants.STORAGE_LAST_CHANGE_TIMESTAMP, new Date().getTime().toString());
 };
 
 export const getRecipe = (name) => {
-    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    const recipeJSON = localStorage.getItem(Constants.STORAGE_RECIPES);
     const nameForCompare = name ? name.toLowerCase() : '';
     let recipeIndex = -1;
     let recipeData;
@@ -118,7 +110,7 @@ export const getRecipe = (name) => {
 };
 
 export const deleteRecipe = (id) => {
-    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    const recipeJSON = localStorage.getItem(Constants.STORAGE_RECIPES);
     let recipeIndex = -1;
     let recipeData;
 
@@ -133,12 +125,12 @@ export const deleteRecipe = (id) => {
             recipeData.recipes.splice(recipeIndex, 1);
         }
 
-        localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
+        localStorage.setItem(Constants.STORAGE_RECIPES, JSON.stringify(recipeData));
     }
 };
 
 export const saveRecipes = (recipes) => {
-    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    const recipeJSON = localStorage.getItem(Constants.STORAGE_RECIPES);
     let recipeData;
 
     if (recipeJSON) {
@@ -148,26 +140,30 @@ export const saveRecipes = (recipes) => {
     }
 
     recipeData.recipes = recipes;
-    localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipeData));
+    localStorage.setItem(Constants.STORAGE_RECIPES, JSON.stringify(recipeData));
 };
 
-export const getDrinkImageFileNames = (drinkImage) => {
-    let imageFileNames = {};
+export const getDrinkImageData = (drinkImage) => {
+    let imageData = {
+        drinkImageFileName: '',
+        drinkImageSelectionFile: ''
+    };
 
     if (drinkImage) {
         const imageIndex = imageLibrary.images.findIndex(image => image.name === drinkImage);
 
         if (imageIndex > -1) {
-            imageFileNames.drinkImageViewFile = imageLibrary.images[imageIndex].view;
-            imageFileNames.drinkImageSelectionFile = imageLibrary.images[imageIndex].selection;
+            imageData.drinkImageViewFile = imageLibrary.images[imageIndex].view;
+            imageData.drinkImageSelectionFile = imageLibrary.images[imageIndex].selection;
+
         }
     }
 
-    return imageFileNames
+    return imageData
 };
 
 export const getRecipeCount = () => {
-    const recipeJSON = localStorage.getItem(STORAGE_RECIPES);
+    const recipeJSON = localStorage.getItem(Constants.STORAGE_RECIPES);
     let recipeData;
     let count = 0;
 
@@ -177,4 +173,30 @@ export const getRecipeCount = () => {
     }
 
     return count;
+};
+
+export const getFormattedLastChangedTimestamp = () => {
+    const lastChangeTimestamp = localStorage.getItem(Constants.STORAGE_LAST_CHANGE_TIMESTAMP);
+    let lastChangeTimestampFormatted = '';
+
+    if (lastChangeTimestamp) {
+        const now = new Date(Number(lastChangeTimestamp));
+
+        const dateOptions = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        };
+
+        const timeOptions = {
+            timeZoneName: 'short',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        };
+
+        lastChangeTimestampFormatted = `${new Intl.DateTimeFormat(undefined, dateOptions).format(now)} at ${new Intl.DateTimeFormat(undefined, timeOptions).format(now)}`;
+    }
+
+    return lastChangeTimestampFormatted;
 };

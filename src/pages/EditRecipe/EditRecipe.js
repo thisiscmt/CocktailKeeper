@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import {Button, Container, Divider, List, ListItem, ThemeProvider, TextField} from '@mui/material';
+import { Button, Container, Divider, List, ListItem, ThemeProvider, TextField } from '@mui/material';
 import { AddCircleOutlineRounded } from '@mui/icons-material';
 import { makeStyles } from 'tss-react/mui';
 import cloneDeep from 'lodash/cloneDeep';
@@ -9,11 +9,11 @@ import QtyModal from '../../components/QtyModal/QtyModal';
 import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
 import ImageSelectorModal from '../../components/ImageSelectorModal/ImageSelectorModal';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
+import Recipe from '../../models/Recipe';
+import Ingredient from '../../models/Ingredient';
 import * as RecipeService from '../../services/recipeService';
 import * as SharedService from '../../services/sharedService';
 import * as ThemeService from '../../services/themeService';
-import Recipe from '../../models/Recipe';
-import Ingredient from '../../models/Ingredient';
 
 const useStyles = makeStyles()(() => ({
     topControls: {
@@ -209,8 +209,6 @@ const EditRecipe = (props) => {
         const newRecipe = cloneDeep(recipe);
 
         newRecipe.drinkImage = imageData.drinkImage;
-        newRecipe.drinkImageViewFile = imageData.drinkImageViewFile;
-        newRecipe.drinkImageSelectionFile = imageData.drinkImageSelectionFile;
         setRecipe(newRecipe);
     }
 
@@ -292,7 +290,7 @@ const EditRecipe = (props) => {
 
                             <List disablePadding={true}>
                                 {
-                                    recipe.ingredients.map(ingredient => {
+                                    recipe.ingredients.map((ingredient) => {
                                         return (
                                             <ListItem key={ingredient.id} className={cx(classes.ingredient)}>
                                                 <QtyModal
@@ -315,7 +313,7 @@ const EditRecipe = (props) => {
                                                     }
                                                 />
                                             </ListItem>
-                                        )
+                                        );
                                     })
                                 }
 
@@ -346,8 +344,6 @@ const EditRecipe = (props) => {
                             <div className={cx(classes.editImage)}>
                                 <ImageSelectorModal
                                     drinkImage={recipe.drinkImage}
-                                    drinkImageViewFile={recipe.drinkImageViewFile}
-                                    drinkImageSelectionFile={recipe.drinkImageSelectionFile}
                                     textColor={recipe.textColor}
                                     onSave={handleSaveImage}
                                 />

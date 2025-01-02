@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
-import {Button, Dialog, DialogTitle, DialogContent, DialogActions, ThemeProvider} from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, ThemeProvider } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 
 import * as ThemeService from '../../services/themeService';
+import * as RecipeService from '../../services/recipeService';
 
 const imageLibrary = require('../../data/images.json');
 
@@ -52,13 +53,12 @@ const useStyles = makeStyles()(() => ({
 const ImageSelectorModal = (props) => {
     const { classes, cx } = useStyles(props);
     const theme = ThemeService.buildThemeConfig();
-    const imageBaseURL = window.location.protocol + '//' + window.location.host + '/images'
+    const imageData = RecipeService.getDrinkImageData(props.drinkImage);
 
     const [ selectedImage, setSelectedImage ] = useState(props.drinkImage);
-    const [ selectedImageViewFile, setSelectedImageViewFile ] = useState(props.drinkImageViewFile);
-    const [ selectedImageSelectionFile, setSelectedImageSelectionFile ] = useState(props.drinkImageSelectionFile);
     const [ open, setOpen ] = useState(false);
     const selectedImageElement = useRef();
+
 
     const handleOpen = () => {
         setOpen(true);
@@ -76,15 +76,11 @@ const ImageSelectorModal = (props) => {
 
     const handleSelectImage = (image) => {
         setSelectedImage(image.name);
-        setSelectedImageViewFile(image.view);
-        setSelectedImageSelectionFile(image.selection);
     };
 
     const handleSave = () => {
         props.onSave({
-            drinkImage: selectedImage,
-            drinkImageViewFile: selectedImageViewFile,
-            drinkImageSelectionFile: selectedImageSelectionFile
+            drinkImage: selectedImage
         });
 
         setOpen(false);
@@ -100,8 +96,8 @@ const ImageSelectorModal = (props) => {
         <ThemeProvider theme={theme}>
             <div className='drink-image-container'>
                 {
-                    props.drinkImageViewFile &&
-                    <img src={`${imageBaseURL}/${props.drinkImageViewFile}`} alt='Drink vessel' className='drink-image' />
+                    props.drinkImage &&
+                    <img src={`/images/${imageData.drinkImageViewFile}`} alt='Drink vessel' className='drink-image' />
                 }
             </div>
 
@@ -142,7 +138,7 @@ const ImageSelectorModal = (props) => {
                                         ref={image.name === selectedImage ? selectedImageElement : null}
                                     >
                                         <img
-                                            src={`${imageBaseURL}/${image.selection}`}
+                                            src={`/images/${image.selection}`}
                                             alt={image.alt}
                                             onClick={() => handleSelectImage(image)}
                                         />
@@ -158,7 +154,8 @@ const ImageSelectorModal = (props) => {
                     <Button onClick={handleSave} className={cx(classes.defaultButtonColor)} variant='outlined' size='small'>
                         Save
                     </Button>
-                    <Button onClick={() => handleClose({}, 'cancel')} className={cx(classes.defaultButtonColor)} variant='outlined' color='secondary' size='small'>
+                    <Button onClick={() => handleClose({}, 'cancel')} className={cx(classes.defaultButtonColor)} variant='outlined'
+                            color='secondary' size='small'>
                         Cancel
                     </Button>
                 </DialogActions>

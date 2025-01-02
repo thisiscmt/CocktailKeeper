@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
-import {Box, Button} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Box, Button } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import arrayMove from 'array-move';
@@ -35,12 +35,12 @@ const Home = (props) => {
         }
     }
 
-    return(
+    return (
         <Box data-testid='HomeMainContainer'>
             {
                 recipes.length === 0 ?
                 <Box>
-                    <p>Welcome to the cocktail keeper.</p>
+                    <p>Welcome to the Cocktail Keeper.</p>
                     <p>Select the add recipe button in the upper-right to get started.</p>
                 </Box> :
 

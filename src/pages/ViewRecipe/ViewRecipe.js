@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {useParams, Link, useNavigate} from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useSwipeable } from 'react-swipeable';
-import {Button, Card, CardContent, Container, Divider, List, ListItem, ThemeProvider} from '@mui/material';
+import { Button, Card, CardContent, Container, Divider, List, ListItem, ThemeProvider } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import cloneDeep from 'lodash/cloneDeep';
 import * as UUID from 'uuid';
@@ -63,6 +63,8 @@ const ViewRecipe = (props) => {
     const [ recipe, setRecipe ] = useState(RecipeService.getRecipe(recipeName));
     const [ theme, setTheme ] = useState(ThemeService.buildThemeConfig(recipe));
 
+    const imageData = RecipeService.getDrinkImageData(recipe.drinkImage)
+
     const swipeConfig = {
         preventDefaultTouchmoveEvent: true
     };
@@ -72,7 +74,6 @@ const ViewRecipe = (props) => {
         onSwipedRight: (eventData) => handleSwipeRight(eventData),
         ...swipeConfig
     });
-
 
     const handleSwipeLeft = () => {
         const recipes = RecipeService.getRecipes();
@@ -84,7 +85,7 @@ const ViewRecipe = (props) => {
             setRecipe(newRecipe);
             setTheme(ThemeService.buildThemeConfig(newRecipe));
 
-            navigate('/recipe/' +  encodeURIComponent(newRecipe.name), { replace: true });
+            navigate('/recipe/' + encodeURIComponent(newRecipe.name), { replace: true });
         }
     };
 
@@ -98,7 +99,7 @@ const ViewRecipe = (props) => {
             setRecipe(newRecipe);
             setTheme(ThemeService.buildThemeConfig(newRecipe));
 
-            navigate('/recipe/' +  encodeURIComponent(newRecipe.name), { replace: true });
+            navigate('/recipe/' + encodeURIComponent(newRecipe.name), { replace: true });
         }
     };
 
@@ -128,7 +129,7 @@ const ViewRecipe = (props) => {
 
         setRecipe(newRecipe);
         setTheme(ThemeService.buildThemeConfig(newRecipe));
-        navigate('/recipe/' +  encodeURIComponent(newRecipe.name), { replace: true });
+        navigate('/recipe/' + encodeURIComponent(newRecipe.name), { replace: true });
     };
 
     return (
@@ -191,10 +192,10 @@ const ViewRecipe = (props) => {
                             </Card>
 
                             {
-                                recipe.drinkImageViewFile &&
+                                recipe.drinkImage &&
                                 <div className='drink-image-container'>
                                     <img
-                                        src={window.location.protocol + '//' + window.location.host + '/images/' + recipe.drinkImageViewFile}
+                                        src={`/images/${imageData.drinkImageViewFile}`}
                                         alt='Drink vessel'
                                         className='drink-image'
                                     />

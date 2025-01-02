@@ -8,8 +8,6 @@ class Recipe {
         this.ingredients = [];
         this.directions = '';
         this.drinkImage = '';
-        this.drinkImageViewFile = '';
-        this.drinkImageSelectionFile = '';
         this.backgroundColor = '#FFFFFF';
         this.textColor = '#000000';
     }

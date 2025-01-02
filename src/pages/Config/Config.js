@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {FormControl, FormControlLabel, TextField, Button, Box, Radio, RadioGroup, Typography} from '@mui/material';
+import { FormControl, FormControlLabel, TextField, Button, Box, Radio, RadioGroup, Typography } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 
 import LoadingOverlay from '../../components/LoadingOverlay/LoadingOverlay';
 import { Context } from '../../stores/mainStore';
-import {AlertSeverity} from '../../enums/AlertSeverity';
+import { AlertSeverity } from '../../enums/AlertSeverity';
+import * as Constants from '../../constants/constants';
 import * as DataService from '../../services/dataService';
 import * as RecipeService from '../../services/recipeService';
 import * as SharedService from '../../services/sharedService';
-import {STORAGE_LAST_CHANGE_TIMESTAMP, STORAGE_PASSWORD, STORAGE_USER_NAME} from '../../constants/constants';
 
 const useStyles = makeStyles()((theme) => ({
     mainContainer: {
@@ -87,8 +87,8 @@ const useStyles = makeStyles()((theme) => ({
 const Config = (props) => {
     const { classes, cx } = useStyles(props);
     const [ , dispatch ] = useContext(Context);
-    const [ userName, setUserName ] = useState(localStorage.getItem(STORAGE_USER_NAME) ? localStorage.getItem(STORAGE_USER_NAME) : '');
-    const [ password, setPassword ] = useState(localStorage.getItem(STORAGE_PASSWORD) ? '********' : '');
+    const [ userName, setUserName ] = useState(localStorage.getItem(Constants.STORAGE_USER_NAME) ? localStorage.getItem(Constants.STORAGE_USER_NAME) : '');
+    const [ password, setPassword ] = useState(localStorage.getItem(Constants.STORAGE_PASSWORD) ? '********' : '');
     const [ passwordChanged, setPasswordChanged ] = useState(false);
     const [ provider, setProvider ] = useState('Server');
     const [ loading, setLoading ] = useState(false);
@@ -109,16 +109,16 @@ const Config = (props) => {
     const handleBackupCocktailData = async () => {
         if (userName && password) {
             dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: ''} });
-            const passwordToUse = passwordChanged ? password : localStorage.getItem(STORAGE_PASSWORD);
+            const passwordToUse = passwordChanged ? password : localStorage.getItem(Constants.STORAGE_PASSWORD);
             const authHeader = 'Basic ' + window.btoa(userName + ':' + passwordToUse);
 
             try {
                 setLoading(true);
                 await DataService.backupCocktailData(authHeader, RecipeService.getRecipeData());
-                localStorage.setItem(STORAGE_USER_NAME, userName);
+                localStorage.setItem(Constants.STORAGE_USER_NAME, userName);
 
                 if (passwordChanged) {
-                    localStorage.setItem(STORAGE_PASSWORD, password);
+                    localStorage.setItem(Constants.STORAGE_PASSWORD, password);
                 }
 
                 dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: 'Cocktail data backed up successfully', severity: AlertSeverity.Success} });
@@ -136,17 +136,17 @@ const Config = (props) => {
     const handleRestoreCocktailData = async () => {
         if (userName && password) {
             dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: ''} });
-            const passwordToUse = passwordChanged ? password : localStorage.getItem(STORAGE_PASSWORD);
+            const passwordToUse = passwordChanged ? password : localStorage.getItem(Constants.STORAGE_PASSWORD);
             const authHeader = 'Basic ' + window.btoa(userName + ':' + passwordToUse);
 
             try {
                 setLoading(true);
 
                 const recipeData = await DataService.restoreCocktailData(authHeader);
-                localStorage.setItem(STORAGE_USER_NAME, userName);
+                localStorage.setItem(Constants.STORAGE_USER_NAME, userName);
 
                 if (passwordChanged) {
-                    localStorage.setItem(STORAGE_PASSWORD, password);
+                    localStorage.setItem(Constants.STORAGE_PASSWORD, password);
                 }
 
                 RecipeService.setRecipeData(recipeData);
@@ -166,34 +166,8 @@ const Config = (props) => {
         }
     };
 
-    const getLastChangeTimestamp = () => {
-        const lastChangeTimestamp = localStorage.getItem(STORAGE_LAST_CHANGE_TIMESTAMP);
-        let lastChangeTimestampFormatted;
-
-        if (lastChangeTimestamp) {
-            const now = new Date(Number(lastChangeTimestamp));
-
-            const dateOptions = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-            };
-
-            const timeOptions = {
-                timeZoneName: 'short',
-                hour: 'numeric',
-                minute: 'numeric',
-                hour12: true
-            };
-
-            lastChangeTimestampFormatted = `${new Intl.DateTimeFormat(undefined, dateOptions).format(now)} at ${new Intl.DateTimeFormat(undefined, timeOptions).format(now)}`;
-        }
-
-        return lastChangeTimestampFormatted;
-    }
-
     const recipeCount = RecipeService.getRecipeCount();
-    const lastChangeTimestamp = getLastChangeTimestamp();
+    const lastChangeTimestamp = RecipeService.getFormattedLastChangedTimestamp();
 
     return (
         <Box className={`loadable-container ${cx(classes.mainContainer)}`}>
