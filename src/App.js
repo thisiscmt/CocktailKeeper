@@ -1,6 +1,6 @@
 import React from 'react';
+import { Container, Paper } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Paper } from '@mui/material';
 
 import Home from './pages/Home/Home';
 import ViewRecipe from './pages/ViewRecipe/ViewRecipe';
@@ -16,10 +16,10 @@ import './App.scss';
 
 function App() {
     return (
-        <main className='main-content'>
-            <Store>
-                <BrowserRouter>
-                    <Paper elevation={5} data-testid='AppMainPaper'>
+        <Store>
+            <BrowserRouter>
+                <Container maxWidth='sm' disableGutters={true} className='site-container'>
+                    <Paper elevation={5} className='site-paper'>
                         <Header/>
 
                         <Routes>
@@ -35,9 +35,9 @@ function App() {
 
                         <Footer/>
                     </Paper>
-                </BrowserRouter>
-            </Store>
-        </main>
+                </Container>
+            </BrowserRouter>
+        </Store>
     );
 }
 

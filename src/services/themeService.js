@@ -1,5 +1,11 @@
 import { createTheme } from '@mui/material';
 
+export const Colors = {
+    backgroundGray: '#F0F0F0',
+    white: '#FFFFFF',
+    black: '#000000'
+};
+
 export const buildThemeConfig = (overrides) => {
     if (overrides) {
         return createTheme({
@@ -12,9 +18,7 @@ export const buildThemeConfig = (overrides) => {
                 MuiContainer: {
                     styleOverrides: {
                         root: {
-                            backgroundColor: overrides.backgroundColor,
-                            paddingTop: '5px',
-                            paddingBottom: '6px'
+                            backgroundColor: overrides.backgroundColor
                         }
                     }
                 },

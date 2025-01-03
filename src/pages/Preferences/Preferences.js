@@ -6,15 +6,17 @@ import * as SharedService from '../../services/sharedService';
 import {Context} from '../../stores/mainStore';
 import {AlertSeverity} from '../../enums/AlertSeverity';
 import {STORAGE_PREFERENCES} from '../../constants/constants';
+import {Colors} from '../../services/themeService';
 
 const useStyles = makeStyles()(() => ({
     mainContainer: {
+        backgroundColor: Colors.backgroundGray,
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+        paddingBottom: '16px',
+        paddingTop: '16px',
         textAlign: 'center'
-    },
-
-    section : {
-        marginBottom: '16px',
-        marginTop: '16px'
     },
 
     defaultUnitLabel: {
@@ -54,7 +56,7 @@ const Preferences = (props) => {
 
     return (
         <Box className={cx(classes.mainContainer)}>
-            <Box className={cx(classes.section)}>
+            <Box>
                 <label className={cx(classes.defaultUnitLabel)}>Default unit:</label>
 
                 <Select
@@ -72,7 +74,6 @@ const Preferences = (props) => {
                     <MenuItem value='tbsp'>tbsp</MenuItem>
                 </Select>
             </Box>
-
         </Box>
     );
 }

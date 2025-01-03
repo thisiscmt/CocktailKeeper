@@ -28,9 +28,19 @@ a.app-link:active {
     text-decoration: none;
 }
 
-.main-content {
-    margin: 10px 10px 20px 10px;
+.site-container {
+    display: flex !important;
+    flex-direction: column;
+    height: 100vh;
+    max-height: -webkit-fill-available;
     text-align: center;
+}
+
+.site-paper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 10px;
 }
 
 .loadable-container {

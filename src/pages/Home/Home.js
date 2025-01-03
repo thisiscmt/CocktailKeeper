@@ -3,13 +3,19 @@ import { Link } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import arrayMove from 'array-move';
+import { arrayMoveImmutable } from 'array-move';
 
 import * as RecipeService from '../../services/recipeService';
+import { Colors } from '../../services/themeService';
 
 const useStyles = makeStyles()(() => ({
+    mainContainer: {
+        backgroundColor: Colors.backgroundGray,
+        flex: 1
+    },
+
     recipeList: {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: Colors.backgroundGray,
         padding: '8px'
     },
 
@@ -28,7 +34,7 @@ const Home = (props) => {
 
     const handleDragEnd = (result) => {
         if (result && result.destination && result.destination.index > -1) {
-            const recipesToUpdate = arrayMove(recipes, result.source.index, result.destination.index);
+            const recipesToUpdate = arrayMoveImmutable(recipes, result.source.index, result.destination.index);
 
             setRecipes(recipesToUpdate);
             RecipeService.saveRecipes(recipesToUpdate);
@@ -36,80 +42,81 @@ const Home = (props) => {
     }
 
     return (
-        <Box data-testid='HomeMainContainer'>
+        <Box className={cx(classes.mainContainer)} data-testid='HomeMainContainer'>
             {
-                recipes.length === 0 ?
-                <Box>
-                    <p>Welcome to the Cocktail Keeper.</p>
-                    <p>Select the add recipe button in the upper-right to get started.</p>
-                </Box> :
+                  recipes.length === 0
+                    ?
+                        <Box>
+                            <p>Welcome to the Cocktail Keeper.</p>
+                            <p>Select the add recipe button in the upper-right to get started.</p>
+                        </Box>
+                    :
+                        <Box className={cx(classes.recipeList)}>
+                            <DragDropContext onDragEnd={handleDragEnd}>
+                                <Droppable droppableId="droppable">
+                                    {(provided, snapshot) => (
+                                        <div ref={provided.innerRef} {...provided.droppableProps}>
+                                            {
+                                                recipes.map((recipe, index) => {
+                                                    return (
+                                                        <Draggable
+                                                            key={recipe.name}
+                                                            index={index}
+                                                            draggableId={recipe.name}
+                                                            shouldRespectForcePress={true}
+                                                        >
+                                                            {(provided, snapshot) => {
+                                                                const recipeStyles = {
+                                                                    opacity: snapshot.isDragging ? 0.5 : 1,
+                                                                    margin: (index === recipes.length - 1) ? 0 : '0 0 8px 0'
+                                                                };
 
-                <Box className={cx(classes.recipeList)}>
-                    <DragDropContext onDragEnd={handleDragEnd}>
-                        <Droppable droppableId="droppable">
-                            {(provided, snapshot) => (
-                                <div ref={provided.innerRef} {...provided.droppableProps}>
-                                    {
-                                        recipes.map((recipe, index) => {
-                                            return (
-                                                <Draggable
-                                                    key={recipe.name}
-                                                    index={index}
-                                                    draggableId={recipe.name}
-                                                    shouldRespectForcePress={true}
-                                                >
-                                                    {(provided, snapshot) => {
-                                                        const recipeStyles = {
-                                                            opacity: snapshot.isDragging ? 0.5 : 1,
-                                                            margin: (index === recipes.length - 1) ? 0 : '0 0 8px 0'
-                                                        };
+                                                                const otherProps = {
+                                                                    ...provided.draggableProps,
+                                                                    ...provided.dragHandleProps,
+                                                                    style: {
+                                                                        ...provided.draggableProps.style,
+                                                                        ...recipeStyles,
+                                                                    },
+                                                                };
 
-                                                        const otherProps = {
-                                                            ...provided.draggableProps,
-                                                            ...provided.dragHandleProps,
-                                                            style: {
-                                                                ...provided.draggableProps.style,
-                                                                ...recipeStyles,
-                                                            },
-                                                        };
+                                                                return (
+                                                                    <>
+                                                                        <div key={recipe.name}
+                                                                             ref={provided.innerRef}
+                                                                             {...otherProps}
+                                                                        >
+                                                                            <Button
+                                                                                component={Link}
+                                                                                to={`/recipe/${encodeURIComponent(recipe.name)}`}
+                                                                                style={
+                                                                                    recipe.backgroundColor ?
+                                                                                        {backgroundColor: recipe.backgroundColor, color: recipe.textColor, borderColor: recipe.backgroundColor} :
+                                                                                        null
+                                                                                }
+                                                                                className={cx(classes.recipeLink)}
+                                                                                variant='outlined'
+                                                                                color='secondary'
+                                                                                fullWidth={true}
+                                                                            >
+                                                                                {recipe.name}
+                                                                            </Button>
+                                                                        </div>
+                                                                        {provided.placeholder}
+                                                                    </>
+                                                                );
+                                                            }}
+                                                        </Draggable>
+                                                    )
+                                                })
+                                            }
 
-                                                        return (
-                                                            <>
-                                                                <div key={recipe.name}
-                                                                     ref={provided.innerRef}
-                                                                     {...otherProps}
-                                                                >
-                                                                    <Button
-                                                                        component={Link}
-                                                                        to={`/recipe/${encodeURIComponent(recipe.name)}`}
-                                                                        style={
-                                                                            recipe.backgroundColor ?
-                                                                                {backgroundColor: recipe.backgroundColor, color: recipe.textColor, borderColor: recipe.backgroundColor} :
-                                                                                null
-                                                                        }
-                                                                        className={cx(classes.recipeLink)}
-                                                                        variant='outlined'
-                                                                        color='secondary'
-                                                                        fullWidth={true}
-                                                                    >
-                                                                        {recipe.name}
-                                                                    </Button>
-                                                                </div>
-                                                                {provided.placeholder}
-                                                            </>
-                                                        );
-                                                    }}
-                                                </Draggable>
-                                            )
-                                        })
-                                    }
-
-                                    { provided.placeholder }
-                                </div>
-                            )}
-                        </Droppable>
-                    </DragDropContext>
-                </Box>
+                                            { provided.placeholder }
+                                        </div>
+                                    )}
+                                </Droppable>
+                            </DragDropContext>
+                        </Box>
             }
         </Box>
     );

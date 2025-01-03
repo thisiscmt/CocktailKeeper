@@ -11,14 +11,13 @@ import * as ThemeService from '../../services/themeService';
 
 const useStyles = makeStyles()(() => ({
     mainContainer: {
-        display: 'flex',
-        justifyContent: 'space-between'
+        flex: 1,
+        padding: '16px'
     },
 
     topControls: {
         display: 'flex',
         justifyContent: 'space-between',
-        marginTop: '5px',
         marginBottom: '10px'
     },
 
@@ -85,7 +84,7 @@ const ViewRecipe = (props) => {
             setRecipe(newRecipe);
             setTheme(ThemeService.buildThemeConfig(newRecipe));
 
-            navigate('/recipe/' + encodeURIComponent(newRecipe.name), { replace: true });
+            navigate(`/recipe/${encodeURIComponent(newRecipe.name)}`, { replace: true });
         }
     };
 
@@ -99,13 +98,13 @@ const ViewRecipe = (props) => {
             setRecipe(newRecipe);
             setTheme(ThemeService.buildThemeConfig(newRecipe));
 
-            navigate('/recipe/' + encodeURIComponent(newRecipe.name), { replace: true });
+            navigate(`/recipe/${encodeURIComponent(newRecipe.name)}`, { replace: true });
         }
     };
 
     const handleCopy = () => {
         let newRecipe = cloneDeep(recipe);
-        let newName = newRecipe.name + ' - Copy';
+        let newName = `${newRecipe.name} - Copy`;
         let done = false;
         let nameId = 2;
 
@@ -113,14 +112,14 @@ const ViewRecipe = (props) => {
 
         if (RecipeService.getRecipe(newName)) {
             while (!done) {
-                if (RecipeService.getRecipe(newName + ' ' + nameId.toString())) {
+                if (RecipeService.getRecipe(`${newName} ${nameId.toString()}`)) {
                     nameId += 1;
                 } else {
                     done = true;
                 }
             }
 
-            newName = newRecipe.name + ' - Copy ' + nameId.toString();
+            newName = `${newRecipe.name} - Copy ${nameId.toString()}`;
         }
 
         newRecipe.name = newName;
@@ -129,12 +128,12 @@ const ViewRecipe = (props) => {
 
         setRecipe(newRecipe);
         setTheme(ThemeService.buildThemeConfig(newRecipe));
-        navigate('/recipe/' + encodeURIComponent(newRecipe.name), { replace: true });
+        navigate(`/recipe/${encodeURIComponent(newRecipe.name)}`, { replace: true });
     };
 
     return (
         <ThemeProvider theme={theme}>
-            <Container maxWidth='sm' data-testid='ViewRecipeMainContainer'>
+            <Container maxWidth='sm' disableGutters={true} className={cx(classes.mainContainer)} data-testid='ViewRecipeMainContainer' >
                 {
                     recipe ?
                         <div {...swipeHandlers}>

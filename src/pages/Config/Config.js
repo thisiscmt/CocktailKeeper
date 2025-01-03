@@ -5,6 +5,7 @@ import { makeStyles } from 'tss-react/mui';
 import LoadingOverlay from '../../components/LoadingOverlay/LoadingOverlay';
 import { Context } from '../../stores/mainStore';
 import { AlertSeverity } from '../../enums/AlertSeverity';
+import { Colors } from '../../services/themeService';
 import * as Constants from '../../constants/constants';
 import * as DataService from '../../services/dataService';
 import * as RecipeService from '../../services/recipeService';
@@ -12,8 +13,10 @@ import * as SharedService from '../../services/sharedService';
 
 const useStyles = makeStyles()((theme) => ({
     mainContainer: {
+        backgroundColor: Colors.backgroundGray,
         display: 'flex',
         flexDirection: 'column',
+        flex: 1,
         paddingBottom: '16px',
         paddingTop: '16px'
     },
@@ -257,13 +260,13 @@ const Config = (props) => {
             </Box>
 
             <Box className={cx(classes.section)}>
-                <Button variant='outlined' color='secondary' size='small' onClick={handleBackupCocktailData}>
+                <Button variant='contained' color='primary' size='small' onClick={handleBackupCocktailData}>
                     Backup
                 </Button>
             </Box>
 
             <Box className={cx(classes.section)}>
-                <Button variant='outlined' color='secondary' size='small' onClick={handleRestoreCocktailData}>
+                <Button variant='contained' color='primary' size='small' onClick={handleRestoreCocktailData}>
                     Restore
                 </Button>
             </Box>

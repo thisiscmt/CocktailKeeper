@@ -16,16 +16,19 @@ import * as SharedService from '../../services/sharedService';
 import * as ThemeService from '../../services/themeService';
 
 const useStyles = makeStyles()(() => ({
+    mainContainer: {
+        flex: 1,
+        padding: '16px'
+    },
+
     topControls: {
         display: 'flex',
         justifyContent: 'space-between',
-        marginTop: '5px',
         marginBottom: '10px'
     },
 
     bottomControls: {
-        marginTop: '10px',
-        marginBottom: '10px'
+        marginTop: '12px'
     },
 
     addLabel: {
@@ -51,12 +54,12 @@ const useStyles = makeStyles()(() => ({
     },
 
     editImage: {
-        marginBottom: '10px'
+        marginBottom: '12px'
     },
 
     changeBackgroundColor: {
-        marginTop: '10px',
-        marginBottom: '10px'
+        marginTop: '12px',
+        marginBottom: '12px'
     }
 }));
 
@@ -246,9 +249,9 @@ const EditRecipe = (props) => {
     const doNavigation = (action) => {
         if (mode === 'Edit') {
             if (action === 'Save') {
-                navigate('/recipe/' +  encodeURIComponent(recipe.name));
+                navigate(`/recipe/${encodeURIComponent(recipe.name)}`);
             } else {
-                navigate('/recipe/' +  encodeURIComponent(recipeName));
+                navigate(`/recipe/${encodeURIComponent(recipeName)}`);
             }
         } else {
             navigate('/');
@@ -257,7 +260,7 @@ const EditRecipe = (props) => {
 
     return (
         <ThemeProvider theme={theme}>
-            <Container maxWidth='sm' data-testid='EditRecipeMainContainer'>
+            <Container maxWidth='sm' disableGutters={true} className={cx(classes.mainContainer)} data-testid='EditRecipeMainContainer'>
                 {
                     recipe ?
                         <form onSubmit={handleSubmit} autoComplete='on'>

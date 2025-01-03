@@ -1,27 +1,28 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { makeStyles } from 'tss-react/mui';
+import { Alert, Fade } from '@mui/material';
 import { AddBoxOutlined } from '@mui/icons-material';
+import { makeStyles } from 'tss-react/mui';
 
 import { Context } from '../../stores/mainStore';
-import {Alert, Fade} from '@mui/material';
 
 const useStyles = makeStyles()(() => ({
     header: {
         alignItems: 'center',
         backgroundColor: 'darkcyan',
         display: 'flex',
-        height: '60px',
+        paddingBottom: '12px',
+        paddingTop: '12px',
         justifyContent: 'space-between'
     },
 
     headerTitle: {
         fontSize: '24px',
-        marginLeft: '10px',
-        textAlign: 'left'
+        marginLeft: '10px'
     },
 
     headerControls: {
+        height: '35px',
         marginRight: '10px'
     }
 }));
@@ -46,11 +47,9 @@ const Header = (props) => {
                 </div>
 
                 <div className={classes.headerControls}>
-                    <div>
-                        <Link to='/recipe' className='nav-link' title='Add a new recipe'>
-                            <AddBoxOutlined fontSize='large' />
-                        </Link>
-                    </div>
+                    <Link to='/recipe' className='nav-link' title='Add a new recipe'>
+                        <AddBoxOutlined fontSize='large' />
+                    </Link>
                 </div>
             </header>
 
