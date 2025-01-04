@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Paper } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { makeStyles } from 'tss-react/mui';
 
 import Home from './pages/Home/Home';
 import ViewRecipe from './pages/ViewRecipe/ViewRecipe';
@@ -14,12 +15,31 @@ import Footer from './components/Footer/Footer';
 import Store from './stores/mainStore';
 import './App.scss';
 
+const useStyles = makeStyles()(() => ({
+    siteContainer: {
+        display: 'flex !important',
+        flexDirection: 'column',
+        height: '100vh',
+        maxHeight: '-webkit-fill-available',
+        textAlign: 'center'
+    },
+
+    siteBackground: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
+        padding: '10px'
+    }
+}));
+
 function App() {
+    const { classes, cx } = useStyles();
+
     return (
         <Store>
             <BrowserRouter>
-                <Container maxWidth='sm' disableGutters={true} className='site-container'>
-                    <Paper elevation={5} className='site-paper'>
+                <Container maxWidth='sm' disableGutters={true} className={cx(classes.siteContainer)}>
+                    <Paper elevation={5} className={cx(classes.siteBackground)}>
                         <Header/>
 
                         <Routes>

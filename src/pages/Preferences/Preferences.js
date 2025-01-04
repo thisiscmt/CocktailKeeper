@@ -2,18 +2,18 @@ import React, {useContext, useEffect, useState} from 'react';
 import { Box, MenuItem, Select } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 
+import { Context} from '../../stores/mainStore';
+import { AlertSeverity } from '../../enums/AlertSeverity';
+import { Colors } from '../../services/themeService';
+import * as Constants from '../../constants/constants';
 import * as SharedService from '../../services/sharedService';
-import {Context} from '../../stores/mainStore';
-import {AlertSeverity} from '../../enums/AlertSeverity';
-import {STORAGE_PREFERENCES} from '../../constants/constants';
-import {Colors} from '../../services/themeService';
 
 const useStyles = makeStyles()(() => ({
     mainContainer: {
         backgroundColor: Colors.backgroundGray,
         display: 'flex',
-        flexDirection: 'column',
         flex: 1,
+        flexDirection: 'column',
         paddingBottom: '16px',
         paddingTop: '16px',
         textAlign: 'center'
@@ -49,7 +49,7 @@ const Preferences = (props) => {
                 defaultUnit: event.target.value
             };
 
-            localStorage.setItem(STORAGE_PREFERENCES, JSON.stringify(preferences));
+            localStorage.setItem(Constants.STORAGE_PREFERENCES, JSON.stringify(preferences));
             dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: 'Preferences saved', severity: AlertSeverity.Success} });
         }
     };

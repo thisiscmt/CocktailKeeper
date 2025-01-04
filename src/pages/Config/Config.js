@@ -15,8 +15,8 @@ const useStyles = makeStyles()((theme) => ({
     mainContainer: {
         backgroundColor: Colors.backgroundGray,
         display: 'flex',
-        flexDirection: 'column',
         flex: 1,
+        flexDirection: 'column',
         paddingBottom: '16px',
         paddingTop: '16px'
     },

@@ -15,7 +15,6 @@ const useStyles = makeStyles()(() => ({
     },
 
     recipeList: {
-        backgroundColor: Colors.backgroundGray,
         padding: '8px'
     },
 

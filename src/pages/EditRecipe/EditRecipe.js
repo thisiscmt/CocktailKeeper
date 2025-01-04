@@ -24,7 +24,7 @@ const useStyles = makeStyles()(() => ({
     topControls: {
         display: 'flex',
         justifyContent: 'space-between',
-        marginBottom: '10px'
+        marginBottom: '12px'
     },
 
     bottomControls: {
