@@ -52,7 +52,7 @@ const Home = (props) => {
                     :
                         <Box className={cx(classes.recipeList)}>
                             <DragDropContext onDragEnd={handleDragEnd}>
-                                <Droppable droppableId="droppable">
+                                <Droppable droppableId='droppable'>
                                     {(provided, snapshot) => (
                                         <div ref={provided.innerRef} {...provided.droppableProps}>
                                             {
@@ -90,7 +90,11 @@ const Home = (props) => {
                                                                                 to={`/recipe/${encodeURIComponent(recipe.name)}`}
                                                                                 style={
                                                                                     recipe.backgroundColor ?
-                                                                                        {backgroundColor: recipe.backgroundColor, color: recipe.textColor, borderColor: recipe.backgroundColor} :
+                                                                                        {
+                                                                                            backgroundColor: recipe.backgroundColor,
+                                                                                            color: recipe.textColor,
+                                                                                            borderColor: recipe.backgroundColor
+                                                                                        } :
                                                                                         null
                                                                                 }
                                                                                 className={cx(classes.recipeLink)}

@@ -3,10 +3,10 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useSwipeable } from 'react-swipeable';
 import { Button, Card, CardContent, Container, Divider, List, ListItem, ThemeProvider } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
-import cloneDeep from 'lodash/cloneDeep';
 import * as UUID from 'uuid';
 
 import * as RecipeService from '../../services/recipeService';
+import * as SharedService from '../../services/sharedService';
 import * as ThemeService from '../../services/themeService';
 
 const useStyles = makeStyles()(() => ({
@@ -103,7 +103,7 @@ const ViewRecipe = (props) => {
     };
 
     const handleCopy = () => {
-        let newRecipe = cloneDeep(recipe);
+        let newRecipe = SharedService.cloneRecipe(recipe);
         let newName = `${newRecipe.name} - Copy`;
         let done = false;
         let nameId = 2;
