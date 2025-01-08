@@ -6,7 +6,6 @@ import { makeStyles } from 'tss-react/mui';
 import * as UUID from 'uuid';
 
 import * as RecipeService from '../../services/recipeService';
-import * as SharedService from '../../services/sharedService';
 import * as ThemeService from '../../services/themeService';
 
 const useStyles = makeStyles()(() => ({
@@ -103,7 +102,7 @@ const ViewRecipe = (props) => {
     };
 
     const handleCopy = () => {
-        let newRecipe = SharedService.cloneRecipe(recipe);
+        let newRecipe = RecipeService.buildRecipe(recipe);
         let newName = `${newRecipe.name} - Copy`;
         let done = false;
         let nameId = 2;
@@ -123,7 +122,7 @@ const ViewRecipe = (props) => {
         }
 
         newRecipe.name = newName;
-        RecipeService.saveRecipe(newRecipe, true);
+        RecipeService.saveRecipe(newRecipe, RecipeService.getRecipeIndex(recipe.name));
         newRecipe = RecipeService.getRecipe(newName);
 
         setRecipe(newRecipe);

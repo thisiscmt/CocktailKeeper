@@ -4,13 +4,12 @@ import * as Constants from '../constants/constants';
 
 const imageLibrary = require('../data/images.json');
 
-export const buildRecipe = (data, recipeIndex) => {
+export const buildRecipe = (data) => {
     const recipe = new Recipe();
     let ingredient;
 
     recipe.id = data.id;
     recipe.name = data.name;
-    recipe.index = recipeIndex;
     recipe.directions = data.directions;
     recipe.drinkImage = data.drinkImage;
     recipe.backgroundColor = data.backgroundColor;
@@ -56,7 +55,7 @@ export const getRecipes = () => {
     return recipes;
 };
 
-export const saveRecipe = (recipe, copied) => {
+export const saveRecipe = (recipe, baseIndex) => {
     const recipeJSON = localStorage.getItem(Constants.STORAGE_RECIPES);
     let recipeIndex = -1;
     let recipeData;
@@ -76,8 +75,8 @@ export const saveRecipe = (recipe, copied) => {
     if (recipeIndex > -1) {
         recipeData.recipes[recipeIndex] = recipe;
     } else {
-        if (copied) {
-            recipeData.recipes.splice(recipe.index + 1, 0, recipe)
+        if (baseIndex !== undefined) {
+            recipeData.recipes.splice(baseIndex + 1, 0, recipe)
         } else {
             recipeData.recipes.push(recipe);
         }
@@ -102,11 +101,28 @@ export const getRecipe = (name) => {
         });
 
         if (recipeIndex > -1) {
-            recipe = buildRecipe(recipeData.recipes[recipeIndex], recipeIndex);
+            recipe = buildRecipe(recipeData.recipes[recipeIndex]);
         }
     }
 
     return recipe;
+};
+
+export const getRecipeIndex = (name) => {
+    const recipeJSON = localStorage.getItem(Constants.STORAGE_RECIPES);
+    const nameForCompare = name ? name.toLowerCase() : '';
+    let recipeIndex = -1;
+    let recipeData;
+
+    if (recipeJSON) {
+        recipeData = JSON.parse(recipeJSON);
+
+        recipeIndex = recipeData.recipes.findIndex((item) => {
+            return item.name.toLowerCase() === nameForCompare;
+        });
+    }
+
+    return recipeIndex;
 };
 
 export const deleteRecipe = (id) => {

@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Container, Divider, List, ListItem, ThemeProvider, TextField } from '@mui/material';
 import { AddCircleOutlineRounded } from '@mui/icons-material';
 import { makeStyles } from 'tss-react/mui';
-import cloneDeep from 'lodash/cloneDeep';
 
 import QtyModal from '../../components/QtyModal/QtyModal';
 import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
@@ -125,7 +124,7 @@ const EditRecipe = (props) => {
     }, [recipeName]);
 
     const handleChangeName = (event) => {
-        const newRecipe = cloneDeep(recipe);
+        const newRecipe = RecipeService.buildRecipe(recipe);
         newRecipe.name = event.target.value;
 
         setRecipe(newRecipe)
@@ -133,7 +132,7 @@ const EditRecipe = (props) => {
     };
 
     const handleAddIngredient = () => {
-        const newRecipe = cloneDeep(recipe);
+        const newRecipe = RecipeService.buildRecipe(recipe);
         const ingredient = new Ingredient();
         const settings = SharedService.getPreferences();
 
@@ -146,7 +145,7 @@ const EditRecipe = (props) => {
     };
 
     const handleSaveIngredientQty = (qtyData) => {
-        const newRecipe = cloneDeep(recipe);
+        const newRecipe = RecipeService.buildRecipe(recipe);
         const ingredientIndex = newRecipe.ingredients.findIndex(item => {
             return item.id === qtyData.id;
         });
@@ -167,7 +166,7 @@ const EditRecipe = (props) => {
     };
 
     const handleChangeIngredientName = (id, name) => {
-        const newRecipe = cloneDeep(recipe);
+        const newRecipe = RecipeService.buildRecipe(recipe);
         const ingredientIndex = newRecipe.ingredients.findIndex(item => {
             return item.id === id;
         });
@@ -179,7 +178,7 @@ const EditRecipe = (props) => {
     };
 
     const handleDeleteIngredient = (ingredientId) => {
-        const newRecipe = cloneDeep(recipe);
+        const newRecipe = RecipeService.buildRecipe(recipe);
         const ingredientIndex = newRecipe.ingredients.findIndex(item => {
             return item.id === ingredientId;
         });
@@ -191,14 +190,14 @@ const EditRecipe = (props) => {
     };
 
     const handleChangeDirections = (event) => {
-        const newRecipe = cloneDeep(recipe);
+        const newRecipe = RecipeService.buildRecipe(recipe);
 
         newRecipe.directions = event.target.value;
         setRecipe(newRecipe);
     };
 
     const handleSaveBackgroundColor = (colorData) => {
-        const newRecipe = cloneDeep(recipe);
+        const newRecipe = RecipeService.buildRecipe(recipe);
         newRecipe.backgroundColor = colorData.colorCode;
         newRecipe.textColor = colorData.textColorCode;
 
@@ -209,7 +208,7 @@ const EditRecipe = (props) => {
     }
 
     const handleSaveImage = (imageData) => {
-        const newRecipe = cloneDeep(recipe);
+        const newRecipe = RecipeService.buildRecipe(recipe);
 
         newRecipe.drinkImage = imageData.drinkImage;
         setRecipe(newRecipe);

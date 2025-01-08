@@ -155,11 +155,7 @@ const Config = (props) => {
                 RecipeService.setRecipeData(recipeData);
                 dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: 'Cocktail data restored successfully', severity: AlertSeverity.Success} });
             } catch (error) {
-                if (error.response.status === 403) {
-                    dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: 'Please verify the current login', severity: AlertSeverity.Info} });
-                } else {
-                    dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: SharedService.getErrorMessage(error), severity: AlertSeverity.Error} });
-                }
+                dispatch({ type: 'SET_BANNER_MESSAGE', payload: {message: SharedService.getErrorMessage(error), severity: AlertSeverity.Error} });
             } finally {
                 setLoading(false);
             }

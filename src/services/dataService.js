@@ -13,7 +13,7 @@ export const backupCocktailData = (authHeader, cocktailData) => {
         timestamp: new Date().getTime()
     };
 
-    return Axios.post(process.env.REACT_APP_API_URL + '/cocktail/backup', data, config);
+    return Axios.post(`${process.env.REACT_APP_API_URL}/cocktail/backup`, data, config);
 };
 
 export const restoreCocktailData = async (authHeader) => {
@@ -24,6 +24,6 @@ export const restoreCocktailData = async (authHeader) => {
         }
     };
 
-    const cocktailData = await Axios.get(process.env.REACT_APP_API_URL + '/cocktail/backup?provider=server', config);
+    const cocktailData = await Axios.get(`${process.env.REACT_APP_API_URL}/cocktail/backup?provider=server`, config);
     return cocktailData.data;
 };
