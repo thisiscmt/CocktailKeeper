@@ -39,7 +39,7 @@ function App() {
         <Store>
             <BrowserRouter>
                 <Container maxWidth='sm' disableGutters={true} className={cx(classes.siteContainer)}>
-                    <Paper elevation={5} className={cx(classes.siteBackground)}>
+                    <Paper elevation={3} className={cx(classes.siteBackground)}>
                         <Header/>
 
                         <Routes>

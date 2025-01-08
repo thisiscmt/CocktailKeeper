@@ -43,7 +43,7 @@ const Home = (props) => {
     return (
         <Box className={cx(classes.mainContainer)} data-testid='HomeMainContainer'>
             {
-                  recipes.length === 0
+                recipes.length === 0
                     ?
                         <Box>
                             <p>Welcome to the Cocktail Keeper.</p>
