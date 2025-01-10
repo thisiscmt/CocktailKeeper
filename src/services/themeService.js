@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material';
 
 export const Colors = {
-    backgroundGray: '#F0F0F0',
+    backgroundGray: '#FAFAFA',
     white: '#FFFFFF',
     black: '#000000'
 };

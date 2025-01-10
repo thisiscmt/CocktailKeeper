@@ -256,13 +256,15 @@ const Config = (props) => {
             </Box>
 
             <Box className={cx(classes.section)}>
-                <Button variant='contained' color='primary' size='small' onClick={handleBackupCocktailData}>
+                <Button variant='outlined' color='primary' size='small' onClick={handleBackupCocktailData}
+                        disabled={userName === Constants.DEMO_USER_NAME && !window.location.href.startsWith('http://localhost')}
+                >
                     Backup
                 </Button>
             </Box>
 
             <Box className={cx(classes.section)}>
-                <Button variant='contained' color='primary' size='small' onClick={handleRestoreCocktailData}>
+                <Button variant='outlined' color='primary' size='small' onClick={handleRestoreCocktailData}>
                     Restore
                 </Button>
             </Box>
