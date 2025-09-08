@@ -1,8 +1,7 @@
 import Recipe from '../models/Recipe';
 import Ingredient from '../models/Ingredient';
 import * as Constants from '../constants/constants';
-
-const imageLibrary = require('../data/images.json');
+import * as ImageLibrary from '../data/images.json';
 
 export const buildRecipe = (data) => {
     const recipe = new Recipe();
@@ -166,11 +165,11 @@ export const getDrinkImageData = (drinkImage) => {
     };
 
     if (drinkImage) {
-        const imageIndex = imageLibrary.images.findIndex(image => image.name === drinkImage);
+        const imageIndex = ImageLibrary.images.findIndex(image => image.name === drinkImage);
 
         if (imageIndex > -1) {
-            imageData.drinkImageViewFile = imageLibrary.images[imageIndex].view;
-            imageData.drinkImageSelectionFile = imageLibrary.images[imageIndex].selection;
+            imageData.drinkImageViewFile = ImageLibrary.images[imageIndex].view;
+            imageData.drinkImageSelectionFile = ImageLibrary.images[imageIndex].selection;
 
         }
     }

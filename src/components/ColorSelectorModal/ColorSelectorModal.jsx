@@ -3,8 +3,7 @@ import {Button, Dialog, DialogTitle, DialogContent, DialogActions, ThemeProvider
 import { CheckCircleOutlineOutlined } from '@mui/icons-material';
 import { makeStyles } from 'tss-react/mui';
 import * as ThemeService from '../../services/themeService';
-
-const colorLibrary = require('../../data/colors.json');
+import * as ColorLibrary from '../../data/colors.json';
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -75,12 +74,12 @@ const ColorSelectorModal = (props) => {
     const handleSelectColor = (event) => {
         const selectedColor = event.target.dataset.colorCode;
 
-        const selectedColorIndex = colorLibrary.colors.findIndex(color => {
+        const selectedColorIndex = ColorLibrary.colors.findIndex(color => {
             return color.colorCode === selectedColor;
         });
 
         setSelectedColor(selectedColor);
-        setSelectedTextColor(colorLibrary.colors[selectedColorIndex].textColorCode);
+        setSelectedTextColor(ColorLibrary.colors[selectedColorIndex].textColorCode);
     };
 
     const handleSave = () => {
@@ -123,7 +122,7 @@ const ColorSelectorModal = (props) => {
 
                 <DialogContent className={`${cx(classes.content)} ${cx(classes.colorList)}`}>
                     {
-                        colorLibrary.colors.map((color, index) => {
+                        ColorLibrary.colors.map((color, index) => {
                             return (
                                 <div
                                     key={index}

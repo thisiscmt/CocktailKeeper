@@ -3,17 +3,17 @@ import { Container, Paper } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { makeStyles } from 'tss-react/mui';
 
-import Home from './pages/Home/Home';
-import ViewRecipe from './pages/ViewRecipe/ViewRecipe';
-import EditRecipe from './pages/EditRecipe/EditRecipe';
-import Config from './pages/Config/Config';
-import Preferences from './pages/Preferences/Preferences';
-import Clean from './pages/Clean/Clean';
-import ErrorPage from './pages/ErrorPage/ErrorPage';
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
-import Store from './stores/mainStore';
-import './App.scss';
+import Home from './pages/Home/Home.jsx';
+import ViewRecipe from './pages/ViewRecipe/ViewRecipe.jsx';
+import EditRecipe from './pages/EditRecipe/EditRecipe.jsx';
+import Config from './pages/Config/Config.jsx';
+import Preferences from './pages/Preferences/Preferences.jsx';
+import Clean from './pages/Clean/Clean.jsx';
+import ErrorPage from './pages/ErrorPage/ErrorPage.jsx';
+import Header from './components/Header/Header.jsx';
+import Footer from './components/Footer/Footer.jsx';
+import Store from './stores/mainStore.jsx';
+import './App.css';
 
 const useStyles = makeStyles()(() => ({
     siteContainer: {

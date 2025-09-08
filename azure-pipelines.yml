@@ -9,7 +9,7 @@ jobs:
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: '20.x'
+          versionSpec: '22.x'
         displayName: 'Install Node.js'
       - script: |
           npm install
@@ -19,7 +19,7 @@ jobs:
         displayName: 'Build the project'
       - task: ArchiveFiles@2
         inputs:
-          rootFolderOrFile: build
+          rootFolderOrFile: dist
           includeRootFolder: false
           archiveType: zip
           archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.Repository.Name)-$(Build.BuildId).zip'

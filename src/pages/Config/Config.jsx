@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { FormControl, FormControlLabel, TextField, Button, Box, Radio, RadioGroup, Typography } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 
-import LoadingOverlay from '../../components/LoadingOverlay/LoadingOverlay';
-import { Context } from '../../stores/mainStore';
+import LoadingOverlay from '../../components/LoadingOverlay/LoadingOverlay.jsx';
+import { Context } from '../../contexts/mainContext.js';
 import { AlertSeverity } from '../../enums/AlertSeverity';
 import { Colors } from '../../services/themeService';
 import * as Constants from '../../constants/constants';

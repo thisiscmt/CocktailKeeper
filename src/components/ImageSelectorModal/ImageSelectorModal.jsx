@@ -4,8 +4,7 @@ import { makeStyles } from 'tss-react/mui';
 
 import * as ThemeService from '../../services/themeService';
 import * as RecipeService from '../../services/recipeService';
-
-const imageLibrary = require('../../data/images.json');
+import * as ImageLibrary from '../../data/images.json';
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -129,7 +128,7 @@ const ImageSelectorModal = (props) => {
                 <DialogContent>
                     <div className={`${cx(classes.content)} ${cx(classes.imageList)}`}>
                         {
-                            imageLibrary.images.map(image => {
+                            ImageLibrary.images.map(image => {
                                 return (
                                     <div
                                         key={image.name}

@@ -4,7 +4,7 @@ import { Alert, Fade } from '@mui/material';
 import { AddBoxOutlined } from '@mui/icons-material';
 import { makeStyles } from 'tss-react/mui';
 
-import { Context } from '../../stores/mainStore';
+import { Context } from '../../contexts/mainContext.js';
 
 const useStyles = makeStyles()(() => ({
     header: {

@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 
-import { Context } from '../../stores/mainStore';
+import { Context } from '../../contexts/mainContext.js';
 import { AlertSeverity } from '../../enums/AlertSeverity';
 import * as RecipeService from '../../services/recipeService';
 

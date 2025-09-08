@@ -53,7 +53,7 @@ const Home = (props) => {
                         <Box className={cx(classes.recipeList)}>
                             <DragDropContext onDragEnd={handleDragEnd}>
                                 <Droppable droppableId='droppable'>
-                                    {(provided, snapshot) => (
+                                    {(provided, ) => (
                                         <div ref={provided.innerRef} {...provided.droppableProps}>
                                             {
                                                 recipes.map((recipe, index) => {

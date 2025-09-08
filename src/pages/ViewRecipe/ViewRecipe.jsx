@@ -64,7 +64,7 @@ const ViewRecipe = (props) => {
     const imageData = RecipeService.getDrinkImageData(recipe.drinkImage)
 
     const swipeConfig = {
-        preventDefaultTouchmoveEvent: true
+        preventScrollOnSwipe: true
     };
 
     const swipeHandlers = useSwipeable({

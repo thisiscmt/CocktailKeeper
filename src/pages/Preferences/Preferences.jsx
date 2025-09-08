@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Box, MenuItem, Select } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 
-import { Context} from '../../stores/mainStore';
+import { Context } from '../../contexts/mainContext.js';
 import { AlertSeverity } from '../../enums/AlertSeverity';
 import { Colors } from '../../services/themeService';
 import * as Constants from '../../constants/constants';

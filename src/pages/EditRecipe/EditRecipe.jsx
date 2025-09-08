@@ -4,10 +4,10 @@ import { Button, Container, Divider, List, ListItem, ThemeProvider, TextField } 
 import { AddCircleOutlineRounded } from '@mui/icons-material';
 import { makeStyles } from 'tss-react/mui';
 
-import QtyModal from '../../components/QtyModal/QtyModal';
-import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal';
-import ImageSelectorModal from '../../components/ImageSelectorModal/ImageSelectorModal';
-import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
+import QtyModal from '../../components/QtyModal/QtyModal.jsx';
+import ColorSelectorModal from '../../components/ColorSelectorModal/ColorSelectorModal.jsx';
+import ImageSelectorModal from '../../components/ImageSelectorModal/ImageSelectorModal.jsx';
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal.jsx';
 import Recipe from '../../models/Recipe';
 import Ingredient from '../../models/Ingredient';
 import * as RecipeService from '../../services/recipeService';
