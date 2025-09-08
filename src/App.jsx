@@ -13,7 +13,6 @@ import ErrorPage from './pages/ErrorPage/ErrorPage.jsx';
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
 import Store from './stores/mainStore.jsx';
-import './App.css';
 
 const useStyles = makeStyles()(() => ({
     siteContainer: {
