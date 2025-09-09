@@ -1,7 +1,6 @@
 import React, { useReducer } from 'react';
 
-import {Context, initialState} from '../contexts/mainContext.js';
-
+import { Context, initialState } from '../contexts/mainContext.js';
 import Reducer from './mainReducer'
 
 const Store = ({children}) => {

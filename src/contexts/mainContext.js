@@ -1,8 +1,8 @@
-import React from 'react';
+import { createContext } from 'react';
 
 export const initialState = {
     bannerMessage: '',
     bannerSeverity: ''
 };
 
-export const Context = React.createContext(initialState);
+export const Context = createContext(initialState);
