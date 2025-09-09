@@ -93,7 +93,9 @@ const Home = (props) => {
                                                                                         {
                                                                                             backgroundColor: recipe.backgroundColor,
                                                                                             color: recipe.textColor,
-                                                                                            borderColor: recipe.backgroundColor
+                                                                                            borderColor: recipe.backgroundColor === '#FFFFFF' ?
+                                                                                                Colors.whiteBackgroundBorderGray :
+                                                                                                recipe.backgroundColor
                                                                                         } :
                                                                                         null
                                                                                 }

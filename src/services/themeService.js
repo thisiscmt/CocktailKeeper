@@ -3,6 +3,7 @@ import { grey } from '@mui/material/colors';
 
 export const Colors = {
     backgroundGray: grey[50],
+    whiteBackgroundBorderGray: grey[300],
     white: '#FFFFFF',
     black: '#000000'
 };
